@@ -13,4 +13,8 @@ public class Main {
     public int newMethod() {
         return 1;
     }
+
+    public boolean aaa() {
+        return false;
+    }
 }
