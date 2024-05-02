@@ -5,4 +5,8 @@ public class Main {
 
         System.out.println("hello world");
     }
+
+    public double method2() {
+        return -9.8;
+    }
 }
