@@ -9,4 +9,8 @@ public class Main {
     public double method2() {
         return -9.8;
     }
+    
+    public int newMethod() {
+        return 1;
+    }
 }
