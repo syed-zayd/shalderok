@@ -7,6 +7,8 @@ public class Player implements Renderable {
     private int eva; // evasiveness / dodge %
     private int atk; // attack / damage
 
+    private Armor armor; // the equipped armor
+
     private static final Player instance = new Player();
 
     private Player() {
@@ -15,6 +17,8 @@ public class Player implements Renderable {
         this.hp = 5;
         this.eva = 0;
         this.atk = 1;
+
+        this.armor = null;
     }
 
     public static Player getInstance() {
@@ -45,8 +49,14 @@ public class Player implements Renderable {
         // paint something
     }
 
+    public void equip(Armor armor) {
+        this.armor = armor;
+    }
+
     public void takeDmg(int dmg) {
-        hp-=dmg;
+        // first let the armor take some damage
+
+        hp -= Math.max(dmg, 0);
         if (hp<=0) {
             hp=0;
             die();
