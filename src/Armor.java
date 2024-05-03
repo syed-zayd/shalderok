@@ -18,7 +18,7 @@ public class Armor {
         this.eva = eva;
         this.atk = atk;
         this.p = null;
-        ImageIO.read(new File(imgPath));
+        this.sprite = ImageIO.read(new File(imgPath));
     }
 
     // left over damage will be returned
