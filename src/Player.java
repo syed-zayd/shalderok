@@ -1,3 +1,5 @@
+import java.awt.*;
+
 // singleton class for the player; get the player using Player.getInstance()
 public class Player implements Renderable {
 
@@ -45,7 +47,7 @@ public class Player implements Renderable {
     }
 
     @Override
-    public void paint() {
+    public void paint(Graphics2D g2d) {
         // paint something
     }
 
