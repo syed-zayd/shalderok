@@ -55,6 +55,13 @@ public class Player implements Renderable {
 
     public void takeDmg(int dmg) {
         // first let the armor take some damage
+        if (armor != null) {
+            dmg = armor.takeDmg(dmg);
+            if (armor.isBroken()) {
+                armor = null;
+                // sound effect somethiing idk
+            }
+        }
 
         hp -= Math.max(dmg, 0);
         if (hp<=0) {

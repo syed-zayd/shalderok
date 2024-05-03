@@ -9,7 +9,6 @@ public class Armor {
     private int eva;
     private int atk;
 
-    private Player p; // set the player using equip()
     private BufferedImage sprite;
 
     public Armor(int shield, int eva, int atk, String imgPath) throws IOException {
@@ -17,8 +16,11 @@ public class Armor {
         this.maxShield = shield;
         this.eva = eva;
         this.atk = atk;
-        this.p = null;
-        ImageIO.read(new File(imgPath));
+        this.sprite = ImageIO.read(new File(imgPath));
+    }
+
+    public boolean isBroken() {
+        return shield <= 0;
     }
 
     // left over damage will be returned
