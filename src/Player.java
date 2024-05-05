@@ -53,6 +53,7 @@ public class Player implements Renderable {
 
     public void equip(Armor armor) {
         this.armor = armor;
+        AudioManager.playSFX("sfx\\equip.wav");
     }
 
     public void takeDmg(int dmg) {
