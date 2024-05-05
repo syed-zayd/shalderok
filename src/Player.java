@@ -1,26 +1,68 @@
 import java.awt.*;
+import java.awt.RenderingHints.Key;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import armor.*;
+import weapon.Weapon;
 
 // singleton class for the player; get the player using Player.getInstance()
 public class Player implements Renderable {
 
-    private int xp; // experience gained
-    private int maxhp; // maximum health points
-    private int hp; // health points
-    private int eva; // evasiveness / dodge %
-    private int atk; // attack / damage
+    // stats
+    private int spd;
+    private int maxHp;
+    private int hp;
+    private int dodge;
+    private int atk;
+    private int xp;
 
-    private Armor armor; // the equipped armor
+    // sprite
+    private BufferedImage sprite;
+
+    // equips
+    private Armor armor;
+    private Weapon weapon;
+    private Potion[] potions;
+
+    // physics-based
+    private double x;
+    private double y;
+    private double angle;
+    private double vx; // velocity
+    private double vy;
+    private double ax; // acceleration
+    private double ay;
+    private boolean up;
+    private boolean down;
+    private boolean right;
+    private boolean left;
 
     private static final Player instance = new Player();
 
     private Player() {
-        this.xp = 0;
-        this.maxhp = 5;
+        this.spd = 10;
+        this.maxHp = 5;
         this.hp = 5;
-        this.eva = 0;
+        this.dodge = 0;
         this.atk = 1;
-
+        this.xp = 0;
         this.armor = null;
+        this.weapon = null;
+        this.potions = new Potion[3];
+
+        try {
+            this.sprite = ImageIO.read(new File("sprites\\player.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.x = 620;
+        this.y = 300;
     }
 
     public static Player getInstance() {
@@ -30,63 +72,93 @@ public class Player implements Renderable {
         return instance;
     }
 
-    public int getxp() {
-        return xp;
+    public void keyPressed(KeyEvent e) {
+        System.out.printf("Pressed [%s]\n", KeyEvent.getKeyText(e.getKeyCode()));
     }
-    public int getmaxhp() {
-        return maxhp;
+    public void keyReleased(KeyEvent e) {
+        System.out.printf("Released [%s]\n", KeyEvent.getKeyText(e.getKeyCode()));
     }
-    public int gethp() {
-        return hp;
-    }
-    public int geteva() {
-        return eva;
-    }
-    public int getatk() {
-        return atk;
+    public void keysHeld() {
+        up = KeyHandler.isHeld(KeyEvent.VK_UP) || KeyHandler.isHeld(KeyEvent.VK_W);
+        down = KeyHandler.isHeld(KeyEvent.VK_DOWN) || KeyHandler.isHeld(KeyEvent.VK_S);
+        right = KeyHandler.isHeld(KeyEvent.VK_RIGHT) || KeyHandler.isHeld(KeyEvent.VK_D);
+        left = KeyHandler.isHeld(KeyEvent.VK_LEFT) || KeyHandler.isHeld(KeyEvent.VK_A);
+        if (up && down) {
+            up = false;
+            down = false;
+        }
+        if (right && left) {
+            right = false;
+            left = false;
+        }
     }
 
     @Override
     public void paint(Graphics2D g2d) {
-        // paint something
+        g2d.drawImage(sprite, (int)x, (int)y, null);
     }
 
-    public void equip(Armor armor) {
-        this.armor = armor;
-        AudioManager.playSFX("sfx\\equip.wav");
-    }
-
-    public void takeDmg(int dmg) {
-        // first let the armor take some damage
+    public int spd() {
+        int effectiveSpd = spd;
         if (armor != null) {
-            dmg = armor.takeDmg(dmg);
-            if (armor.isBroken()) {
-                armor = null;
-                // sound effect somethiing idk
-            }
+            effectiveSpd += armor.getSpd();
+        }
+        if (weapon != null) {
+            effectiveSpd += weapon.getSpd();
+        }
+        return effectiveSpd;
+    }
+
+    // updates the player's acceleration
+    public void updateAcceleration() {
+        ax = 0;
+        ay = 0;
+
+        if (up) {
+            ay = -spd()/3;
+        } else if (down) {
+            ay = spd()/3;
+        }
+        if (right) {
+            ax = spd()/3;
+        } else if (left) {
+            ax = -spd()/3;
         }
 
-        hp -= Math.max(dmg, 0);
-        if (hp<=0) {
-            hp=0;
-            die();
+        // decelerate the player when they aren't moving
+        if (! (up || down) ) {
+            // set the acceleration as a function of their velocity (like air resistance)
+            ay = -vy/3;
+        }
+        if (! (right || left) ) {
+            // set the acceleration as a function of their velocity (like air resistance)
+            ax = -vx/3;
         }
     }
 
-    public void gainxp(int xp) {
-        this.xp+=xp;
+    // updates the player's velocity
+    public void updateVelocity() {
+        // add the acceleration
+        vx += ax;
+        vy += ay;
 
-        // check level up
+        // set maximum speed (spd)
+        vx = Math.min(vx, spd());
+        vy = Math.min(vy, spd());
+
+        // set minimum speed (-spd)
+        vx = Math.max(vx, -spd());
+        vy = Math.max(vy, -spd());
     }
 
-    // restores hp and returns how much hp was restored
-    public int restore(int a) {
-        int prevhp = hp;
-        hp = Math.min(hp+a, maxhp);
-        return hp-prevhp;
-    }
+    public void move() {
+        keysHeld();
+        updateAcceleration();
+        updateVelocity();
 
-    public void die() {
-        // die or something
+        x += vx;
+        y += vy;
+
+        // System.out.printf("Up: %b, Down: %b, Left: %b, Right: %b\n", up, down, left, right);
     }
 }

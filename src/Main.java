@@ -26,17 +26,45 @@ public class Main extends JPanel{
             public void mouseExited(MouseEvent e) {}
             
         });
+
+        addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                KeyHandler.keyPressed(e);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                KeyHandler.keyReleased(e);
+            }
+            
+        });
+
+        setFocusable(true);
     }
 
     public static void main(String[] args) throws InterruptedException {
         JFrame frame = new JFrame("shalderok");
         Main panel = new Main();
         frame.add(panel);
-        frame.setSize(Constants.PANEL_WIDTH, Constants.PANEL_HEIGHT);
+        frame.setSize(Util.PANEL_WIDTH, Util.PANEL_HEIGHT);
 
         frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        while (true) {
+            panel.move();
+            panel.repaint();
+            Thread.sleep(20);
+        }
+    }
+
+    public void move() {
+        p.move();
     }
 
     @Override
