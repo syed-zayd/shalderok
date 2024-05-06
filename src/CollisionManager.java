@@ -60,6 +60,8 @@ public class CollisionManager {
         }
     }
     
+    
+
     // returns whether a displacement of dx on Hitbox a will result in a collision with Hitbox b
     private static boolean checkX(Hitbox a, Hitbox b, double dx) {
         return a.getLeft()+dx < b.getRight() && a.getRight()+dx > b.getLeft();
@@ -86,9 +88,11 @@ public class CollisionManager {
                 if (Math.abs(cx) < Math.abs(cy)) {
                     p.x += cx;
                     p.vx = 0;
+                    p.knockbackX = Math.abs(cx)/cx*50;
                 } else {
                     p.y += cy;
                     p.vy = 0;
+                    p.knockbackY = Math.abs(cy)/cy*50;
                 }
                 pHitbox.align(p.x, p.y);
             }

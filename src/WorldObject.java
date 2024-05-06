@@ -12,7 +12,7 @@ public abstract class WorldObject {
     protected double y;
     protected int w;
     protected int h;
-    private BufferedImage sprite;
+    protected BufferedImage sprite;
     private Hitbox hitbox;
 
     public WorldObject(String spriteFilePath, double x, double y, int w, int h) {

@@ -11,53 +11,27 @@ import armor.*;
 import weapon.Weapon;
 
 // singleton class for the player; get the player using Player.getInstance()
-public class Player extends WorldObject {
+public class Player extends Entity {
 
     // stats
-    private int spd;
-    private int maxHp;
-    private int hp;
-    private int dodge;
-    private int atk;
     private int xp;
-
-    // sprite
-    private BufferedImage sprite;
+    private int dodge;
 
     // equips
     private Armor armor;
     private Weapon weapon;
     private Potion[] potions;
 
-    // physics-based
-    private double angle;
-    public double vx; // velocity
-    public double vy;
-    private boolean up;
-    private boolean down;
-    private boolean right;
-    private boolean left;
-
     private static final Player instance = new Player();
 
     private Player() {
-        super("sprites/player.png", 620, 300, 200, 200);
+        super("sprites/player.png", 620, 300, 200, 200, 10, 5, 1);
 
-        this.spd = 10;
-        this.maxHp = 5;
-        this.hp = 5;
         this.dodge = 0;
-        this.atk = 1;
         this.xp = 0;
         this.armor = null;
         this.weapon = null;
         this.potions = new Potion[3];
-
-        try {
-            this.sprite = ImageIO.read(new File("sprites\\player.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -107,6 +81,19 @@ public class Player extends WorldObject {
 
     // updates the player's velocity
     public void updateVelocity() {
+
+        // decrease knockback
+        knockbackX *= 0.9;
+        knockbackY *= 0.9;
+
+        // if knockback is significant, prevent moving
+        if (Math.abs(knockbackX) > 1 || Math.abs(knockbackY) > 1) {
+            // apply knockback
+            vx = knockbackX;
+            vy = knockbackY;
+            return;
+        }
+
         if (up) {
             vy -= spd()/3;
         } else if (down) {
@@ -140,6 +127,7 @@ public class Player extends WorldObject {
 
         x += vx;
         y += vy;
+        CollisionManager.handleCollisions();
 
         getHitbox().align(x, y);
 
