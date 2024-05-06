@@ -1,29 +1,43 @@
-public class Hitbox {
-    private int x;
-    private int y;
-    private int w;
-    private int h;
+import java.awt.Graphics2D;
 
-    public Hitbox(int x, int y, int w, int h) {
+public class Hitbox {
+    private double x;
+    private double y;
+    private double w;
+    private double h;
+
+    public Hitbox(double x, double y, double w, double h) {
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
     }
 
-    public static boolean isColliding(Hitbox a, Hitbox b) {
-        // Calculate the right and bottom edges of each hitbox
-        int aRight = a.x + a.w;
-        int aBottom = a.y + a.h;
-        int bRight = b.x + b.w;
-        int bBottom = b.y + b.h;
-    
-        // Check for collision along the x-axis and y-axis
-        boolean xOverlap = a.x < bRight && aRight > b.x;
-        boolean yOverlap = a.y < bBottom && aBottom > b.y;
-    
-        // Return true if there is overlap along both axes
-        return xOverlap && yOverlap;
+    public void align(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
-    
+
+    public double getTop() {
+        return y;
+    }
+    public double getBottom() {
+        return y+h;
+    }
+    public double getLeft() {
+        return x;
+    }
+    public double getRight() {
+        return x+w;
+    }
+    public double getCenterX() {
+        return (getLeft()+getRight())/2.0;
+    }
+    public double getCenterY() {
+        return (getTop()+getBottom())/2.0;
+    }
+
+    public void paint(Graphics2D g2d) {
+        g2d.drawRect((int)x, (int)y, (int)w, (int)h);
+    }
 }

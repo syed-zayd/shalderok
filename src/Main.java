@@ -57,14 +57,10 @@ public class Main extends JPanel{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         while (true) {
-            panel.move();
+            WorldManager.getInstance().update();
             panel.repaint();
             Thread.sleep(20);
         }
-    }
-
-    public void move() {
-        p.move();
     }
 
     @Override
@@ -73,6 +69,6 @@ public class Main extends JPanel{
         Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Player.getInstance().paint(g2d);
+        WorldManager.getInstance().paint(g2d);
     }
 }

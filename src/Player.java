@@ -11,7 +11,7 @@ import armor.*;
 import weapon.Weapon;
 
 // singleton class for the player; get the player using Player.getInstance()
-public class Player {
+public class Player extends WorldObject {
 
     // stats
     private int spd;
@@ -30,13 +30,9 @@ public class Player {
     private Potion[] potions;
 
     // physics-based
-    private double x;
-    private double y;
     private double angle;
-    private double vx; // velocity
-    private double vy;
-    private double ax; // acceleration
-    private double ay;
+    public double vx; // velocity
+    public double vy;
     private boolean up;
     private boolean down;
     private boolean right;
@@ -45,6 +41,8 @@ public class Player {
     private static final Player instance = new Player();
 
     private Player() {
+        super("sprites/player.png", 620, 300, 200, 200);
+
         this.spd = 10;
         this.maxHp = 5;
         this.hp = 5;
@@ -61,8 +59,6 @@ public class Player {
             e.printStackTrace();
         }
 
-        this.x = 620;
-        this.y = 300;
     }
 
     public static Player getInstance() {
@@ -95,6 +91,7 @@ public class Player {
 
     public void paint(Graphics2D g2d) {
         g2d.drawImage(sprite, (int)x, (int)y, null);
+        getHitbox().paint(g2d);
     }
 
     public int spd() {
@@ -108,38 +105,25 @@ public class Player {
         return effectiveSpd;
     }
 
-    // updates the player's acceleration
-    public void updateAcceleration() {
-        ax = 0;
-        ay = 0;
-
-        if (up) {
-            ay = -spd()/3;
-        } else if (down) {
-            ay = spd()/3;
-        }
-        if (right) {
-            ax = spd()/3;
-        } else if (left) {
-            ax = -spd()/3;
-        }
-
-        // decelerate the player when they aren't moving
-        if (! (up || down) ) {
-            // set the acceleration as a function of their velocity (like air resistance)
-            ay = -vy/10;
-        }
-        // same for x direction
-        if (! (right || left) ) {
-            ax = -vx/10;
-        }
-    }
-
     // updates the player's velocity
     public void updateVelocity() {
-        // add the acceleration
-        vx += ax;
-        vy += ay;
+        if (up) {
+            vy -= spd()/3;
+        } else if (down) {
+            vy += spd()/3;
+        }
+        if (right) {
+            vx += spd()/3;
+        } else if (left) {
+            vx -= spd()/3;
+        }
+
+        if (! (up || down)) {
+            vy *= 0.9;
+        }
+        if (! (right || left)) {
+            vx *= 0.9;
+        }
 
         // set maximum speed (spd)
         vx = Math.min(vx, spd());
@@ -152,11 +136,12 @@ public class Player {
 
     public void move() {
         keysHeld();
-        updateAcceleration();
         updateVelocity();
 
         x += vx;
         y += vy;
+
+        getHitbox().align(x, y);
 
         // System.out.printf("Speed X: %f, Speed Y: %f\n", vx, vy);
     }
