@@ -11,7 +11,7 @@ import armor.*;
 import weapon.Weapon;
 
 // singleton class for the player; get the player using Player.getInstance()
-public class Player implements Renderable {
+public class Player {
 
     // stats
     private int spd;
@@ -93,7 +93,6 @@ public class Player implements Renderable {
         }
     }
 
-    @Override
     public void paint(Graphics2D g2d) {
         g2d.drawImage(sprite, (int)x, (int)y, null);
     }
@@ -128,11 +127,11 @@ public class Player implements Renderable {
         // decelerate the player when they aren't moving
         if (! (up || down) ) {
             // set the acceleration as a function of their velocity (like air resistance)
-            ay = -vy/3;
+            ay = -vy/10;
         }
+        // same for x direction
         if (! (right || left) ) {
-            // set the acceleration as a function of their velocity (like air resistance)
-            ax = -vx/3;
+            ax = -vx/10;
         }
     }
 
@@ -159,6 +158,6 @@ public class Player implements Renderable {
         x += vx;
         y += vy;
 
-        // System.out.printf("Up: %b, Down: %b, Left: %b, Right: %b\n", up, down, left, right);
+        // System.out.printf("Speed X: %f, Speed Y: %f\n", vx, vy);
     }
 }
