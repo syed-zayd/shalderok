@@ -46,7 +46,17 @@ public class CollisionManager {
 
         // apply the movements as long as there are no conflicts
         for (int i=0; i<steps; i++) {
-            if (!conflictsX[i])
+            if (!conflictsX[i]) {
+                p.x += stepX;
+            } else {
+                p.vx = 0;
+            }
+
+            if (!conflictsY[i]) {
+                p.y += stepY;
+            } else {
+                p.vy = 0;
+            }
         }
     }
     
