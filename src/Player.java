@@ -7,9 +7,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import armor.*;
-import weapon.Weapon;
-
 // singleton class for the player; get the player using Player.getInstance()
 public class Player extends Entity {
 

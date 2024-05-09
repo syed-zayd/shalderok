@@ -1,3 +1,4 @@
+
 public abstract class Entity extends WorldObject {
     protected int spd;
     protected int maxHp;
