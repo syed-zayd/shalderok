@@ -6,6 +6,8 @@ public class Main extends JPanel{
 
     static Player p = Player.getInstance();
 
+
+
     public Main() {
         addMouseListener(new MouseListener() {
             @Override
@@ -15,6 +17,8 @@ public class Main extends JPanel{
 
             @Override
             public void mousePressed(MouseEvent e) {}
+
+
 
             @Override
             public void mouseReleased(MouseEvent e) {}
@@ -50,6 +54,13 @@ public class Main extends JPanel{
     public static void main(String[] args) throws InterruptedException {
         JFrame frame = new JFrame("shalderok");
         Main panel = new Main();
+        
+        // set custom cursor
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Image image = toolkit.getImage("shalderok\\sprites\\cursor.png");
+        Cursor c = toolkit.createCustomCursor(image, new Point(4, 4), "img");
+        panel.setCursor (c);
+        
         frame.add(panel);
         frame.setSize(Util.PANEL_WIDTH, Util.PANEL_HEIGHT);
 
