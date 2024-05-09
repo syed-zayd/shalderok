@@ -37,6 +37,10 @@ public abstract class Weapon {
         return sprite;
     }
 
+    public boolean canUse() {
+        return System.currentTimeMillis() - lastUsed >= attackCooldown;
+    }
+
     public abstract int getAtk();
     public abstract int getDodge();
     public abstract int getSpd();
