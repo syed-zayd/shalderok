@@ -22,7 +22,7 @@ public class Player extends Entity {
     private static final Player instance = new Player();
 
     private Player() {
-        super("shalderok\\sprites\\player.png", 620, 300, 200, 200, 10, 5, 1);
+        super("sprites/player.png", 620, 300, 50, 50, 10, 5, 1);
 
         this.dodge = 0;
         this.xp = 0;

@@ -6,19 +6,16 @@ public class Main extends JPanel{
 
     static Player p = Player.getInstance();
 
-
-
     public Main() {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.printf("%d, %d\n", e.getX(), e.getY());
+
             }
 
             @Override
             public void mousePressed(MouseEvent e) {}
-
-
 
             @Override
             public void mouseReleased(MouseEvent e) {}
@@ -57,8 +54,8 @@ public class Main extends JPanel{
         
         // set custom cursor
         Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image image = toolkit.getImage("shalderok\\sprites\\cursor.png");
-        Cursor c = toolkit.createCustomCursor(image, new Point(4, 4), "img");
+        Image image = toolkit.getImage("sprites/cursor.png");
+        Cursor c = toolkit.createCustomCursor(image, new Point(16, 16), "gameplay");
         panel.setCursor (c);
         
         frame.add(panel);
@@ -80,6 +77,8 @@ public class Main extends JPanel{
         Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        g2d.translate(Util.PANEL_WIDTH/2-p.getHitbox().getCenterX(), Util.PANEL_HEIGHT/2-p.getHitbox().getCenterY());
         WorldManager.getInstance().paint(g2d);
     }
+
 }
