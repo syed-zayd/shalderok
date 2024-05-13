@@ -2,8 +2,8 @@ import java.awt.Graphics2D;
 
 public class Arrow extends Projectile {
 
-    public Arrow() {
-        // super("sprites/arrow.png", Player.getInstance().)
+    public Arrow(double x, double y, WorldObject owner) {
+        super("sprites/arrow.png", x, y, 32, 32, 1, owner);
     }
 
     @Override

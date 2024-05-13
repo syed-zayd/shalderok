@@ -16,8 +16,9 @@ public class Player extends Entity {
 
     // equips
     private Armor armor;
-    private Weapon weapon;
+    public Weapon weapon;
     private Potion[] potions;
+    public double mouseAngle;
 
     private static final Player instance = new Player();
 
@@ -62,7 +63,14 @@ public class Player extends Entity {
 
     public void paint(Graphics2D g2d) {
         g2d.drawImage(sprite, (int)x, (int)y, null);
+        if (weapon != null) {
+            weapon.paint(g2d);
+        }
         getHitbox().paint(g2d);
+
+        g2d.setColor(Color.GREEN);
+        g2d.fillRect((int)hitbox.getCenterX(), (int)hitbox.getCenterY(), 10, 10);
+        g2d.setColor(Color.BLACK);
     }
 
     public int spd() {
@@ -118,9 +126,21 @@ public class Player extends Entity {
         vy = Math.max(vy, -spd());
     }
 
+    public void updateMouseAngle() {
+        if (weapon == null) {
+            return;
+        }
+
+        Point mouse = MouseInfo.getPointerInfo().getLocation();
+        double dy = mouse.getY() - hitbox.getCenterY();
+        double dx = mouse.getX() - hitbox.getCenterX();
+        System.out.println(dy/dx);
+    }
+
     public void move() {
         keysHeld();
         updateVelocity();
+        updateMouseAngle();
 
         x += vx;
         y += vy;
@@ -128,6 +148,6 @@ public class Player extends Entity {
 
         getHitbox().align(x, y);
 
-        // System.out.printf("Speed X: %f, Speed Y: %f\n", vx, vy);
+        // System.out.println(Math.toDegrees(mouseAngle));
     }
 }

@@ -55,7 +55,7 @@ public class Main extends JPanel{
         // set custom cursor
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image image = toolkit.getImage("sprites/cursor.png");
-        Cursor c = toolkit.createCustomCursor(image, new Point(16, 16), "gameplay");
+        Cursor c = toolkit.createCustomCursor(image, new Point(0, 0), "gameplay");
         panel.setCursor (c);
         
         frame.add(panel);
@@ -76,8 +76,8 @@ public class Main extends JPanel{
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g2d.translate(Util.PANEL_WIDTH/2-p.getHitbox().getCenterX(), Util.PANEL_HEIGHT/2-p.getHitbox().getCenterY());
+        
+        // g2d.translate((int)(Util.PANEL_WIDTH/2-p.getHitbox().getCenterX()), (int)(Util.PANEL_HEIGHT/2-p.getHitbox().getCenterY()));
         WorldManager.getInstance().paint(g2d);
     }
 
