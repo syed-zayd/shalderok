@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,10 +42,10 @@ public class Player extends Entity {
     }
 
     public void keyPressed(KeyEvent e) {
-        System.out.printf("Pressed [%s]\n", KeyEvent.getKeyText(e.getKeyCode()));
+        // System.out.printf("Pressed [%s]\n", KeyEvent.getKeyText(e.getKeyCode()));
     }
     public void keyReleased(KeyEvent e) {
-        System.out.printf("Released [%s]\n", KeyEvent.getKeyText(e.getKeyCode()));
+        // System.out.printf("Released [%s]\n", KeyEvent.getKeyText(e.getKeyCode()));
     }
     public void keysHeld() {
         up = KeyHandler.isHeld(KeyEvent.VK_UP) || KeyHandler.isHeld(KeyEvent.VK_W);
@@ -127,14 +128,14 @@ public class Player extends Entity {
     }
 
     public void updateMouseAngle() {
-        if (weapon == null) {
-            return;
-        }
-
-        Point mouse = MouseInfo.getPointerInfo().getLocation();
-        double dy = mouse.getY() - hitbox.getCenterY();
+        Point mouse = Util.lastMouseMove;
         double dx = mouse.getX() - hitbox.getCenterX();
-        System.out.println(dy/dx);
+        double dy = mouse.getY() - hitbox.getCenterY();
+        mouseAngle = Math.atan2(dx, dy);
+        // if (mouseAngle<0) {
+        //     mouseAngle += 2*Math.PI;
+        // }
+        System.out.printf("%d, %d, Angle: %d\n", (int)dx, (int)dy, (int)Math.toDegrees(mouseAngle));
     }
 
     public void move() {
@@ -146,7 +147,7 @@ public class Player extends Entity {
         y += vy;
         CollisionManager.handleCollisions();
 
-        getHitbox().align(x, y);
+        hitbox.align(x, y);
 
         // System.out.println(Math.toDegrees(mouseAngle));
     }

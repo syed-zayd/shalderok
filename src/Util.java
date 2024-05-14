@@ -1,12 +1,15 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Util {
     static final int PANEL_WIDTH = 1920;
     static final int PANEL_HEIGHT = 640;
+    static Point lastMouseMove = new Point(0,0);
 
     public static BufferedImage rotateImage(BufferedImage buffImage, double angle) {
         double sin = Math.abs(Math.sin(angle));
