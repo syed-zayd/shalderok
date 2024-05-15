@@ -34,10 +34,7 @@ public class Main extends JPanel{
             public void mouseDragged(MouseEvent e) {}
 
             @Override
-            public void mouseMoved(MouseEvent e) {
-                Util.lastMouseMove = e.getPoint();
-                Util.lastMouseMove.translate(-(int) (Util.PANEL_WIDTH / 2 - p.getHitbox().getCenterX()), -(int) (Util.PANEL_HEIGHT / 2 - p.getHitbox().getCenterY()));
-            }
+            public void mouseMoved(MouseEvent e) {}
             
         });
 
@@ -71,12 +68,17 @@ public class Main extends JPanel{
         panel.setCursor (c);
         
         frame.add(panel);
-        frame.setSize(Util.PANEL_WIDTH, Util.PANEL_HEIGHT);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // frame.setUndecorated(true);
+        frame.setVisible(true);
+
+        Util.updateFrameSize(frame.getContentPane().getSize());
 
         frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         while (true) {
+            Util.updateLastMouseMove();
             WorldManager.getInstance().update();
             panel.repaint();
             Thread.sleep(20);
@@ -88,10 +90,7 @@ public class Main extends JPanel{
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
-        g2d.translate((int)(Util.PANEL_WIDTH/2-p.getHitbox().getCenterX()), (int)(Util.PANEL_HEIGHT/2-p.getHitbox().getCenterY()));
-        Util.lastMouseMove = MouseInfo.getPointerInfo().getLocation();
-        Util.lastMouseMove.translate(-(int) (Util.PANEL_WIDTH / 2 - p.getHitbox().getCenterX()), -(int) (Util.PANEL_HEIGHT / 2 - p.getHitbox().getCenterY()));
+        g2d.translate((int)(Util.panelWidth/2-p.getHitbox().getCenterX()), (int)(Util.panelHeight/2-p.getHitbox().getCenterY()));
         WorldManager.getInstance().paint(g2d);
     }
 
