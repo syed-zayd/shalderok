@@ -1,10 +1,10 @@
 import java.awt.Graphics2D;
 
 public class Hitbox {
-    private double x;
-    private double y;
-    private double w;
-    private double h;
+    double x;
+    double y;
+    double w;
+    double h;
 
     public Hitbox(double x, double y, double w, double h) {
         this.x = x;

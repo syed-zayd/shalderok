@@ -7,9 +7,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Util {
-    static final int PANEL_WIDTH = 1920;
-    static final int PANEL_HEIGHT = 640;
-    static Point lastMouseMove = new Point(0,0);
+    static double xOffset = 0;
+    static double yOffset = 0;
 
     public static BufferedImage rotateImage(BufferedImage buffImage, double angle) {
         double sin = Math.abs(Math.sin(angle));
