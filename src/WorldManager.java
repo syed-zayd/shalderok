@@ -9,7 +9,6 @@ public class WorldManager {
     private static WorldManager instance;
     private WorldManager() {
         p = Player.getInstance();
-        p.weapon = new BasicBow();
         objects = new ArrayList<WorldObject>();
 
         objects.add(new Block(200, 200, 100, 200));

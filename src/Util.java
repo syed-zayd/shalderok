@@ -1,7 +1,5 @@
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
@@ -9,21 +7,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Util {
+    static final int PANEL_WIDTH = 1920;
+    static final int PANEL_HEIGHT = 640;
     static Point lastMouseMove = new Point(0,0);
-
-    static int panelWidth = 0;
-    static int panelHeight = 0;
-
-    public static void updateFrameSize(Dimension size) {
-        panelWidth = size.width;
-        panelHeight = size.height;
-    }
-
-    // public static void updateLastMouseMove() {
-    //     Player p = Player.getInstance();
-    //     Util.lastMouseMove = MouseInfo.getPointerInfo().getLocation();
-    //     Util.lastMouseMove.translate(-(int) (panelWidth / 2 - p.getHitbox().getCenterX()), -(int) (panelHeight / 2 - p.getHitbox().getCenterY()));
-    // }
 
     public static BufferedImage rotateImage(BufferedImage buffImage, double angle) {
         double sin = Math.abs(Math.sin(angle));

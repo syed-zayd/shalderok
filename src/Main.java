@@ -25,16 +25,6 @@ public class Main extends JPanel{
 
             @Override
             public void mouseExited(MouseEvent e) {}
-
-        });
-
-        addMouseMotionListener(new MouseMotionListener() {
-
-            @Override
-            public void mouseDragged(MouseEvent e) {}
-
-            @Override
-            public void mouseMoved(MouseEvent e) {}
             
         });
 
@@ -52,6 +42,7 @@ public class Main extends JPanel{
             public void keyReleased(KeyEvent e) {
                 KeyHandler.keyReleased(e);
             }
+            
         });
 
         setFocusable(true);
@@ -64,15 +55,11 @@ public class Main extends JPanel{
         // set custom cursor
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image image = toolkit.getImage("sprites/cursor.png");
-        Cursor c = toolkit.createCustomCursor(image, new Point(16,16), "gameplay");
+        Cursor c = toolkit.createCustomCursor(image, new Point(16, 16), "gameplay");
         panel.setCursor (c);
         
         frame.add(panel);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        // frame.setUndecorated(true);
-        frame.setVisible(true);
-
-        Util.updateFrameSize(frame.getContentPane().getSize());
+        frame.setSize(Util.PANEL_WIDTH, Util.PANEL_HEIGHT);
 
         frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,7 +76,8 @@ public class Main extends JPanel{
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.translate((int)(Util.panelWidth/2-p.getHitbox().getCenterX()), (int)(Util.panelHeight/2-p.getHitbox().getCenterY()));
+
+        g2d.translate(Util.PANEL_WIDTH/2-p.getHitbox().getCenterX(), Util.PANEL_HEIGHT/2-p.getHitbox().getCenterY());
         WorldManager.getInstance().paint(g2d);
     }
 
