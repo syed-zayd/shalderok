@@ -19,11 +19,11 @@ public class Util {
         panelHeight = size.height;
     }
 
-    public static void updateLastMouseMove() {
-        Player p = Player.getInstance();
-        Util.lastMouseMove = MouseInfo.getPointerInfo().getLocation();
-        Util.lastMouseMove.translate(-(int) (panelWidth / 2 - p.getHitbox().getCenterX()), -(int) (panelHeight / 2 - p.getHitbox().getCenterY()));
-    }
+    // public static void updateLastMouseMove() {
+    //     Player p = Player.getInstance();
+    //     Util.lastMouseMove = MouseInfo.getPointerInfo().getLocation();
+    //     Util.lastMouseMove.translate(-(int) (panelWidth / 2 - p.getHitbox().getCenterX()), -(int) (panelHeight / 2 - p.getHitbox().getCenterY()));
+    // }
 
     public static BufferedImage rotateImage(BufferedImage buffImage, double angle) {
         double sin = Math.abs(Math.sin(angle));

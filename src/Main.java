@@ -78,7 +78,6 @@ public class Main extends JPanel{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         while (true) {
-            Util.updateLastMouseMove();
             WorldManager.getInstance().update();
             panel.repaint();
             Thread.sleep(20);
