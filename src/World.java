@@ -22,9 +22,10 @@ class World extends JPanel {
         p = new Player(0, 0);
         camera.centerObj = p;
         objs = new ArrayList<GameObject>();
-        
+        Wand wand = new Wand(0, 0);
         objs.add(new Wall(300, 100, 150, 300));
-        p.equip(new Wand(0, 0));
+        objs.add(wand);
+        p.equip(wand);
 
         addKeyListener(new KeyHandler());
         addMouseMotionListener(new MouseMotionListener() {
@@ -87,6 +88,10 @@ class World extends JPanel {
 
     private void handleCollisions() {
         for (GameObject obj: objs) {
+            if (obj instanceof Weapon) {
+                continue;
+            }
+
             double cx = collisionX(p, obj);
             double cy = collisionY(p, obj);
             if (cx != 0 && cy != 0) {

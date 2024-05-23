@@ -24,7 +24,7 @@ public class Wand extends Weapon {
     }
 
     public void paint(Graphics2D g2d){
-        Util.rotateImage(sprite, angle);
+
         g2d.drawImage(sprite, drawX(), drawY(), null);
     }
 

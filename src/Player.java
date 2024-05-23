@@ -72,10 +72,10 @@ class Player extends GameObject{
     }
 
     private void updateWeapon() {
-        weapon.x = x;
-        weapon.y = y-10;
         if(weapon != null){
-            weapon.angle = mouseAngle;
+            weapon.angle = mouseAngle + (Math.PI / 2);
+            weapon.x = drawCenterX() + 50*Math.cos(weapon.angle);
+            weapon.y = drawCenterY() + 50*Math.sin(weapon.angle);
         }
     }
 
