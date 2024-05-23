@@ -1,51 +1,22 @@
-import java.awt.*;
-import java.awt.RenderingHints.Key;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
+class Player extends GameObject{
+    double vx, vy; // current speed
+    double spd; // max speed
+    boolean up, down, left, right; // direction player is facing
+    double dx, dy, mouseAngle; // angle from mouse to player's center
 
-// singleton class for the player; get the player using Player.getInstance()
-public class Player extends Entity {
+    Weapon weapon;
 
-    // stats
-    private int xp;
-    private int dodge;
 
-    // equips
-    private Armor armor;
-    private Weapon weapon;
-    private Potion[] potions;
-
-    private static final Player instance = new Player();
-
-    private Player() {
-        super("sprites/player.png", 620, 300, 50, 50, 10, 5, 1);
-
-        this.dodge = 0;
-        this.xp = 0;
-        this.armor = null;
-        this.weapon = null;
-        this.potions = new Potion[3];
-
+    public Player(double x, double y) {
+        super(x, y, 32, 32);
+        spd = 5;
     }
 
-    public static Player getInstance() {
-        if (instance == null) {
-            return new Player();
-        }
-        return instance;
-    }
-
-    public void keyPressed(KeyEvent e) {
-        System.out.printf("Pressed [%s]\n", KeyEvent.getKeyText(e.getKeyCode()));
-    }
-    public void keyReleased(KeyEvent e) {
-        System.out.printf("Released [%s]\n", KeyEvent.getKeyText(e.getKeyCode()));
-    }
-    public void keysHeld() {
+    private void updateDirection() {
         up = KeyHandler.isHeld(KeyEvent.VK_UP) || KeyHandler.isHeld(KeyEvent.VK_W);
         down = KeyHandler.isHeld(KeyEvent.VK_DOWN) || KeyHandler.isHeld(KeyEvent.VK_S);
         right = KeyHandler.isHeld(KeyEvent.VK_RIGHT) || KeyHandler.isHeld(KeyEvent.VK_D);
@@ -60,74 +31,55 @@ public class Player extends Entity {
         }
     }
 
-    public void paint(Graphics2D g2d) {
-        g2d.drawImage(sprite, (int)x, (int)y, null);
-        getHitbox().paint(g2d);
-    }
-
-    public int spd() {
-        int effectiveSpd = spd;
-        if (armor != null) {
-            effectiveSpd += armor.getSpd();
-        }
-        if (weapon != null) {
-            effectiveSpd += weapon.getSpd();
-        }
-        return effectiveSpd;
-    }
-
-    // updates the player's velocity
-    public void updateVelocity() {
-
-        // decrease knockback
-        knockbackX *= 0.9;
-        knockbackY *= 0.9;
-
-        // if knockback is significant, prevent moving
-        if (Math.abs(knockbackX) > 1 || Math.abs(knockbackY) > 1) {
-            // apply knockback
-            vx = knockbackX;
-            vy = knockbackY;
-            return;
-        }
-
+    private void updateVelocity() {
         if (up) {
-            vy -= spd()/3;
+            vy -= spd/10;
         } else if (down) {
-            vy += spd()/3;
+            vy += spd/10;
         }
-        if (right) {
-            vx += spd()/3;
-        } else if (left) {
-            vx -= spd()/3;
+        if (left) {
+            vx -= spd/10;
+        } else if (right) {
+            vx += spd/10;
         }
 
-        if (! (up || down)) {
+        if (!up && !down) {
             vy *= 0.9;
         }
-        if (! (right || left)) {
+        if (!left && !right) {
             vx *= 0.9;
         }
 
-        // set maximum speed (spd)
-        vx = Math.min(vx, spd());
-        vy = Math.min(vy, spd());
-
-        // set minimum speed (-spd)
-        vx = Math.max(vx, -spd());
-        vy = Math.max(vy, -spd());
+        vx = Math.min(vx, spd);
+        vy = Math.min(vy, spd);
+        vx = Math.max(vx, -spd);
+        vy = Math.max(vy, -spd);
     }
 
-    public void move() {
-        keysHeld();
-        updateVelocity();
-
+    private void move() {
         x += vx;
         y += vy;
-        CollisionManager.handleCollisions();
-
-        getHitbox().align(x, y);
-
-        // System.out.printf("Speed X: %f, Speed Y: %f\n", vx, vy);
     }
+    
+    private void updateAngle() {
+        dx = World.mouse.getX() - (drawCenterX()-World.camera.x);
+        dy = World.mouse.getY() - (drawCenterY()-World.camera.y);
+        mouseAngle = Math.atan2(dy, dx);
+    }
+
+    public void update() {
+        updateDirection();
+        updateVelocity();
+        move();
+        updateAngle();
+    }
+
+	@Override
+	public void paint(Graphics2D g2d) {
+        g2d.setColor(Color.RED);
+		g2d.drawRect(drawX(), drawY(), w, h);
+        g2d.setColor(Color.BLACK);
+
+        g2d.drawString(String.format("%.1f, %.1f | Angle: %.2f", dx, dy, Math.toDegrees(mouseAngle)), 10, 10);
+	}
 }
