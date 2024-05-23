@@ -1,15 +1,15 @@
 class Camera {
     double x, y;
     double zoom;
-    Camera instance;
+    GameObject centerObj;
     
     public Camera() {
         zoom=1;
     }
 
-    public void center(GameObject obj) {
-        x = obj.drawCenterX() - Main.getScreenSize().getWidth()/2;
-        y = obj.drawCenterY() - Main.getScreenSize().getHeight()/2;
+    public void center() {
+        x = centerObj.drawCenterX() - Main.getScreenSize().getWidth()/2;
+        y = centerObj.drawCenterY() - Main.getScreenSize().getHeight()/2;
     }
 
     public void zoomOut() {
@@ -20,5 +20,12 @@ class Camera {
     }
     public void resetZoom() {
         zoom = 1;
+    }
+
+    public double getCenterX() {
+        return x+Main.getScreenSize().getWidth()/2.;
+    }
+    public double getCenterY() {
+        return y+Main.getScreenSize().getHeight()/2.;
     }
 }
