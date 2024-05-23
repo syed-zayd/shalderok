@@ -1,7 +1,7 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class KeyHandler implements KeyListener{
+public class KeyHandler implements KeyListener {
     private static final boolean[] KEYS_HELD = new boolean[0x10000];
 
     public void keyPressed(KeyEvent e) {

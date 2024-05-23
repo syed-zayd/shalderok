@@ -16,6 +16,10 @@ class Player extends GameObject{
         spd = 5;
     }
 
+    public void equip(Weapon weapon){
+        this.weapon = weapon;
+    }
+
     private void updateDirection() {
         up = KeyHandler.isHeld(KeyEvent.VK_UP) || KeyHandler.isHeld(KeyEvent.VK_W);
         down = KeyHandler.isHeld(KeyEvent.VK_DOWN) || KeyHandler.isHeld(KeyEvent.VK_S);
@@ -67,11 +71,20 @@ class Player extends GameObject{
         mouseAngle = Math.atan2(dy, dx);
     }
 
+    private void updateWeapon() {
+        weapon.x = x;
+        weapon.y = y-10;
+        if(weapon != null){
+            weapon.angle = mouseAngle;
+        }
+    }
+
     public void update() {
         updateDirection();
         updateVelocity();
         move();
         updateAngle();
+        updateWeapon();
     }
 
 	@Override

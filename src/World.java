@@ -24,6 +24,7 @@ class World extends JPanel {
         objs = new ArrayList<GameObject>();
         
         objs.add(new Wall(300, 100, 150, 300));
+        p.equip(new Wand(0, 0));
 
         addKeyListener(new KeyHandler());
         addMouseMotionListener(new MouseMotionListener() {
