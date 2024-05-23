@@ -1,4 +1,9 @@
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
+
 import javax.swing.JFrame;
 
 public class Main {
@@ -12,6 +17,12 @@ public class Main {
     frame.setUndecorated(false);
     frame.setVisible(true);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    // set custom cursor
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+    Image image = toolkit.getImage("sprites/cursor.png");
+    Cursor c = toolkit.createCustomCursor(image, new Point(16,16), "gameplay");
+    world.setCursor (c);
 
     while (true) {
       world.update();

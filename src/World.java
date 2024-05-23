@@ -15,12 +15,12 @@ class World extends JPanel {
     static Player p;
     ArrayList<GameObject> objs;
     
-    static final boolean[] HELD_KEYS = new boolean[0x10000];
     static Point mouse = new Point (0, 0);
     
     public World() {
         camera = new Camera();
         p = new Player(0, 0);
+        camera.centerObj = p;
         objs = new ArrayList<GameObject>();
         
         objs.add(new Wall(300, 100, 150, 300));
@@ -111,7 +111,7 @@ class World extends JPanel {
         handleCollisions();
 
         // update camera
-        camera.center(p);
+        camera.center();
     }
     
     @Override
@@ -121,7 +121,7 @@ class World extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.translate(-camera.x, -camera.y);
-        g2d.transform(new AffineTransform(camera.zoom, 0, 0, camera.zoom, p.drawCenterX()*(1-camera.zoom), p.drawCenterY()*(1-camera.zoom)));
+        g2d.transform(new AffineTransform(camera.zoom, 0, 0, camera.zoom, camera.getCenterX()*(1-camera.zoom), camera.getCenterY()*(1-camera.zoom)));
 
         p.paint(g2d);
         for (GameObject obj: objs) {
