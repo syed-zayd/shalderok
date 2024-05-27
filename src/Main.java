@@ -27,7 +27,7 @@ public class Main {
     while (true) {
       world.update();
       world.repaint();
-      Thread.sleep(5);
+      Thread.sleep(10);
     }
   }
 

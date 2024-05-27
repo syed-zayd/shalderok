@@ -1,3 +1,5 @@
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -7,6 +9,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
@@ -14,18 +18,20 @@ class World extends JPanel {
     static Camera camera;
     static Player p;
     ArrayList<GameObject> objs;
+    Room currentRoom;
     
     static Point mouse = new Point (0, 0);
     
     public World() {
-        camera = new Camera();
-        p = new Player(0, 0);
-        camera.centerObj = p;
         objs = new ArrayList<GameObject>();
-        Wand wand = new Wand(0, 0);
+        p = new Player(50, 100);
+        objs.add(p);
+        camera = new Camera();
         objs.add(new Wall(300, 100, 150, 300));
-        objs.add(wand);
-        p.equip(wand);
+        objs.add(new Spider(50, 400));
+        currentRoom = new Room(0, 0, 1000, 1000);
+
+        camera.centerObj = currentRoom;
 
         addKeyListener(new KeyHandler());
         addMouseMotionListener(new MouseMotionListener() {
@@ -88,7 +94,7 @@ class World extends JPanel {
 
     private void handleCollisions() {
         for (GameObject obj: objs) {
-            if (obj instanceof Weapon) {
+            if (! (obj instanceof Wall)) {
                 continue;
             }
 
@@ -104,6 +110,19 @@ class World extends JPanel {
                 }
             }
         }
+
+        // double cx = collisionX(currentRoom, p);
+        // double cy = collisionY(currentRoom, p);
+        // if (cx != 0 && cy != 0) {
+        //     if (Math.abs(cx) < Math.abs(cy)) {
+        //         p.x += cx;
+        //         p.vx = 0;
+        //     } else {
+        //         p.y += cy;
+        //         p.vy = 0;
+        //     }
+        // }
+
     }
 
     public void update() {
@@ -126,6 +145,12 @@ class World extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        try {
+            g2d.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts/MysteryQuest-Regular.ttf")).deriveFont(18f));
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+
         g2d.translate(-camera.x, -camera.y);
         g2d.transform(new AffineTransform(camera.zoom, 0, 0, camera.zoom, camera.getCenterX()*(1-camera.zoom), camera.getCenterY()*(1-camera.zoom)));
 
@@ -133,6 +158,7 @@ class World extends JPanel {
         for (GameObject obj: objs) {
             obj.paint(g2d);
         }
+        currentRoom.paint(g2d);
     }
     
 }

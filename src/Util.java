@@ -1,3 +1,4 @@
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -31,4 +32,16 @@ public class Util {
     
         return rotatedImage;
     }
+
+    public static void drawCenteredString(Graphics2D g2d, String text, int centerX, int y) {
+        // Get font metrics for the current font
+        FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
+
+        // Determine the X coordinate for the text such that it's centered at centerX
+        int x = centerX - (metrics.stringWidth(text) / 2);
+
+        // Draw the string
+        g2d.drawString(text, x, y);
+    }
+
 }

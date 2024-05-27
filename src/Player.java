@@ -37,14 +37,14 @@ class Player extends GameObject{
 
     private void updateVelocity() {
         if (up) {
-            vy -= spd/10;
+            vy -= spd/6;
         } else if (down) {
-            vy += spd/10;
+            vy += spd/6;
         }
         if (left) {
-            vx -= spd/10;
+            vx -= spd/6;
         } else if (right) {
-            vx += spd/10;
+            vx += spd/6;
         }
 
         if (!up && !down) {
@@ -93,6 +93,6 @@ class Player extends GameObject{
 		g2d.drawRect(drawX(), drawY(), w, h);
         g2d.setColor(Color.BLACK);
 
-        g2d.drawString(String.format("%.1f, %.1f | Angle: %.2f", dx, dy, Math.toDegrees(mouseAngle)), 10, 10);
+        g2d.drawString(String.format("%.1f, %.1f | Angle: %.2f", dx, dy, Math.toDegrees(mouseAngle)), 500, -50);
 	}
 }
