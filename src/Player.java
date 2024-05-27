@@ -13,7 +13,7 @@ class Player extends GameObject{
 
     public Player(double x, double y) {
         super(x, y, 32, 32);
-        spd = 5;
+        spd = 3;
     }
 
     public void equip(Weapon weapon){
@@ -37,21 +37,21 @@ class Player extends GameObject{
 
     private void updateVelocity() {
         if (up) {
-            vy -= spd/6;
+            vy -= spd/10;
         } else if (down) {
-            vy += spd/6;
+            vy += spd/10;
         }
         if (left) {
-            vx -= spd/6;
+            vx -= spd/10;
         } else if (right) {
-            vx += spd/6;
+            vx += spd/10;
         }
 
         if (!up && !down) {
-            vy *= 0.9;
+            vy *= 0.92;
         }
         if (!left && !right) {
-            vx *= 0.9;
+            vx *= 0.92;
         }
 
         vx = Math.min(vx, spd);

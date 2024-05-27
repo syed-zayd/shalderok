@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 class World extends JPanel {
+    static final int TILE_SIZE = 32;
     static Camera camera;
     static Player p;
     ArrayList<GameObject> objs;
@@ -27,11 +28,12 @@ class World extends JPanel {
         p = new Player(50, 100);
         objs.add(p);
         camera = new Camera();
+        camera.centerObj = p;
         objs.add(new Wall(300, 100, 150, 300));
         objs.add(new Spider(50, 400));
-        currentRoom = new Room(0, 0, 1000, 1000);
 
-        camera.centerObj = currentRoom;
+        // currentRoom = new Room(0, 0, 20, 10);
+
 
         addKeyListener(new KeyHandler());
         addMouseMotionListener(new MouseMotionListener() {
@@ -158,7 +160,7 @@ class World extends JPanel {
         for (GameObject obj: objs) {
             obj.paint(g2d);
         }
-        currentRoom.paint(g2d);
+        // currentRoom.paint(g2d);
     }
     
 }

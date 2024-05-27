@@ -44,4 +44,7 @@ public class Util {
         g2d.drawString(text, x, y);
     }
 
+    public static int randInt(int min, int max) {
+        return min + (int)(Math.random() * ((max - min) + 1));
+    }
 }
