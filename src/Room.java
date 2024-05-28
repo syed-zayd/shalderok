@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Room {
     static final int TILE_SIZE = 32;
 
+    boolean conflicted = false;
     public String type;
     private GameObject[][] grid;
     ArrayList<GameObject> objs;
@@ -70,7 +71,7 @@ public class Room {
         }
     }
 
-    public Room(String type, double x, double y, String direction) {
+    public Room(String type, double x, double y, String direction, Floor f) {
         this.type = type;
         this.objs = new ArrayList<GameObject>();
 
@@ -90,6 +91,10 @@ public class Room {
             case "up":
                 // build a path of walls
                 for (int i=0; i<5; i++) {
+                    if (isConflict(x-TILE_SIZE, y-TILE_SIZE)) {
+                        return;
+                    }
+
                     objs.add(new Wall(x-TILE_SIZE, y-TILE_SIZE, TILE_SIZE, TILE_SIZE));
                     objs.add(new Wall(x+TILE_SIZE, y-TILE_SIZE, TILE_SIZE, TILE_SIZE));
                     y-=TILE_SIZE;
@@ -162,5 +167,9 @@ public class Room {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    boolean isConflict(double x, double y) {
+        return true;
     }
 }

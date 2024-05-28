@@ -43,6 +43,7 @@ class World extends JPanel {
             }
             
         });
+
         addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {

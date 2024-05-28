@@ -2,7 +2,7 @@ import java.awt.Graphics2D;
 import java.util.*;
 
 public class Floor {
-    boolean[][] visited = new boolean[0x1000][0x1000];
+    boolean[][] visited = new boolean[Short.MAX_VALUE][Short.MAX_VALUE];
 
     private Map<Room, ArrayList<Room>> connections;
     public Room entrance;
@@ -29,7 +29,7 @@ public class Floor {
         int posX = 100;
         int posY = 100;
 
-        entrance = new Room("entrance", 0, 0, "none");
+        entrance = new Room("entrance", 0, 0, "none", this);
         addRoom(entrance);
 
         visited[posX][posY] = true;
@@ -80,12 +80,13 @@ public class Floor {
             }
 
 
-            next = new Room("normal", x, y, direction);
+            next = new Room("normal", x, y, direction, this);
             addRoom(next);
             connect(current, next, direction);
 
             current = next;
         }
+        
         
     }
 
@@ -93,5 +94,9 @@ public class Floor {
         return new ArrayList<Room>(connections.keySet());
     }
 
-    
+    void visit(int x, int y) {
+        x/=Room.TILE_SIZE;
+        y/=Room.TILE_SIZE;
+        visited[x>=0 ? x : Integer.MAX_VALUE-x][y>=0 ? y : Integer.MAX_VALUE-y] = true;
+    }
 }
