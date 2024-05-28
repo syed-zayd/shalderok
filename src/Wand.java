@@ -19,17 +19,24 @@ public class Wand extends Weapon {
         }
     }
 
+    @Override
     public void shoot(){
-
+        projectiles.add(new Projectile(x, y, angle, 20, 20, Projectile.LINEAR));
     }
 
+    @Override
     public void paint(Graphics2D g2d){
-
         g2d.drawImage(sprite, drawX(), drawY(), null);
+        for(Projectile projectile: projectiles){
+            projectile.paint(g2d);
+        }
     }
 
+    @Override
     public void update(){
-
+        for(Projectile projectile: projectiles){
+            projectile.update();
+        }
     }
 
 }

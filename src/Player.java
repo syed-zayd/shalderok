@@ -14,10 +14,17 @@ class Player extends GameObject{
     public Player(double x, double y) {
         super(x, y, 16, 16);
         spd = 3;
+        weapon = new Wand(x, y);
     }
 
     public void equip(Weapon weapon){
         this.weapon = weapon;
+    }
+
+    public void useWeapon(){
+        if(weapon != null){
+            weapon.shoot();
+        }
     }
 
     private void updateDirection() {
@@ -74,8 +81,9 @@ class Player extends GameObject{
     private void updateWeapon() {
         if(weapon != null){
             weapon.angle = mouseAngle + (Math.PI / 2);
-            weapon.x = drawCenterX() + 50*Math.cos(weapon.angle);
-            weapon.y = drawCenterY() + 50*Math.sin(weapon.angle);
+            weapon.x = drawX();
+            weapon.y = drawY();
+            weapon.update();
         }
     }
 
@@ -94,5 +102,12 @@ class Player extends GameObject{
         g2d.setColor(Color.BLACK);
 
         Util.drawCenteredString(g2d, String.format("vx: %.1f, vy: %.1f", vx, vy), drawCenterX(), drawY()-10);
+
+        // draw weapon
+
+        if(weapon != null){
+            weapon.paint(g2d);
+        }
+
 	}
 }
