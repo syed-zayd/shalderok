@@ -47,4 +47,19 @@ public class Util {
     public static int randInt(int min, int max) {
         return min + (int)(Math.random() * ((max - min) + 1));
     }
+
+    public static String randDirection() {
+        switch (randInt(0, 3)) {
+            case 0:
+                return "up";
+            case 1:
+                return "down";
+            case 2:
+                return "left";
+            case 3:
+                return "right";
+            default:
+                return null;
+        }
+    }
 }

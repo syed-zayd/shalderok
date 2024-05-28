@@ -24,7 +24,8 @@ public class Main {
     Cursor c = toolkit.createCustomCursor(image, new Point(16,16), "gameplay");
     world.setCursor (c);
 
-    Floor f = new Floor();
+    // Floor f = new Floor();
+    // f.depthFirstTraversal(f.entrance);
 
     while (true) {
       world.update();

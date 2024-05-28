@@ -18,21 +18,17 @@ class World extends JPanel {
     static final int TILE_SIZE = 32;
     static Camera camera;
     static Player p;
-    ArrayList<GameObject> objs;
-    Room currentRoom;
+    Floor f;
     
     static Point mouse = new Point (0, 0);
     
     public World() {
-        objs = new ArrayList<GameObject>();
         p = new Player(50, 100);
-        objs.add(p);
         camera = new Camera();
         camera.centerObj = p;
-        objs.add(new Wall(300, 100, 150, 300));
-        objs.add(new Spider(50, 400));
+        // objs.add(new Wall(300, 100, 150, 300));
 
-        // currentRoom = new Room(0, 0, 20, 10);
+        f = new Floor();
 
 
         addKeyListener(new KeyHandler());
@@ -95,43 +91,35 @@ class World extends JPanel {
     }
 
     private void handleCollisions() {
-        for (GameObject obj: objs) {
-            if (! (obj instanceof Wall)) {
-                continue;
-            }
+        for (Room r: f.getRooms()) {
+            for (GameObject obj: r.objs) {
+                if (! (obj instanceof Wall)) {
+                    continue;
+                }
 
-            double cx = collisionX(p, obj);
-            double cy = collisionY(p, obj);
-            if (cx != 0 && cy != 0) {
-                if (Math.abs(cx) < Math.abs(cy)) {
-                    p.x += cx;
-                    p.vx = 0;
-                } else {
-                    p.y += cy;
-                    p.vy = 0;
+                double cx = collisionX(p, obj);
+                double cy = collisionY(p, obj);
+                if (cx != 0 && cy != 0) {
+                    if (Math.abs(cx) < Math.abs(cy)) {
+                        p.x += cx;
+                        p.vx = 0;
+                    } else {
+                        p.y += cy;
+                        p.vy = 0;
+                    }
                 }
             }
         }
-
-        // double cx = collisionX(currentRoom, p);
-        // double cy = collisionY(currentRoom, p);
-        // if (cx != 0 && cy != 0) {
-        //     if (Math.abs(cx) < Math.abs(cy)) {
-        //         p.x += cx;
-        //         p.vx = 0;
-        //     } else {
-        //         p.y += cy;
-        //         p.vy = 0;
-        //     }
-        // }
-
     }
 
     public void update() {
         // update every object
         p.update();
-        for (GameObject obj : objs) {
-            obj.update();
+
+        for (Room r: f.getRooms()) {
+            for (GameObject obj : r.objs) {
+                obj.update();
+            }
         }
 
         // manage collisions
@@ -157,10 +145,12 @@ class World extends JPanel {
         g2d.transform(new AffineTransform(camera.zoom, 0, 0, camera.zoom, camera.getCenterX()*(1-camera.zoom), camera.getCenterY()*(1-camera.zoom)));
 
         p.paint(g2d);
-        for (GameObject obj: objs) {
-            obj.paint(g2d);
+        
+        for (Room r: f.getRooms()) {
+            for (GameObject o: r.objs) {
+                o.paint(g2d);
+            }
         }
-        // currentRoom.paint(g2d);
     }
     
 }

@@ -15,6 +15,7 @@ class Wall extends GameObject {
 	@Override
 	public void paint(Graphics2D g2d) {
         g2d.setColor(Color.darkGray);
+		g2d.drawRect((int)x, (int)y, w, h);
 		g2d.fillRect((int)x, (int)y, w, h);
         g2d.setColor(Color.BLACK);
 	}

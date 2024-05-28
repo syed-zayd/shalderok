@@ -24,6 +24,4 @@ public class NavMesh {
         p1.addNeighbor(p2);
         p2.addNeighbor(p1);
     }
-
-    void generateNavMesh
 }

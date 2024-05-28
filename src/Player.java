@@ -12,7 +12,7 @@ class Player extends GameObject{
 
 
     public Player(double x, double y) {
-        super(x, y, 32, 32);
+        super(x, y, 16, 16);
         spd = 3;
     }
 
@@ -93,6 +93,6 @@ class Player extends GameObject{
 		g2d.drawRect(drawX(), drawY(), w, h);
         g2d.setColor(Color.BLACK);
 
-        g2d.drawString(String.format("%.1f, %.1f | Angle: %.2f", dx, dy, Math.toDegrees(mouseAngle)), 500, -50);
+        Util.drawCenteredString(g2d, String.format("vx: %.1f, vy: %.1f", vx, vy), drawCenterX(), drawY()-10);
 	}
 }
