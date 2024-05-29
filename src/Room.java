@@ -91,9 +91,9 @@ public class Room {
             case "up":
                 // build a path of walls
                 for (int i=0; i<5; i++) {
-                    if (isConflict(x-TILE_SIZE, y-TILE_SIZE)) {
-                        return;
-                    }
+                    // if (isConflict(x-TILE_SIZE, y-TILE_SIZE)) {
+                    //     return;
+                    // }
 
                     objs.add(new Wall(x-TILE_SIZE, y-TILE_SIZE, TILE_SIZE, TILE_SIZE));
                     objs.add(new Wall(x+TILE_SIZE, y-TILE_SIZE, TILE_SIZE, TILE_SIZE));
