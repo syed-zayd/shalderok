@@ -48,18 +48,22 @@ public class Util {
         return min + (int)(Math.random() * ((max - min) + 1));
     }
 
-    public static String randDirection() {
-        switch (randInt(0, 3)) {
-            case 0:
-                return "up";
-            case 1:
-                return "down";
-            case 2:
-                return "left";
-            case 3:
-                return "right";
-            default:
-                return null;
+    public static String randDirection(boolean up, boolean down, boolean left, boolean right) {
+        int options = (up?1:0) + (down?1:0) + (left?1:0) + (right?1:0);
+        int r = Util.randInt(1, options);
+        int i=1;
+        if (up && r==i++) {
+            return "up";
         }
+        if (down && r==i++) {
+            return "down";
+        }
+        if (left && r==i++) {
+            return "left";
+        }
+        if (right && r==i++) {
+            return "right";
+        }
+        return "none";
     }
 }

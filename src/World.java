@@ -13,6 +13,8 @@ import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.swing.JPanel;
 
 class World extends JPanel {
@@ -28,7 +30,11 @@ class World extends JPanel {
         camera = new Camera();
         camera.centerObj = p;
 
-        f = new Floor();
+        try {
+            f = new Floor();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         addMouseListener(new MouseListener() {
 
@@ -125,7 +131,9 @@ class World extends JPanel {
 
     private void handleCollisions() {
         for (Room r: f.getRooms()) {
-            for (GameObject obj: r.objs) {
+            Iterator<GameObject> it = r.getObjIterator();
+            while (it.hasNext()) {
+                GameObject obj = it.next();
                 if (! (obj instanceof Wall)) {
                     continue;
                 }
@@ -150,8 +158,9 @@ class World extends JPanel {
         p.update();
 
         for (Room r: f.getRooms()) {
-            for (GameObject obj : r.objs) {
-                obj.update();
+            Iterator<GameObject> it = r.getObjIterator();
+            while (it.hasNext()) {
+                it.next().update();
             }
         }
 
@@ -180,8 +189,9 @@ class World extends JPanel {
         p.paint(g2d);
         
         for (Room r: f.getRooms()) {
-            for (GameObject o: r.objs) {
-                o.paint(g2d);
+            Iterator<GameObject> it = r.getObjIterator();
+            while (it.hasNext()) {
+                it.next().paint(g2d);
             }
         }
     }

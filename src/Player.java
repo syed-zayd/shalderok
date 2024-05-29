@@ -101,7 +101,7 @@ class Player extends GameObject{
 		g2d.drawRect(drawX(), drawY(), w, h);
         g2d.setColor(Color.BLACK);
 
-        Util.drawCenteredString(g2d, String.format("vx: %.1f, vy: %.1f", vx, vy), drawCenterX(), drawY()-10);
+        Util.drawCenteredString(g2d, String.format("mx: %.0f, my: %.0f", World.mouse.getX()+World.camera.x, World.mouse.getY()+World.camera.y), drawCenterX(), drawY()-10);
 
         // draw weapon
 
