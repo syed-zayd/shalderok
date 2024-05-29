@@ -34,7 +34,7 @@ public class Floor {
 
         visited[posX][posY] = true;
         Room current = entrance;
-        for (int i=0; i<Util.randInt(5, 8); i++) {
+        for (int i=0; i<Util.randInt(1, 2); i++) {
             String direction = null;
             int nPosX = posX;
             int nPosY = posY;

@@ -9,9 +9,7 @@ public class Projectile extends GameObject {
 
     interface AttackPattern {
     
-        public double updatePositionX(double initialX, double vel, int timeOfFlight, double angle);
-
-        public double updatePositionY(double initialY, double vel, int timeOfFlight, double angle);
+        public Coordinate updatePosition(double initialX, double initialY, double vel, int timeOfFlight, double angle);
     
     }
 
@@ -27,19 +25,46 @@ public class Projectile extends GameObject {
     
     public static final AttackPattern LINEAR = new AttackPattern() {
 
-        public double updatePositionX(double initialX, double vel, int timeOfFlight, double angle){
+        public Coordinate updatePosition(double initialX, double initialY, double vel, int timeOfFlight, double angle){
 
-            return vel * Math.cos(angle) * timeOfFlight + initialX;
+            Coordinate dpos = new Coordinate(vel * timeOfFlight, 0);
+            // dpos.reflect();
+            dpos.rotate(angle);
+            
+            return new Coordinate(initialX + dpos.getX(), initialY + dpos.getY());
 
-        }
-        
-        public double updatePositionY(double initialY, double vel, int timeOfFlight, double angle){
-            
-            return vel * Math.sin(angle) * timeOfFlight + initialY;
-            
         }
 
     };
+
+    // public static final AttackPattern ZIGZAG = new AttackPattern() {
+
+    //     public double updatePositionX(double initialX, double vel, int timeOfFlight, double angle) {
+            
+    //         if((timeOfFlight / 100) % 2 == 0){
+    //             return vel * Math.cos(angle) * timeOfFlight + initialX;
+    //         }
+
+    //     }
+
+    //     public double updatePositionY(double initialY, double vel, int timeOfFlight, double angle) {
+            
+
+
+    //     }
+        
+    // };
+
+    // public static final AttackPattern SINUSOIDAL = new AttackPattern() {
+
+    //     public double[] updatePosition(double initialX, double initialY, double vel, int timeOfFlight, double angle){
+
+    //         double[] pos = {};
+    //         return pos;
+
+    //     }
+
+    // };
 
     public Projectile(double x, double y, double angle, int w, int h, AttackPattern ap) {
         super(x, y, w, h);
@@ -60,8 +85,9 @@ public class Projectile extends GameObject {
 
     @Override
     public void update() {
-        x = attackPattern.updatePositionX(initialX, vel, timeOfFlight, angle);
-        y = attackPattern.updatePositionY(initialY, vel, timeOfFlight, angle);
+        Coordinate pos = attackPattern.updatePosition(initialX, initialY, vel, timeOfFlight, angle);
+        x = pos.getX();
+        y = pos.getY();
         timeOfFlight++;
     }
 
