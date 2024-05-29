@@ -75,12 +75,12 @@ class Player extends GameObject{
     private void updateAngle() {
         dx = World.mouse.getX() - (drawCenterX()-World.camera.x);
         dy = World.mouse.getY() - (drawCenterY()-World.camera.y);
-        mouseAngle = Math.atan2(dy, dx);
+        mouseAngle = -1 * Math.atan2(dy, dx);
     }
 
     private void updateWeapon() {
         if(weapon != null){
-            weapon.angle = mouseAngle + (Math.PI / 2);
+            weapon.angle = mouseAngle;
             weapon.x = drawX();
             weapon.y = drawY();
             weapon.update();
