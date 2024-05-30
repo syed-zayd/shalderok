@@ -93,6 +93,7 @@ public class Projectile extends GameObject {
     @Override
     public void paint(Graphics2D g2d) {
         g2d.drawImage(sprite, drawX(), drawY(), null);
+        g2d.fillRect(drawCenterX(), drawCenterY(), 5, 5);
     }
     
     

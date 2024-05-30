@@ -32,6 +32,7 @@ class World extends JPanel {
             e.printStackTrace();
         }
         p = new Player(50, 100, f.entrance);
+        f.weapons.add(p.weapon);
         camera = new Camera();
         camera.centerObj = p;
 
@@ -135,6 +136,7 @@ class World extends JPanel {
     }
 
     private void handleCollisions() {
+        // object collisions
         for (Room r: p.getRooms()) {
             for (GameObject obj: r.objs) {
 
@@ -150,7 +152,7 @@ class World extends JPanel {
                             p.y += cy;
                             p.vy = 0;
                         }
-                    } else if (obj instanceof Empty) {
+                    } else if (obj instanceof Empty || obj instanceof Path) {
                         p.r = r;
                     }
                 }
@@ -173,10 +175,27 @@ class World extends JPanel {
                         }
                     }    
                 }
+
+                // weapon projectile collides with object
+                for (Weapon w: f.weapons) {
+                    for (Projectile p: w.activeProjectiles) {
+                        cx = collisionX(p, obj);
+                        cy = collisionY(p, obj);
+                        if (cx != 0 && cy != 0) { // collision has occured
+                            // if (obj instanceof Wall) {
+                            //     if (Math.abs(cx) < Math.abs(cy)) {
+                            //         e.x += cx;
+                            //     } else {
+                            //         e.y += cy;
+                            //     }
+                            // }
+                        }    
+                    }
+                }
             }
         }
 
-        // player collides with enemy
+        // enemy collisions
         for (Enemy e: f.enemies) {
             double cx = collisionX(p, e);
             double cy = collisionY(p, e);
