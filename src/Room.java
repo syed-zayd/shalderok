@@ -214,6 +214,7 @@ public class Room {
                         break;
                     case 'P':
                         grid[row][col] = new Path(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        break;
                     case 'E':
                     default:
                         grid[row][col] = new Empty(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
