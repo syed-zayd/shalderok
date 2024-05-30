@@ -96,6 +96,7 @@ class Player extends GameObject{
         dx = World.mouse.getX() - (drawCenterX()-World.camera.x);
         dy = World.mouse.getY() - (drawCenterY()-World.camera.y);
         mouseAngle = -1 * Math.atan2(dy, dx);
+        System.out.println(mouseAngle);
     }
 
     private void updateWeapon() {

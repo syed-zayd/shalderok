@@ -22,21 +22,23 @@ public class Wand extends Weapon {
 
     @Override
     public void shoot(){
-        projectiles.add(new Projectile(x, y, angle, 20, 20, 100, Projectile.LINEAR));
+        queuedProjectiles.add(new Projectile(x, y, angle, 20, 20, 100, Projectile.LINEAR));
         System.out.println(angle);
     }
 
     @Override
     public void paint(Graphics2D g2d){
         g2d.drawImage(sprite, drawX(), drawY(), null);
-        for(Projectile projectile: projectiles){
+        for(Projectile projectile: activeProjectiles){
             projectile.paint(g2d);
         }
     }
 
     @Override
     public void update(){
-        Iterator<Projectile> it = projectiles.iterator();
+        activeProjectiles.addAll(queuedProjectiles);
+        queuedProjectiles.clear();
+        Iterator<Projectile> it = activeProjectiles.iterator();
         while (it.hasNext()) {
             Projectile projectile = it.next();
             projectile.update();
