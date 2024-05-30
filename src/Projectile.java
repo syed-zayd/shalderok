@@ -30,6 +30,7 @@ public class Projectile extends GameObject {
             Coordinate dpos = new Coordinate(vel * timeOfFlight, 0);
             // dpos.reflect();
             dpos.rotate(angle);
+            System.out.println("Angle: " + angle + " X Transform: " + dpos.getX() + " Y Transform: " + dpos.getY());
             
             return new Coordinate(initialX + dpos.getX(), initialY + dpos.getY());
 
@@ -37,23 +38,20 @@ public class Projectile extends GameObject {
 
     };
 
-    // public static final AttackPattern ZIGZAG = new AttackPattern() {
+    public static final AttackPattern ZIGZAG = new AttackPattern() {
 
-    //     public double updatePositionX(double initialX, double vel, int timeOfFlight, double angle) {
+        public Coordinate updatePosition(double initialX, double initialY, double vel, int timeOfFlight, double angle){
+
+            Coordinate dpos = new Coordinate(vel * timeOfFlight, 0);
+            // dpos.reflect();
+            dpos.rotate(angle);
+            System.out.println("Angle: " + angle + " X Transform: " + dpos.getX() + " Y Transform: " + dpos.getY());
             
-    //         if((timeOfFlight / 100) % 2 == 0){
-    //             return vel * Math.cos(angle) * timeOfFlight + initialX;
-    //         }
+            return new Coordinate(initialX + dpos.getX(), initialY + dpos.getY());
 
-    //     }
+        }
 
-    //     public double updatePositionY(double initialY, double vel, int timeOfFlight, double angle) {
-            
-
-
-    //     }
-        
-    // };
+    };
 
     // public static final AttackPattern SINUSOIDAL = new AttackPattern() {
 
