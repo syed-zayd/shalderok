@@ -1,6 +1,7 @@
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
@@ -21,7 +22,7 @@ public class Wand extends Weapon {
 
     @Override
     public void shoot(){
-        projectiles.add(new Projectile(x, y, angle, 20, 20, Projectile.LINEAR));
+        projectiles.add(new Projectile(x, y, angle, 20, 20, 100, Projectile.LINEAR));
         System.out.println(angle);
     }
 
@@ -35,8 +36,13 @@ public class Wand extends Weapon {
 
     @Override
     public void update(){
-        for(Projectile projectile: projectiles){
+        Iterator<Projectile> it = projectiles.iterator();
+        while (it.hasNext()) {
+            Projectile projectile = it.next();
             projectile.update();
+            if (projectile.timeOfFlight >= projectile.duration) {
+                it.remove();
+            }
         }
     }
 

@@ -16,8 +16,8 @@ public class Projectile extends GameObject {
     private double initialX;
     private double initialY;
     private double vel;
-    private int timeOfFlight;
-    private int duration;
+    int timeOfFlight;
+    int duration;
     private double angle;
     private AttackPattern attackPattern;
     private int bouncesRemaining;
@@ -66,12 +66,13 @@ public class Projectile extends GameObject {
 
     // };
 
-    public Projectile(double x, double y, double angle, int w, int h, AttackPattern ap) {
+    public Projectile(double x, double y, double angle, int w, int h, int duration, AttackPattern ap) {
         super(x, y, w, h);
         this.initialX = x;
         this.initialY = y;
         this.angle = angle;
         timeOfFlight = 0;
+        this.duration = duration;
         attackPattern = ap;
         this.vel = 5;
 

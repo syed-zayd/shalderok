@@ -10,6 +10,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,19 +23,23 @@ class World extends JPanel {
     static Camera camera;
     static Player p;
     Floor f;
-    
     static Point mouse = new Point (0, 0);
     
     public World() {
-        p = new Player(50, 100);
-        camera = new Camera();
-        camera.centerObj = p;
-
         try {
             f = new Floor();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        p = new Player(50, 100, f.entrance);
+        camera = new Camera();
+        camera.centerObj = p;
+
+        // first room
+        Room abc = f.getConnectingRooms(f.entrance).get(0);
+        Spider sp = new Spider(abc.gateUp.x, abc.gateLeft.y);
+        f.enemies.add(sp);
+        sp.debug = sp.x + ", " + sp.y;
 
         addMouseListener(new MouseListener() {
 
@@ -130,26 +135,63 @@ class World extends JPanel {
     }
 
     private void handleCollisions() {
-        for (Room r: f.getRooms()) {
-            Iterator<GameObject> it = r.getObjIterator();
-            while (it.hasNext()) {
-                GameObject obj = it.next();
-                if (! (obj instanceof Wall)) {
-                    continue;
-                }
+        for (Room r: p.getRooms()) {
+            for (GameObject obj: r.objs) {
 
+                // player collides with object
                 double cx = collisionX(p, obj);
                 double cy = collisionY(p, obj);
-                if (cx != 0 && cy != 0) {
-                    if (Math.abs(cx) < Math.abs(cy)) {
-                        p.x += cx;
-                        p.vx = 0;
-                    } else {
-                        p.y += cy;
-                        p.vy = 0;
+                if (cx != 0 && cy != 0) { // collision has occured
+                    if (obj instanceof Wall) {
+                        if (Math.abs(cx) < Math.abs(cy)) {
+                            p.x += cx;
+                            p.vx = 0;
+                        } else {
+                            p.y += cy;
+                            p.vy = 0;
+                        }
+                    } else if (obj instanceof Empty) {
+                        p.r = r;
                     }
                 }
+
+                // enemy collides with object
+                for (Enemy e: f.enemies) {
+                    cx = collisionX(e, obj);
+                    cy = collisionY(e, obj);
+                    if (cx != 0 && cy != 0) { // collision has occured
+                        if (obj instanceof Wall) {
+                            if (Math.abs(cx) < Math.abs(cy)) {
+                                e.x += cx;
+                            } else {
+                                e.y += cy;
+                            }
+                        } else if (obj instanceof Empty) {
+                            if (r == p.r) {
+                                e.active = true;
+                            }
+                        }
+                    }    
+                }
             }
+        }
+
+        // player collides with enemy
+        for (Enemy e: f.enemies) {
+            double cx = collisionX(p, e);
+            double cy = collisionY(p, e);
+            if (cx != 0 && cy != 0) { // collision has occured
+                Point2D.Double knockbackVector = e.getNormalVectorToPlayer();
+                p.knockbackX = 25*knockbackVector.x;
+                p.knockbackY = 25*knockbackVector.y;
+                e.vx = 0;
+                e.vy = 0;
+                if (Math.abs(cx) < Math.abs(cy)) {
+                    e.x -= cx;
+                } else {
+                    e.y -= cy;
+                }
+            }    
         }
     }
 
@@ -157,11 +199,16 @@ class World extends JPanel {
         // update every object
         p.update();
 
-        for (Room r: f.getRooms()) {
-            Iterator<GameObject> it = r.getObjIterator();
-            while (it.hasNext()) {
-                it.next().update();
+        for (Room r: p.getRooms()) {
+            for (GameObject obj: r.objs) {
+                obj.update();
             }
+        }
+        for (Enemy e: f.enemies) {
+            if (e.active) {
+                e.update();
+            }
+            e.active = false;
         }
 
         // manage collisions
@@ -186,14 +233,18 @@ class World extends JPanel {
         g2d.translate(-camera.x, -camera.y);
         g2d.transform(new AffineTransform(camera.zoom, 0, 0, camera.zoom, camera.getCenterX()*(1-camera.zoom), camera.getCenterY()*(1-camera.zoom)));
 
-        p.paint(g2d);
         
         for (Room r: f.getRooms()) {
-            Iterator<GameObject> it = r.getObjIterator();
-            while (it.hasNext()) {
-                it.next().paint(g2d);
+            for (GameObject obj: r.objs) {
+                obj.paint(g2d);
             }
         }
+        for (Enemy e: f.enemies) {
+            e.paint(g2d);
+        }
+
+        p.paint(g2d);
+
     }
     
 }
