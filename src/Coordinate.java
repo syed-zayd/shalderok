@@ -14,7 +14,7 @@ public class Coordinate {
 
     public void rotate(double angle){
         double transformX = x * Math.cos(angle) - y * Math.sin(angle);
-        double transformY = x * Math.sin(angle) + y * Math.cos(angle);
+        double transformY = -x * Math.sin(angle) - y * Math.cos(angle);
         x = transformX;
         y = transformY;
     }
