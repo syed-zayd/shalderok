@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,13 +88,8 @@ public class Room {
         if (type == "entrance") {
             filePath = "rooms/entrance.txt";
         } else if (type == "normal") {
-            try {
-                File[] normalRooms = new File("rooms/normal").listFiles
-                filePath = "rooms/" + normalRooms[Util.randInt(0,normalRooms.length-1)].getName();
-            }
-            catch (IOException e) {
-                filePath = "rooms/normal.txt";
-            }
+            File[] normalRooms = new File("rooms/normal").listFiles();
+            filePath = "rooms/normal/" + normalRooms[Util.randInt(0,normalRooms.length-1)].getName();
         }
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         cols = Integer.parseInt(br.readLine());
@@ -216,6 +212,8 @@ public class Room {
                         grid[row][col] = new Wall(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE,
                                 Color.darkGray);
                         break;
+                    case 'P':
+                        grid[row][col] = new Path(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                     case 'E':
                     default:
                         grid[row][col] = new Empty(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
