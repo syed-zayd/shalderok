@@ -87,7 +87,13 @@ public class Room {
         if (type == "entrance") {
             filePath = "rooms/entrance.txt";
         } else if (type == "normal") {
-            filePath = "rooms/normal.txt";
+            try {
+                File[] normalRooms = new File("rooms/normal").listFiles
+                filePath = "rooms/" + normalRooms[Util.randInt(0,normalRooms.length-1)].getName();
+            }
+            catch (IOException e) {
+                filePath = "rooms/normal.txt";
+            }
         }
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         cols = Integer.parseInt(br.readLine());
