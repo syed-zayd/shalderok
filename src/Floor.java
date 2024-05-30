@@ -5,6 +5,7 @@ public class Floor {
     private boolean[][] visited;
     private Map<Room, ArrayList<Room>> connections;
     ArrayList<Enemy> enemies;
+    ArrayList<Weapon> weapons;
     public Room entrance;
 
     void addRoom(Room r) {
@@ -71,6 +72,7 @@ public class Floor {
         visited = new boolean[0x1000][0x1000];
         connections = new HashMap<>();
         enemies = new ArrayList<Enemy>();
+        weapons = new ArrayList<Weapon>();
 
         entrance = new Room("entrance", 0, 0, "non", this);
         addRoom(entrance);
@@ -134,7 +136,7 @@ public class Floor {
             System.out.println("[Floor Generation] Successful: Room added");
         }
 
-        
+
     }
 
 }

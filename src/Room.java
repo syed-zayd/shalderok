@@ -31,7 +31,7 @@ public class Room {
             objs.add(gateUp);
             return f.isVisited(gateUp);
         }
-        gateUp = new Empty(gateUp.x, gateUp.y, TILE_SIZE, TILE_SIZE);
+        gateUp = new Path(gateUp.x, gateUp.y, TILE_SIZE, TILE_SIZE);
         objs.add(gateUp);
         return false;
     }
@@ -43,7 +43,7 @@ public class Room {
             objs.add(gateDown);
             return f.isVisited(gateDown);
         }
-        gateDown = new Empty(gateDown.x, gateDown.y, TILE_SIZE, TILE_SIZE);
+        gateDown = new Path(gateDown.x, gateDown.y, TILE_SIZE, TILE_SIZE);
         objs.add(gateDown);
         return false;
     }
@@ -55,7 +55,7 @@ public class Room {
             objs.add(gateLeft);
             return f.isVisited(gateLeft);
         }
-        gateLeft = new Empty(gateLeft.x, gateLeft.y, TILE_SIZE, TILE_SIZE);
+        gateLeft = new Path(gateLeft.x, gateLeft.y, TILE_SIZE, TILE_SIZE);
         objs.add(gateLeft);
         return false;
     }
@@ -67,7 +67,7 @@ public class Room {
             objs.add(gateRight);
             return f.isVisited(gateRight);
         }
-        gateRight = new Empty(gateRight.x, gateRight.y, TILE_SIZE, TILE_SIZE);
+        gateRight = new Path(gateRight.x, gateRight.y, TILE_SIZE, TILE_SIZE);
         objs.add(gateRight);
         return false;
     }
