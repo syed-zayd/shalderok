@@ -24,8 +24,8 @@ class Spider extends Enemy {
         double v = Math.sqrt(vx*vx+vy*vy);
         v = Math.min(v*1.01+0.001,1);
 
-        vx=v*getNormalVectorToPlayer().x;
-        vy=v*getNormalVectorToPlayer().y;
+        vx=v*toPlayer.x;
+        vy=v*toPlayer.y;
 
 
         debug = String.format("%.1f, %.1f", vx, vy);

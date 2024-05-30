@@ -96,7 +96,9 @@ class Player extends GameObject{
         dx = World.mouse.getX() - (drawCenterX()-World.camera.x);
         dy = World.mouse.getY() - (drawCenterY()-World.camera.y);
         mouseAngle = -1 * Math.atan2(dy, dx);
-        System.out.println(mouseAngle);
+        if (mouseAngle <0) {
+            mouseAngle+=2*Math.PI;
+        }
     }
 
     private void updateWeapon() {
@@ -122,10 +124,9 @@ class Player extends GameObject{
 		g2d.drawRect(drawX(), drawY(), w, h);
         g2d.setColor(Color.BLACK);
 
-        Util.drawCenteredString(g2d, String.format("vx: %.2f, vy: %.2f", vx, vy), drawCenterX(), drawY()-10);
+        Util.drawCenteredString(g2d, String.format("%.2f", Math.toDegrees(mouseAngle)), drawCenterX(), drawY()-10);
 
         // draw weapon
-
         if(weapon != null){
             weapon.paint(g2d);
         }
