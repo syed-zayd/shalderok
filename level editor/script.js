@@ -3,6 +3,7 @@ const saveButton = document.getElementById('saveButton');
 const copyButton = document.getElementById('copyButton');
 const makeWallsButton = document.getElementById('makeWallsButton');
 const makeEmptyButton = document.getElementById('makeEmptyButton');
+const makeBordersButton = document.getElementById('makeBordersButton');
 const controlsForm = document.getElementById('controls');
 const rowsInput = document.getElementById('rowsInput');
 const colsInput = document.getElementById('colsInput');
@@ -21,7 +22,7 @@ saveButton.addEventListener('click', saveLevel);
 copyButton.addEventListener('click', copyLevel);
 makeWallsButton.addEventListener('click', makeWalls);
 makeEmptyButton.addEventListener('click', makeEmpty);
-
+makeBordersButton.addEventListener('click', makeBorders);
 
 function generateGrid(fill="E") {
     rows = parseInt(rowsInput.value);
@@ -87,6 +88,34 @@ function makeWalls() {
 
 function makeEmpty() {
     generateGrid("E");
+}
+
+function makeBorders() {
+    rows = parseInt(rowsInput.value);
+    cols = parseInt(colsInput.value);
+
+    grid.innerHTML = '';
+    grid.style.gridTemplateColumns = `repeat(${cols}, 30px)`;
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell ';
+            if (r===0 || c===0 || r===rows-1 || c===cols-1) {
+                cell.className += 'wall';
+                level[r][c] = "W";
+            } else {
+                cell.className += 'empty';
+                level[r][c] = "E";
+            }
+            cell.dataset.row = r;
+            cell.dataset.col = c;
+            cell.addEventListener('click', toggleCell);
+            grid.appendChild(cell);
+        }
+    }
+
+    updateLiveTextarea();
 }
 
 function updateLiveTextarea() {
