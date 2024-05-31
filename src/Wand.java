@@ -22,7 +22,7 @@ public class Wand extends Weapon {
 
     @Override
     public void shoot(){
-        queuedProjectiles.add(new Projectile(x, y, angle, 20, 20, 100, Projectile.LINEAR));
+        queuedProjectiles.add(new Projectile(x, y, 20, 20, 5, angle, 100, Projectile.LINEAR));
         System.out.println(angle);
     }
 

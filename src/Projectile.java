@@ -1,5 +1,6 @@
 import java.awt.Graphics2D;
 import java.io.*;
+import java.awt.geom.Point2D;
 
 import javax.imageio.ImageIO;
 
@@ -9,72 +10,37 @@ public class Projectile extends GameObject {
 
     interface AttackPattern {
     
-        public Coordinate updatePosition(double initialX, double initialY, double vel, int timeOfFlight, double angle);
+        public Point2D.Double updateVelocity(double vx, double vy, int timeOfFlight);
     
     }
 
-    private double originX;
-    private double originY;
-    private double vel;
+    private double vx;
+    private double vy;
     int timeOfFlight;
     int duration;
     double angle;
     private AttackPattern attackPattern;
-    int bouncesRemaining = 1;
+    int bouncesRemaining = 5;
     private BufferedImage sprite;
-    
-    public void setOrigin(double ox, double oy) {
-        originX = ox;
-        originY = oy;
-    }
 
     public static final AttackPattern LINEAR = new AttackPattern() {
 
-        public Coordinate updatePosition(double initialX, double initialY, double vel, int timeOfFlight, double angle){
+        public Point2D.Double updateVelocity(double vx, double vy, int timeOfFlight){
 
-            Coordinate dpos = new Coordinate(vel * timeOfFlight, 0);
-            // dpos.reflect();
-            dpos.rotate(angle);
-            
-            return new Coordinate(initialX + dpos.getX(), initialY + dpos.getY());
+            return new Point2D.Double(vx, vy);
 
         }
 
     };
 
-    public static final AttackPattern ZIGZAG = new AttackPattern() {
-
-        public Coordinate updatePosition(double initialX, double initialY, double vel, int timeOfFlight, double angle){
-
-            Coordinate dpos = new Coordinate(vel * timeOfFlight, 0);
-            // dpos.reflect();
-            
-            return new Coordinate(initialX + dpos.getX(), initialY + dpos.getY());
-
-        }
-
-    };
-
-    // public static final AttackPattern SINUSOIDAL = new AttackPattern() {
-
-    //     public double[] updatePosition(double initialX, double initialY, double vel, int timeOfFlight, double angle){
-
-    //         double[] pos = {};
-    //         return pos;
-
-    //     }
-
-    // };
-
-    public Projectile(double x, double y, double angle, int w, int h, int duration, AttackPattern ap) {
+    public Projectile(double x, double y, int w, int h, double v, double angle, int duration, AttackPattern ap) {
         super(x, y, w, h);
-        this.originX = x;
-        this.originY = y;
         this.angle = angle;
-        timeOfFlight = 0;
+        this.timeOfFlight = 0;
         this.duration = duration;
-        attackPattern = ap;
-        this.vel = 5;
+        this.attackPattern = ap;
+        this.vx = v * Math.cos(angle);
+        this.vy = v * Math.sin(angle);
 
         try {
             sprite = ImageIO.read(new File("sprites/arrow.png"));
@@ -86,9 +52,11 @@ public class Projectile extends GameObject {
 
     @Override
     public void update() {
-        Coordinate pos = attackPattern.updatePosition(originX, originY, vel, timeOfFlight, angle);
-        x = pos.getX();
-        y = pos.getY();
+        Point2D.Double newVel = attackPattern.updateVelocity(vx, vy, timeOfFlight);
+        vx = newVel.getX();
+        vy = newVel.getY();
+        x += vx;
+        y += vy;
         timeOfFlight++;
     }
 

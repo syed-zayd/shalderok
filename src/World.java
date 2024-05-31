@@ -112,9 +112,9 @@ class World extends JPanel {
         }
 
         if (Math.abs(pushLeft) <= Math.abs(pushRight)) {
-            return pushLeft;
+            return pushLeft - 1.0;
         } else {
-            return pushRight;
+            return pushRight + 1.0;
         }
     }
     
@@ -129,9 +129,9 @@ class World extends JPanel {
         }
 
         if (Math.abs(pushUp) <= Math.abs(pushDown)) {
-            return pushUp;
+            return pushUp - 1.0;
         } else {
-            return pushDown;
+            return pushDown + 1.0;
         }
     }
 
