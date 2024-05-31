@@ -14,13 +14,13 @@ public class Projectile extends GameObject {
     
     }
 
-    private double vx;
-    private double vy;
+    double vx;
+    double vy;
     int timeOfFlight;
     int duration;
     double angle;
     private AttackPattern attackPattern;
-    int bouncesRemaining = 5;
+    int bouncesRemaining = 1;
     private BufferedImage sprite;
 
     public static final AttackPattern LINEAR = new AttackPattern() {
@@ -40,7 +40,7 @@ public class Projectile extends GameObject {
         this.duration = duration;
         this.attackPattern = ap;
         this.vx = v * Math.cos(angle);
-        this.vy = v * Math.sin(angle);
+        this.vy = - v * Math.sin(angle);
 
         try {
             sprite = ImageIO.read(new File("sprites/arrow.png"));

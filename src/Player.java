@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 class Player extends GameObject{
+    int hearts;
+    int maxHearts;
     double vx, vy; // current speed
     double knockbackX, knockbackY;
     double spd; // max speed
@@ -15,6 +17,8 @@ class Player extends GameObject{
 
     public Player(double x, double y, Room r) {
         super(x, y, 32, 32);
+        hearts = 3;
+        maxHearts = 3;
         spd = 3;
         weapon = new Wand(x, y);
         this.r = r;

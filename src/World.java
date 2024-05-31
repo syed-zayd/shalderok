@@ -11,11 +11,13 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 class World extends JPanel {
@@ -24,10 +26,12 @@ class World extends JPanel {
     static Player p;
     Floor f;
     static Point mouse = new Point (0, 0);
+    static BufferedImage heartImage;
     
     public World() {
         try {
             f = new Floor();
+            heartImage = ImageIO.read(new File("sprites/heart.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,9 +116,9 @@ class World extends JPanel {
         }
 
         if (Math.abs(pushLeft) <= Math.abs(pushRight)) {
-            return pushLeft - 1.0;
+            return pushLeft;
         } else {
-            return pushRight + 1.0;
+            return pushRight;
         }
     }
     
@@ -129,9 +133,9 @@ class World extends JPanel {
         }
 
         if (Math.abs(pushUp) <= Math.abs(pushDown)) {
-            return pushUp - 1.0;
+            return pushUp;
         } else {
-            return pushDown + 1.0;
+            return pushDown;
         }
     }
 
@@ -188,10 +192,7 @@ class World extends JPanel {
                                     System.out.println("Collision!");
                                     projectile.x += cx;
                                     if (projectile.bouncesRemaining>0) {
-                                        projectile.angle = Math.PI - projectile.angle;
-                                        projectile.angle %= 2*Math.PI;
-                                        projectile.setOrigin(projectile.drawCenterX(), projectile.drawCenterY());
-                                        projectile.timeOfFlight=0;
+                                        projectile.vx *= -1;
                                         projectile.bouncesRemaining--;
                                     } else {
                                         it.remove();
@@ -200,12 +201,12 @@ class World extends JPanel {
                                 else {
                                     projectile.y += cy;
                                     if (projectile.bouncesRemaining>0) {
-                                        projectile.angle *= -1;
-                                        projectile.angle %= 2*Math.PI;
-                                        projectile.setOrigin(projectile.drawCenterX(), projectile.drawCenterY());
-                                        projectile.timeOfFlight=0;
+                                        projectile.vy *= -1;
+                                        projectile.bouncesRemaining--;
                                     }
-                                    projectile.bouncesRemaining--;
+                                    else {
+                                        it.remove();
+                                    }
                                 }
                             }
                         }
@@ -252,6 +253,8 @@ class World extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
+        AffineTransform oldTransform = g2d.getTransform();
+
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         try {
@@ -273,6 +276,14 @@ class World extends JPanel {
             }
         }
         p.paint(g2d);
+
+        g2d.setTransform(oldTransform);
+
+        for(int i = 0; i < p.hearts; i++){
+            g2d.drawImage(heartImage, 10 + heartImage.getWidth() * i, 10, null);
+        }
+
+        
 
     }
     
