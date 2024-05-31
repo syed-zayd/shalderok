@@ -28,7 +28,7 @@ public class Floor {
                 break;
             case "down":
                 r1.objs.remove(r1.gateDown);
-                r1.gateUp = new Door(r1.gateDown.x, r1.gateDown.y, Room.TILE_SIZE, Room.TILE_SIZE);
+                r1.gateDown = new Door(r1.gateDown.x, r1.gateDown.y, Room.TILE_SIZE, Room.TILE_SIZE);
                 r1.objs.add(r1.gateDown);
 
                 r2.objs.remove(r2.gateUp);
