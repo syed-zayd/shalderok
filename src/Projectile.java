@@ -20,7 +20,7 @@ public class Projectile extends GameObject {
     int duration;
     double angle;
     private AttackPattern attackPattern;
-    int bouncesRemaining = 10;
+    int bouncesRemaining = 1;
     private BufferedImage sprite;
     
     public void setOrigin(double ox, double oy) {
@@ -35,7 +35,6 @@ public class Projectile extends GameObject {
             Coordinate dpos = new Coordinate(vel * timeOfFlight, 0);
             // dpos.reflect();
             dpos.rotate(angle);
-            System.out.println("Angle: " + angle + " X Transform: " + dpos.getX() + " Y Transform: " + dpos.getY());
             
             return new Coordinate(initialX + dpos.getX(), initialY + dpos.getY());
 
@@ -49,8 +48,6 @@ public class Projectile extends GameObject {
 
             Coordinate dpos = new Coordinate(vel * timeOfFlight, 0);
             // dpos.reflect();
-            dpos.rotate(angle);
-            System.out.println("Angle: " + angle + " X Transform: " + dpos.getX() + " Y Transform: " + dpos.getY());
             
             return new Coordinate(initialX + dpos.getX(), initialY + dpos.getY());
 

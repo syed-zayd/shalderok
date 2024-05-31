@@ -3,7 +3,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 class Spider extends Enemy {
-    String debug = "debugtext";
+    String debug = "0";
 
     public Spider(double x, double y) {
         super(x, y, 30, 30, 10);
@@ -28,7 +28,7 @@ class Spider extends Enemy {
         vy=v*toPlayer.y;
 
 
-        debug = String.format("%.1f, %.1f", vx, vy);
+        // debug = String.format("%.1f, %.1f", vx, vy);
 
         x+=vx;
         y+=vy;

@@ -185,9 +185,10 @@ class World extends JPanel {
                             cy = collisionY(projectile, obj);
                             if (cx != 0 && cy != 0) {
                                 if (Math.abs(cx) < Math.abs(cy)) {
+                                    System.out.println("Collision!");
                                     projectile.x += cx;
                                     if (projectile.bouncesRemaining>0) {
-                                        projectile.angle *= -1;
+                                        projectile.angle = Math.PI - projectile.angle;
                                         projectile.angle %= 2*Math.PI;
                                         projectile.setOrigin(projectile.drawCenterX(), projectile.drawCenterY());
                                         projectile.timeOfFlight=0;
@@ -199,7 +200,7 @@ class World extends JPanel {
                                 else {
                                     projectile.y += cy;
                                     if (projectile.bouncesRemaining>0) {
-                                        projectile.angle = Math.PI - projectile.angle;
+                                        projectile.angle *= -1;
                                         projectile.angle %= 2*Math.PI;
                                         projectile.setOrigin(projectile.drawCenterX(), projectile.drawCenterY());
                                         projectile.timeOfFlight=0;
