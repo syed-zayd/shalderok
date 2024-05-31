@@ -20,6 +20,11 @@ class Player extends GameObject{
         this.r = r;
     }
 
+    @Override
+    public boolean isSolid() {
+        return true;
+    }
+
     public void equip(Weapon weapon){
         this.weapon = weapon;
     }
@@ -33,6 +38,12 @@ class Player extends GameObject{
     ArrayList<Room> getRooms() {
         ArrayList<Room> rv = new ArrayList<Room>(r.f.getConnectingRooms(r));
         rv.add(r);
+        return rv;
+    }
+
+    ArrayList<Enemy> getEnemies() {
+        ArrayList<Enemy> rv = new ArrayList<Enemy>();
+        getRooms().forEach((r) -> rv.addAll(r.enemies));
         return rv;
     }
     
@@ -96,9 +107,8 @@ class Player extends GameObject{
         dx = World.mouse.getX() - (drawCenterX()-World.camera.x);
         dy = World.mouse.getY() - (drawCenterY()-World.camera.y);
         mouseAngle = -1 * Math.atan2(dy, dx);
-        if (mouseAngle <0) {
-            mouseAngle+=2*Math.PI;
-        }
+        
+        mouseAngle%=360;
     }
 
     private void updateWeapon() {

@@ -3,9 +3,12 @@ import java.awt.geom.Point2D;
 abstract class Enemy extends GameObject {
     boolean active;
     double vx, vy;
-    public Enemy(double x, double y, int w, int h) {
+    int hp;
+
+    public Enemy(double x, double y, int w, int h, int hp) {
         super(x, y, w, h);
-        active = true;
+        this.hp = hp;
+        active = false;
     }
     Point2D.Double getNormalVectorToPlayer() {
         double dx = World.p.drawCenterX()-drawCenterX();
@@ -15,5 +18,10 @@ abstract class Enemy extends GameObject {
             return new Point2D.Double(0, 0);
         }
         return new Point2D.Double(dx/magnitude, dy/magnitude);
+    }
+
+    @Override
+    public boolean isSolid() {
+        return true;
     }
 }

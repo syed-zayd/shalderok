@@ -13,16 +13,21 @@ public class Projectile extends GameObject {
     
     }
 
-    private double initialX;
-    private double initialY;
+    private double originX;
+    private double originY;
     private double vel;
     int timeOfFlight;
     int duration;
-    private double angle;
+    double angle;
     private AttackPattern attackPattern;
-    private int bouncesRemaining;
+    int bouncesRemaining = 10;
     private BufferedImage sprite;
     
+    public void setOrigin(double ox, double oy) {
+        originX = ox;
+        originY = oy;
+    }
+
     public static final AttackPattern LINEAR = new AttackPattern() {
 
         public Coordinate updatePosition(double initialX, double initialY, double vel, int timeOfFlight, double angle){
@@ -66,8 +71,8 @@ public class Projectile extends GameObject {
 
     public Projectile(double x, double y, double angle, int w, int h, int duration, AttackPattern ap) {
         super(x, y, w, h);
-        this.initialX = x;
-        this.initialY = y;
+        this.originX = x;
+        this.originY = y;
         this.angle = angle;
         timeOfFlight = 0;
         this.duration = duration;
@@ -84,7 +89,7 @@ public class Projectile extends GameObject {
 
     @Override
     public void update() {
-        Coordinate pos = attackPattern.updatePosition(initialX, initialY, vel, timeOfFlight, angle);
+        Coordinate pos = attackPattern.updatePosition(originX, originY, vel, timeOfFlight, angle);
         x = pos.getX();
         y = pos.getY();
         timeOfFlight++;
@@ -96,6 +101,9 @@ public class Projectile extends GameObject {
         g2d.fillRect(drawCenterX(), drawCenterY(), 5, 5);
     }
     
-    
+    @Override
+    public boolean isSolid() {
+        return false;
+    }
 
 }

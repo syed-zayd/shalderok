@@ -17,6 +17,7 @@ public class Room {
     Floor f;
     GameObject[][] grid;
     ArrayList<GameObject> objs;
+    ArrayList<Enemy> enemies;
     GameObject gateUp;
     GameObject gateDown;
     GameObject gateLeft;
@@ -24,52 +25,20 @@ public class Room {
     private int cols; // width in tiles
     private int rows; // height in tiles
 
-    boolean setGateUp(GameObject obj) {
-        objs.remove(gateUp);
-        if (obj != null) {
-            gateUp = obj;
-            objs.add(gateUp);
-            return f.isVisited(gateUp);
+    void unlock() {
+        
+        if (gateUp instanceof Door) {
+            ((Door)gateUp).locked = false;
         }
-        gateUp = new Path(gateUp.x, gateUp.y, TILE_SIZE, TILE_SIZE);
-        objs.add(gateUp);
-        return false;
-    }
-
-    boolean setGateDown(GameObject obj) {
-        objs.remove(gateDown);
-        if (obj != null) {
-            gateDown = obj;
-            objs.add(gateDown);
-            return f.isVisited(gateDown);
+        if (gateDown instanceof Door) {
+            ((Door)gateDown).locked = false;
         }
-        gateDown = new Path(gateDown.x, gateDown.y, TILE_SIZE, TILE_SIZE);
-        objs.add(gateDown);
-        return false;
-    }
-
-    boolean setGateLeft(GameObject obj) {
-        objs.remove(gateLeft);
-        if (obj != null) {
-            gateLeft = obj;
-            objs.add(gateLeft);
-            return f.isVisited(gateLeft);
+        if (gateLeft instanceof Door) {
+            ((Door)gateLeft).locked = false;
         }
-        gateLeft = new Path(gateLeft.x, gateLeft.y, TILE_SIZE, TILE_SIZE);
-        objs.add(gateLeft);
-        return false;
-    }
-
-    boolean setGateRight(GameObject obj) {
-        objs.remove(gateRight);
-        if (obj != null) {
-            gateRight = obj;
-            objs.add(gateRight);
-            return f.isVisited(gateRight);
+        if (gateRight instanceof Door) {
+            ((Door)gateRight).locked = false;
         }
-        gateRight = new Path(gateRight.x, gateRight.y, TILE_SIZE, TILE_SIZE);
-        objs.add(gateRight);
-        return false;
     }
 
     boolean addObj(GameObject obj) {
@@ -81,6 +50,7 @@ public class Room {
         this.conflicted = false;
         this.type = type;
         this.objs = new ArrayList<GameObject>();
+        this.enemies = new ArrayList<Enemy>();
         this.f = f;
 
         // load the room's file
@@ -90,7 +60,13 @@ public class Room {
         } else if (type == "normal") {
             File[] normalRooms = new File("rooms/normal").listFiles();
             filePath = "rooms/normal/" + normalRooms[Util.randInt(0,normalRooms.length-1)].getName();
+        } else if (type == "boss") {
+            filePath = "rooms/boss.txt";
+        } else if (type == "exit") {
+            filePath = "rooms/exit.txt";
         }
+
+
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         cols = Integer.parseInt(br.readLine());
         rows = Integer.parseInt(br.readLine());
@@ -205,7 +181,6 @@ public class Room {
         // build the room
         for (int row = 0; row < rows; row++) {
             String line = br.readLine();
-            System.out.println(line);
             for (int col = 0; col < cols; col++) {
                 // determine the object to add
                 switch (line.charAt(col)) {
@@ -222,32 +197,34 @@ public class Room {
                 }
 
                 // add the gates if necessary
-                // this code will not work if the room has empty spaces where the gates are
                 if (row == 0 && col == cols / 2) { // top
-                    if (setGateUp(grid[row][col])) {
+                    if (addObj(grid[row][col])) {
                         conflicted = true;
                         br.close();
                         return;
                     }
-                    ;
+                    gateUp = grid[row][col];
                 } else if (row == rows - 1 && col == cols / 2) { // bottom
-                    if (setGateDown(grid[row][col])) {
+                    if (addObj(grid[row][col])) {
                         conflicted = true;
                         br.close();
                         return;
                     }
+                    gateDown = grid[row][col];
                 } else if (row == rows / 2 && col == 0) { // left
-                    if (setGateLeft(grid[row][col])) {
+                    if (addObj(grid[row][col])) {
                         conflicted = true;
                         br.close();
                         return;
                     }
+                    gateLeft = grid[row][col];
                 } else if (row == rows / 2 && col == cols - 1) { // right
-                    if (setGateRight(grid[row][col])) {
+                    if (addObj(grid[row][col])) {
                         conflicted = true;
                         br.close();
                         return;
                     }
+                    gateRight = grid[row][col];
                 } else {
                     if (addObj(grid[row][col])) {
                         conflicted = true;
@@ -261,6 +238,23 @@ public class Room {
         br.close();
         for (GameObject obj : objs) {
             f.visit(obj);
+        }
+    }
+
+    void update() {
+        for (GameObject obj: objs) {
+            obj.update();
+        }
+
+        for (Enemy e: enemies) {
+            if (e.active) {
+                e.update();
+            }
+            e.active = false;
+        }
+
+        if (enemies.size() == 0) {
+            unlock();
         }
     }
 }

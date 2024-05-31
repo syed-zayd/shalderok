@@ -39,7 +39,7 @@ class World extends JPanel {
         // first room
         Room abc = f.getConnectingRooms(f.entrance).get(0);
         Spider sp = new Spider(abc.gateUp.x, abc.gateLeft.y);
-        f.enemies.add(sp);
+        abc.enemies.add(sp);
         sp.debug = sp.x + ", " + sp.y;
 
         addMouseListener(new MouseListener() {
@@ -144,7 +144,7 @@ class World extends JPanel {
                 double cx = collisionX(p, obj);
                 double cy = collisionY(p, obj);
                 if (cx != 0 && cy != 0) { // collision has occured
-                    if (obj instanceof Wall) {
+                    if (obj.isSolid()) {
                         if (Math.abs(cx) < Math.abs(cy)) {
                             p.x += cx;
                             p.vx = 0;
@@ -152,65 +152,83 @@ class World extends JPanel {
                             p.y += cy;
                             p.vy = 0;
                         }
-                    } else if (obj instanceof Empty || obj instanceof Path) {
+                    } else {
                         p.r = r;
                     }
                 }
 
                 // enemy collides with object
-                for (Enemy e: f.enemies) {
+                for (Enemy e: p.getEnemies()) {
                     cx = collisionX(e, obj);
                     cy = collisionY(e, obj);
                     if (cx != 0 && cy != 0) { // collision has occured
-                        if (obj instanceof Wall) {
+                        if (r == p.r) {
+                            e.active = true;
+                        }
+                        if (obj.isSolid()) {
                             if (Math.abs(cx) < Math.abs(cy)) {
                                 e.x += cx;
                             } else {
                                 e.y += cy;
                             }
-                        } else if (obj instanceof Empty) {
-                            if (r == p.r) {
-                                e.active = true;
-                            }
                         }
                     }    
                 }
 
-                // weapon projectile collides with object
+                // projectile collides with object
                 for (Weapon w: f.weapons) {
-                    for (Projectile p: w.activeProjectiles) {
-                        cx = collisionX(p, obj);
-                        cy = collisionY(p, obj);
-                        if (cx != 0 && cy != 0) { // collision has occured
-                            // if (obj instanceof Wall) {
-                            //     if (Math.abs(cx) < Math.abs(cy)) {
-                            //         e.x += cx;
-                            //     } else {
-                            //         e.y += cy;
-                            //     }
-                            // }
-                        }    
+                    Iterator<Projectile> it = w.activeProjectiles.iterator();
+                    while (it.hasNext()) {
+                        Projectile projectile = it.next();
+                        if (obj.isSolid()) {
+                            cx = collisionX(projectile, obj);
+                            cy = collisionY(projectile, obj);
+                            if (cx != 0 && cy != 0) {
+                                if (Math.abs(cx) < Math.abs(cy)) {
+                                    projectile.x += cx;
+                                    if (projectile.bouncesRemaining>0) {
+                                        projectile.angle *= -1;
+                                        projectile.angle %= 2*Math.PI;
+                                        projectile.setOrigin(projectile.drawCenterX(), projectile.drawCenterY());
+                                        projectile.timeOfFlight=0;
+                                        projectile.bouncesRemaining--;
+                                    } else {
+                                        it.remove();
+                                    }
+                                }
+                                else {
+                                    projectile.y += cy;
+                                    if (projectile.bouncesRemaining>0) {
+                                        projectile.angle = Math.PI - projectile.angle;
+                                        projectile.angle %= 2*Math.PI;
+                                        projectile.setOrigin(projectile.drawCenterX(), projectile.drawCenterY());
+                                        projectile.timeOfFlight=0;
+                                    }
+                                    projectile.bouncesRemaining--;
+                                }
+                            }
+                        }
                     }
                 }
             }
-        }
 
-        // enemy collisions
-        for (Enemy e: f.enemies) {
-            double cx = collisionX(p, e);
-            double cy = collisionY(p, e);
-            if (cx != 0 && cy != 0) { // collision has occured
-                Point2D.Double knockbackVector = e.getNormalVectorToPlayer();
-                p.knockbackX = 25*knockbackVector.x;
-                p.knockbackY = 25*knockbackVector.y;
-                e.vx = 0;
-                e.vy = 0;
-                if (Math.abs(cx) < Math.abs(cy)) {
-                    e.x -= cx;
-                } else {
-                    e.y -= cy;
-                }
-            }    
+            // enemy collisions
+            for (Enemy e: r.enemies) {
+                double cx = collisionX(e, p);
+                double cy = collisionY(e, p);
+                if (cx != 0 && cy != 0) { // collision has occured
+                    Point2D.Double knockbackVector = e.getNormalVectorToPlayer();
+                    p.knockbackX = 25*knockbackVector.x;
+                    p.knockbackY = 25*knockbackVector.y;
+                    e.vx = 0;
+                    e.vy = 0;
+                    if (Math.abs(cx) < Math.abs(cy)) {
+                        e.x += cx;
+                    } else {
+                        e.y += cy;
+                    }
+                } 
+            }
         }
     }
 
@@ -219,15 +237,7 @@ class World extends JPanel {
         p.update();
 
         for (Room r: p.getRooms()) {
-            for (GameObject obj: r.objs) {
-                obj.update();
-            }
-        }
-        for (Enemy e: f.enemies) {
-            if (e.active) {
-                e.update();
-            }
-            e.active = false;
+            r.update();
         }
 
         // manage collisions
@@ -257,11 +267,10 @@ class World extends JPanel {
             for (GameObject obj: r.objs) {
                 obj.paint(g2d);
             }
+            for (Enemy e: r.enemies) {
+                e.paint(g2d);
+            }
         }
-        for (Enemy e: f.enemies) {
-            e.paint(g2d);
-        }
-
         p.paint(g2d);
 
     }

@@ -6,7 +6,7 @@ class Spider extends Enemy {
     String debug = "debugtext";
 
     public Spider(double x, double y) {
-        super(x, y, 30, 30);
+        super(x, y, 30, 30, 10);
     }
 
     @Override

@@ -12,4 +12,9 @@ abstract class Weapon extends GameObject {
     }
     
     abstract void shoot();
+
+    @Override
+    public boolean isSolid() {
+        return false;
+    }
 }

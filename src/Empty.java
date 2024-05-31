@@ -19,4 +19,8 @@ public class Empty extends GameObject {
         g2d.setColor(Color.BLACK);
     }
 
+    @Override
+    public boolean isSolid() {
+        return false;
+    }
 }

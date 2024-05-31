@@ -26,4 +26,5 @@ abstract class GameObject {
 
     public abstract void update();
     public abstract void paint(Graphics2D g2d);
+    public abstract boolean isSolid();
 }
