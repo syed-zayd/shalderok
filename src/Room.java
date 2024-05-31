@@ -205,6 +205,7 @@ public class Room {
         // build the room
         for (int row = 0; row < rows; row++) {
             String line = br.readLine();
+            System.out.println(line);
             for (int col = 0; col < cols; col++) {
                 // determine the object to add
                 switch (line.charAt(col)) {

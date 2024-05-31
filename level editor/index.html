@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="settings">
+        <form id="controls">
+            <label for="rowsInput">Rows:</label>
+            <input type="number" id="rowsInput" value="11" min="1">
+            <label for="colsInput">Columns:</label>
+            <input type="number" id="colsInput" value="11" min="1">
+            <button type="submit">Generate Grid</button>
+        </form>
+        <button id="makeWallsButton">Make Walls</button>
+        <button id="makeEmptyButton">Make Empty</button>
+    </div>
+    <div id="grid">
+    </div>
+    <div id="data">
+        <textarea id="liveTextarea" readonly></textarea>
+        <button id="saveButton">Save</button>
+        <button id="copyButton">Copy</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
