@@ -109,7 +109,6 @@ public class Room {
         } else if (type == "normal") {
             File[] normalRooms = new File("rooms/normal").listFiles();
             filePath = "rooms/normal/" + normalRooms[Util.randInt(0,normalRooms.length-1)].getName();
-            filePath = "rooms/normal/room7.txt";
         } else if (type == "boss") {
             File[] bossRooms = new File("rooms/boss").listFiles();
             filePath = "rooms/boss/" + bossRooms[Util.randInt(0,bossRooms.length-1)].getName();
@@ -124,7 +123,7 @@ public class Room {
         this.grid = new GameObject[rows][cols];
 
         // build the path
-        int pathLength = Util.randInt(1, 10);
+        int pathLength = Util.randInt(10, 10);
         switch (direction) {
             case "up":
                 // build a path of walls
@@ -313,4 +312,9 @@ public class Room {
             unlock();
         }
     }
+
+    // @Override
+    // public String toString() {
+    //     return "[Room: " + type + "]";
+    // }
 }
