@@ -43,7 +43,7 @@ public class Projectile extends GameObject {
         this.attackPattern = ap;
         this.vx = v * Math.cos(angle);
         this.vy = - v * Math.sin(angle);
-
+        this.currentFrame = s.getSprite("idle", 0);
     }
 
     @Override
