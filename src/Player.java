@@ -56,6 +56,9 @@ class Player extends GameObject {
     }
 
     void enterNewFloor(Floor f) {
+        if(weapon != null){
+            f.weapons.add(weapon);
+        }
         this.r = f.entrance;
         Util.centerPosition(this, f.entrance.getCenterObject());
     }
