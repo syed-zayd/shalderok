@@ -33,7 +33,7 @@ public class Room {
 
         int i = (int) ((e.drawCenterY()-top)/TILE_SIZE);
         int j = (int) ((e.drawCenterX()-left)/TILE_SIZE);
-        if (i > grid.length || i < 0 || j > grid[0].length - 1 || j < 0) {
+        if (i > grid.length -1 || i < 0 || j > grid[0].length - 1 || j < 0) {
             e.pathfindingCurrentIndex.x = -1;
             e.pathfindingCurrentIndex.y = -1;
         } else {
@@ -44,10 +44,6 @@ public class Room {
         System.out.println(e.pathfindingCurrentIndex);
     }
     private void setPlayerPFIndex() {
-        if (World.p.r != this) {
-            World.p.pathfindingCurrentIndex.x = -1;
-            World.p.pathfindingCurrentIndex.y = -1;
-        }
         double left = World.p.r.grid[0][0].x;
         double top = World.p.r.grid[0][0].y;
 
@@ -63,6 +59,11 @@ public class Room {
     }
 
     private void pathFind(Enemy e) {
+        if (World.p.r != this) {
+            e.pathfindingPath = new ArrayList<GameObject>();
+            return;
+        }
+
         AStar aStar = new AStar(grid);
         e.pathfindingPath = aStar.findPath(e.pathfindingCurrentIndex, World.p.pathfindingCurrentIndex);
     }

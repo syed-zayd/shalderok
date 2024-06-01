@@ -14,7 +14,7 @@ public class AStar {
 
     public ArrayList<GameObject> findPath(Point start, Point goal) {
         if (start.x == -1 || start.y == -1 || goal.x == -1 || goal.y == -1) {
-            Collections.emptyList();
+            return new ArrayList<GameObject>();
         }
 
         PriorityQueue<Node> openList = new PriorityQueue<>();
