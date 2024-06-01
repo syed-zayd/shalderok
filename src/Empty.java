@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 public class Empty extends GameObject {
 
     public Empty(double x, double y, int w, int h) {
-        super(x, y, w, h);
+        super(x, y, w, h, null);
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 public class Path extends GameObject {
 
     public Path(double x, double y, int w, int h) {
-        super(x, y, w, h);
+        super(x, y, w, h, null);
     }
 
     @Override

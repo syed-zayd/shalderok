@@ -7,10 +7,16 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 public class Main {
-  static JFrame frame = new JFrame("camera test");
-  static World world = new World();
+  public static JFrame frame = new JFrame("camera test");
+  public static World world;
 
   public static void main(String[] args) throws InterruptedException {
+    
+    System.out.println("Loading sprites...");
+    SpriteLoader.loadSprites();
+
+    world = new World();
+    
     frame.setSize(800, 600);;
     frame.add(world);
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -20,12 +26,9 @@ public class Main {
 
     // set custom cursor
     Toolkit toolkit = Toolkit.getDefaultToolkit();
-    Image image = toolkit.getImage("sprites/cursor.png");
+    Image image = toolkit.getImage("graphics/cursor.png");
     Cursor c = toolkit.createCustomCursor(image, new Point(16,16), "gameplay");
-    world.setCursor (c);
-
-    // Floor f = new Floor();
-    // f.depthFirstTraversal(f.entrance);
+    world.setCursor(c);
 
     while (true) {
       world.update();
