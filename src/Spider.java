@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 class Spider extends Enemy {
     String debug = "0";
@@ -18,17 +19,39 @@ class Spider extends Enemy {
         Util.drawCenteredString(g2d, debug, drawCenterX(), drawY()-10);
     }
 
+    private void updateVelocity() {
+        System.out.println(pathfindingPath.size());
+        Point2D.Double v;
+        
+        if (pathfindingPath.size() < 1) {
+            v = getUnitVectorTo(World.p);
+        } else {
+            v = getUnitVectorTo(pathfindingPath.get(0));
+        }
+        vx = 2*v.x;
+        vy = 2*v.y;
+    }
+
     @Override
     public void update() {
-        Point2D.Double toPlayer = getNormalVectorToPlayer();
-        double v = Math.sqrt(vx*vx+vy*vy);
-        v = Math.min(v*1.01+0.001,1);
+        debug = String.format("%d, %d", pathfindingCurrentIndex.x, pathfindingCurrentIndex.y);
 
-        vx=v*toPlayer.x;
-        vy=v*toPlayer.y;
+        knockbackX *= 0.92;
+        knockbackY *= 0.92;
 
-
-        // debug = String.format("%.1f, %.1f", vx, vy);
+        // if knockback is significant, prevent moving
+        if (Math.abs(knockbackX) > 1 || Math.abs(knockbackY) > 1) {
+            // apply knockback
+            vx = knockbackX;
+            vy = knockbackY;
+        } else if (knockbackX != 0 || knockbackY != 0) {
+            knockbackX = 0;
+            knockbackY = 0;
+            vx = 0;
+            vy = 0;
+        } else {
+            updateVelocity();
+        }
 
         x+=vx;
         y+=vy;

@@ -40,17 +40,10 @@ class World extends JPanel {
         camera = new Camera();
         camera.centerObj = p;
 
-        // first room
-        Room abc = f.getConnectingRooms(f.entrance).get(0);
-        Spider sp = new Spider(abc.gateUp.x, abc.gateLeft.y);
-        abc.enemies.add(sp);
-        sp.debug = sp.x + ", " + sp.y;
-
         addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                
             }
 
             @Override
@@ -140,6 +133,49 @@ class World extends JPanel {
     }
 
     private void handleCollisions() {
+        // entity collisions
+        for (Enemy e1: p.activeEnemies()) {
+            // check with player
+            double cx = collisionX(e1, p);
+            double cy = collisionY(e1, p);
+            if (cx != 0 && cy != 0) { // collision has occured
+                Point2D.Double knockbackVector = e1.getUnitVectorTo(p);
+                p.knockbackX = 20*knockbackVector.x;
+                p.knockbackY = 20*knockbackVector.y;
+
+                e1.knockbackX = -10*knockbackVector.x;
+                e1.knockbackY = -10*knockbackVector.y;
+
+                if (Math.abs(cx) < Math.abs(cy)) {
+                    e1.x += cx;
+                } else {
+                    e1.y += cy;
+                }
+            }    
+
+            // check with other enemies
+            for (Enemy e2: p.activeEnemies()) {
+                if (e1 == e2) {
+                    continue;
+                }
+
+                cx = collisionX(e1, e2);
+                cy = collisionY(e1, e2);
+                if (cx != 0 && cy != 0) { // collision has occured
+                    Point2D.Double knockbackVector = e1.getUnitVectorTo(e2);
+                    e1.knockbackX = -10*knockbackVector.x;
+                    e1.knockbackY = -10*knockbackVector.y;
+                    e2.knockbackX = 10*knockbackVector.x;
+                    e2.knockbackY = 10*knockbackVector.y;
+
+                    if (Math.abs(cx) < Math.abs(cy)) {
+                        e1.x += cx;
+                    } else {
+                        e1.y += cy;
+                    }
+                }    
+            }
+        }
         // object collisions
         for (Room r: p.getRooms()) {
             for (GameObject obj: r.objs) {
@@ -156,19 +192,17 @@ class World extends JPanel {
                             p.y += cy;
                             p.vy = 0;
                         }
-                    } else {
-                        p.r = r;
+                    } else if (obj instanceof Empty) {
+                        p.enter(r);
                     }
                 }
 
                 // enemy collides with object
-                for (Enemy e: p.getEnemies()) {
+                for (Enemy e: p.activeEnemies()) {
                     cx = collisionX(e, obj);
                     cy = collisionY(e, obj);
                     if (cx != 0 && cy != 0) { // collision has occured
-                        if (r == p.r) {
-                            e.active = true;
-                        }
+
                         if (obj.isSolid()) {
                             if (Math.abs(cx) < Math.abs(cy)) {
                                 e.x += cx;
@@ -176,7 +210,7 @@ class World extends JPanel {
                                 e.y += cy;
                             }
                         }
-                    }    
+                    }
                 }
 
                 // projectile collides with object
@@ -212,24 +246,6 @@ class World extends JPanel {
                         }
                     }
                 }
-            }
-
-            // enemy collisions
-            for (Enemy e: r.enemies) {
-                double cx = collisionX(e, p);
-                double cy = collisionY(e, p);
-                if (cx != 0 && cy != 0) { // collision has occured
-                    Point2D.Double knockbackVector = e.getNormalVectorToPlayer();
-                    p.knockbackX = 25*knockbackVector.x;
-                    p.knockbackY = 25*knockbackVector.y;
-                    e.vx = 0;
-                    e.vy = 0;
-                    if (Math.abs(cx) < Math.abs(cy)) {
-                        e.x += cx;
-                    } else {
-                        e.y += cy;
-                    }
-                } 
             }
         }
     }
