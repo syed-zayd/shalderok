@@ -160,6 +160,34 @@ public class Floor {
             last = current;
             current = appendRoom(current, "boss");
         }
+
+        // add random side paths
+        Set<Room> visited = new LinkedHashSet<Room>();
+        Stack<Room> stack = new Stack<Room>();
+        stack.push(entrance);
+        while (!stack.isEmpty()) {
+            current = stack.pop();
+            if (!visited.contains(current)) {
+                visited.add(current);
+                
+                // chance to add a side path
+                if (Math.random() < 0.1 || current == entrance) {
+                    Room sidePathRoom = current;
+                    for (int i=0; i<Util.randInt(5,7); i++) {
+                        sidePathRoom = appendRoom(current, "normal");
+                        if (sidePathRoom == null) {
+                            break;
+                        }
+                    }
+                }
+
+                // keep going
+                for (Room r: getConnectingRooms(current)) {
+                    stack.push(r);
+                }
+
+            }
+        }
     }
 
     private Room appendRoom(Room current, String type) throws IOException {
