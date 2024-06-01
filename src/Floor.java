@@ -171,7 +171,7 @@ public class Floor {
                 visited.add(current);
                 
                 // chance to add a side path
-                if (Math.random() < 0.1 || current == entrance) {
+                if (Math.random() < 0.1 || (current == entrance && Math.random() < 0.5)) {
                     Room sidePathRoom = current;
                     for (int i=0; i<Util.randInt(5,7); i++) {
                         sidePathRoom = appendRoom(current, "normal");
