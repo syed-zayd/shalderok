@@ -22,6 +22,7 @@ public class Projectile extends GameObject {
     private AttackPattern attackPattern;
     int bouncesRemaining = 1;
     private BufferedImage sprite;
+    int damage;
 
     public static final AttackPattern LINEAR = new AttackPattern() {
 
@@ -33,20 +34,15 @@ public class Projectile extends GameObject {
 
     };
 
-    public Projectile(double x, double y, int w, int h, double v, double angle, int duration, AttackPattern ap) {
-        super(x, y, w, h);
+    public Projectile(double x, double y, double v, double angle, int damage, int duration, AttackPattern ap, Sprite s) {
+        super(x, y, 16, 16, s);
         this.angle = angle;
         this.timeOfFlight = 0;
+        this.damage = damage;
         this.duration = duration;
         this.attackPattern = ap;
         this.vx = v * Math.cos(angle);
         this.vy = - v * Math.sin(angle);
-
-        try {
-            sprite = ImageIO.read(new File("sprites/arrow.png"));
-        } catch(IOException e){
-            
-        }
 
     }
 
@@ -58,12 +54,6 @@ public class Projectile extends GameObject {
         x += vx;
         y += vy;
         timeOfFlight++;
-    }
-
-    @Override
-    public void paint(Graphics2D g2d) {
-        g2d.drawImage(sprite, drawX(), drawY(), null);
-        g2d.fillRect(drawCenterX(), drawCenterY(), 5, 5);
     }
     
     @Override

@@ -3,7 +3,10 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-class Player extends GameObject{
+class Player extends GameObject {
+
+    private final int WEAPON_RADIUS = 64;
+
     int hearts;
     int maxHearts;
     double vx, vy; // current speed
@@ -15,18 +18,23 @@ class Player extends GameObject{
     Weapon weapon;
     Room r;
 
-    public Player(double x, double y, Room r) {
-        super(x, y, 32, 32);
+    public Player(double x, double y, Room r, Sprite s) {
+        super(x, y, 32, 32, s);
         hearts = 3;
         maxHearts = 3;
         spd = 3;
         weapon = new Wand(x, y);
         this.r = r;
+        currentFrame = s.getSprite("idle", 0);
     }
 
     @Override
     public boolean isSolid() {
         return true;
+    }
+
+    public void updateCharacter(Sprite s){
+        this.sprite = s;
     }
 
     public void equip(Weapon weapon){
@@ -37,6 +45,10 @@ class Player extends GameObject{
         if(weapon != null){
             weapon.shoot();
         }
+    }
+
+    public void takeDamage(int damage){
+        hearts -= damage;
     }
 
     ArrayList<Room> getRooms() {
@@ -118,8 +130,10 @@ class Player extends GameObject{
     private void updateWeapon() {
         if(weapon != null){
             weapon.angle = mouseAngle;
-            weapon.x = drawX();
-            weapon.y = drawY();
+            double centerX = drawCenterX() + WEAPON_RADIUS * Math.cos(mouseAngle);
+            double centerY = drawCenterY() - WEAPON_RADIUS * Math.sin(mouseAngle);
+            weapon.x = weapon.drawXFromCenter(centerX);
+            weapon.y = weapon.drawYFromCenter(centerY);
             weapon.update();
         }
     }
@@ -134,9 +148,7 @@ class Player extends GameObject{
 
 	@Override
 	public void paint(Graphics2D g2d) {
-        g2d.setColor(Color.RED);
-		g2d.drawRect(drawX(), drawY(), w, h);
-        g2d.setColor(Color.BLACK);
+        super.paint(g2d);
 
         Util.drawCenteredString(g2d, String.format("%.2f", Math.toDegrees(mouseAngle)), drawCenterX(), drawY()-10);
 

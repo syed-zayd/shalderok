@@ -5,7 +5,7 @@ public class Door extends GameObject {
     boolean locked;
 
     public Door(double x, double y, int w, int h) {
-        super(x, y, w, h);
+        super(x, y, w, h, null);
         locked = true;
     }
 

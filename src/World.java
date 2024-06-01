@@ -25,17 +25,18 @@ class World extends JPanel {
     static Camera camera;
     static Player p;
     Floor f;
-    static Point mouse = new Point (0, 0);
-    static BufferedImage heartImage;
+    static Point mouse = new Point(0, 0);
+    static BufferedImage heartImage, heartOutlineImage;
     
     public World() {
         try {
             f = new Floor();
-            heartImage = ImageIO.read(new File("sprites/heart.png"));
+            heartImage = ImageIO.read(new File("graphics/heart.png"));
+            heartOutlineImage = ImageIO.read(new File("graphics/heartoutline.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        p = new Player(50, 100, f.entrance);
+        p = new Player(50, 100, f.entrance, SpriteLoader.getSprite("kowata"));
         f.weapons.add(p.weapon);
         camera = new Camera();
         camera.centerObj = p;
@@ -103,6 +104,10 @@ class World extends JPanel {
             }
         });
         setFocusable(true);
+    }
+
+    public static void updateCharacter(String character){
+        p.updateCharacter(SpriteLoader.getSprite(character));
     }
 
     private static double collisionX(GameObject a, GameObject b) {
@@ -283,7 +288,9 @@ class World extends JPanel {
             g2d.drawImage(heartImage, 10 + heartImage.getWidth() * i, 10, null);
         }
 
-        
+        for(int i = p.hearts; i < p.maxHearts; i++){
+            g2d.drawImage(heartOutlineImage, 10 + heartImage.getWidth() * i, 10, null);
+        }
 
     }
     

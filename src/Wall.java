@@ -5,7 +5,7 @@ class Wall extends GameObject {
 	Color c;
 
 	public Wall(double x, double y, int w, int h, Color c) {
-		super(x, y, w, h);
+		super(x, y, w, h, null);
 		this.c = c;
 	}
 
