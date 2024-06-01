@@ -1,11 +1,4 @@
-import java.awt.image.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
 
-import javax.imageio.ImageIO;
-
-import java.awt.*;
 
 public class Wand extends Weapon {
     
@@ -17,4 +10,8 @@ public class Wand extends Weapon {
         queuedProjectiles.add(new MagicOrb(x, y, 5, angle));
     }
 
+    @Override
+    public void interact() {
+
+    }
 }

@@ -23,4 +23,9 @@ public class Empty extends GameObject {
     public boolean isSolid() {
         return false;
     }
+
+    @Override
+    public void interact() {
+
+    }
 }

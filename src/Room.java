@@ -1,17 +1,15 @@
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class Room {
     static final int TILE_SIZE = 64;
 
     public boolean conflicted;
+    public boolean defeated;
 
     public String type;
     Floor f;
@@ -25,8 +23,52 @@ public class Room {
     private int cols; // width in tiles
     private int rows; // height in tiles
 
+    public GameObject getCenterObject() {
+        return grid[grid.length/2][grid[0].length/2];
+    }
+
+    private void setEnemyPFIndex(Enemy e) {
+        double left = grid[0][0].x;
+        double top = grid[0][0].y;
+
+        int i = (int) ((e.drawCenterY()-top)/TILE_SIZE);
+        int j = (int) ((e.drawCenterX()-left)/TILE_SIZE);
+        if (i > grid.length -1 || i < 0 || j > grid[0].length - 1 || j < 0) {
+            e.pathfindingCurrentIndex.x = -1;
+            e.pathfindingCurrentIndex.y = -1;
+        } else {
+            e.pathfindingCurrentIndex.x = i;
+            e.pathfindingCurrentIndex.y = j;
+        }
+    }
+    private void setPlayerPFIndex() {
+        double left = World.p.r.grid[0][0].x;
+        double top = World.p.r.grid[0][0].y;
+
+        int i = (int) ((World.p.drawCenterY()-top)/TILE_SIZE);
+        int j = (int) ((World.p.drawCenterX()-left)/TILE_SIZE);
+        if (i > World.p.r.grid.length || i < 0 || j > World.p.r.grid[0].length - 1 || j < 0) {
+            World.p.pathfindingCurrentIndex.x = -1;
+            World.p.pathfindingCurrentIndex.y = -1;
+        } else {
+            World.p.pathfindingCurrentIndex.x = i;
+            World.p.pathfindingCurrentIndex.y = j;
+        }
+    }
+
+    private void pathFind(Enemy e) {
+        if (World.p.r != this) {
+            e.pathfindingPath = new ArrayList<GameObject>();
+            return;
+        }
+
+        AStar aStar = new AStar(grid);
+        e.pathfindingPath = aStar.findPath(e.pathfindingCurrentIndex, World.p.pathfindingCurrentIndex);
+    }
+
     void unlock() {
-        
+        defeated = true;
+
         if (gateUp instanceof Door) {
             ((Door)gateUp).locked = false;
         }
@@ -38,6 +80,13 @@ public class Room {
         }
         if (gateRight instanceof Door) {
             ((Door)gateRight).locked = false;
+        }
+
+        if (type == "boss") {
+            System.out.println("DEFEATED BOSS");
+            objs.remove(getCenterObject());
+            grid[grid.length/2][grid[0].length/2] = new Staircase(getCenterObject().x, getCenterObject().y, TILE_SIZE, TILE_SIZE);
+            addObj(grid[grid.length/2][grid[0].length/2]);
         }
     }
 
@@ -60,8 +109,10 @@ public class Room {
         } else if (type == "normal") {
             File[] normalRooms = new File("rooms/normal").listFiles();
             filePath = "rooms/normal/" + normalRooms[Util.randInt(0,normalRooms.length-1)].getName();
+            filePath = "rooms/normal/room7.txt";
         } else if (type == "boss") {
-            filePath = "rooms/boss.txt";
+            File[] bossRooms = new File("rooms/boss").listFiles();
+            filePath = "rooms/boss/" + bossRooms[Util.randInt(0,bossRooms.length-1)].getName();
         } else if (type == "exit") {
             filePath = "rooms/exit.txt";
         }
@@ -191,6 +242,9 @@ public class Room {
                     case 'P':
                         grid[row][col] = new Path(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                         break;
+                    case 'B':
+                    case 'X':
+                        enemies.add(new Spider(x+col*TILE_SIZE, y+row*TILE_SIZE));
                     case 'E':
                     default:
                         grid[row][col] = new Empty(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -246,14 +300,16 @@ public class Room {
             obj.update();
         }
 
+        setPlayerPFIndex();
         for (Enemy e: enemies) {
-            if (e.active) {
+            if (e.activated) {
+                setEnemyPFIndex(e);
+                pathFind(e);
                 e.update();
             }
-            e.active = false;
         }
 
-        if (enemies.size() == 0) {
+        if (enemies.size() == 0 && !defeated) {
             unlock();
         }
     }

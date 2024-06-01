@@ -1,5 +1,7 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 public class KeyHandler implements KeyListener {
     private static final boolean[] KEYS_HELD = new boolean[0x10000];
@@ -11,6 +13,14 @@ public class KeyHandler implements KeyListener {
             World.camera.resetZoom();
         } else if (e.getKeyCode() == KeyEvent.VK_F11) {
             toggleFullscreen();
+        } else if (e.getKeyCode() == KeyEvent.VK_K) {
+            try {
+                if (!World.p.r.enemies.isEmpty()) {
+                    World.p.r.enemies = new ArrayList<Enemy>();
+                }
+            } catch (ConcurrentModificationException exception) {
+
+            }
         }
     }
 

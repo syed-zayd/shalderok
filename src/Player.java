@@ -1,5 +1,5 @@
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -14,18 +14,22 @@ class Player extends GameObject {
     double spd; // max speed
     boolean up, down, left, right; // direction player is facing
     double dx, dy, mouseAngle; // angle from mouse to player's center
+    Point pathfindingCurrentIndex;
 
     Weapon weapon;
     Room r;
 
-    public Player(double x, double y, Room r, Sprite s) {
+    public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 32, 32, s);
         hearts = 3;
         maxHearts = 3;
         spd = 3;
         weapon = new Wand(x, y);
-        this.r = r;
         currentFrame = s.getSprite("idle", 0);
+        pathfindingCurrentIndex = new Point(-1, -1);
+
+        this.r = f.entrance;
+        Util.centerPosition(this, f.entrance.getCenterObject());
     }
 
     @Override
@@ -51,15 +55,31 @@ class Player extends GameObject {
         hearts -= damage;
     }
 
+    void enterNewFloor(Floor f) {
+        this.r = f.entrance;
+        Util.centerPosition(this, f.entrance.getCenterObject());
+    }
+
+    void enter(Room r) {
+        if (this.r == r) {
+            return;
+        }
+        this.r = r;
+        for (Enemy e: r.enemies) {
+            e.activated = true;
+        }
+    }
+
     ArrayList<Room> getRooms() {
         ArrayList<Room> rv = new ArrayList<Room>(r.f.getConnectingRooms(r));
         rv.add(r);
         return rv;
     }
 
-    ArrayList<Enemy> getEnemies() {
+    ArrayList<Enemy> activeEnemies() {
         ArrayList<Enemy> rv = new ArrayList<Enemy>();
         getRooms().forEach((r) -> rv.addAll(r.enemies));
+        rv.removeIf((e) -> !e.activated);
         return rv;
     }
     
@@ -88,7 +108,7 @@ class Player extends GameObject {
             vx = knockbackX;
             vy = knockbackY;
             return;
-        }        
+        }
 
         if (up) {
             vy -= spd/10;
@@ -150,7 +170,7 @@ class Player extends GameObject {
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
 
-        Util.drawCenteredString(g2d, String.format("%.2f", Math.toDegrees(mouseAngle)), drawCenterX(), drawY()-10);
+        Util.drawCenteredString(g2d, String.format("%d, %d", pathfindingCurrentIndex.x, pathfindingCurrentIndex.y), drawCenterX(), drawY()-10);
 
         // draw weapon
         if(weapon != null){
@@ -158,4 +178,9 @@ class Player extends GameObject {
         }
 
 	}
+
+    @Override
+    public void interact() {
+
+    }
 }

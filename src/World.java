@@ -1,9 +1,11 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -14,7 +16,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -24,55 +25,53 @@ class World extends JPanel {
     static final int TILE_SIZE = 32;
     static Camera camera;
     static Player p;
-    Floor f;
+    static Floor f;
     static Point mouse = new Point(0, 0);
     static BufferedImage heartImage, heartOutlineImage;
     
+    public static void nextFloor() {
+        try {
+            f = new Floor(f.level+1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        p.enterNewFloor(f);
+    }
+
     public World() {
         try {
-            f = new Floor();
+            f = new Floor(1);
             heartImage = ImageIO.read(new File("graphics/heart.png"));
             heartOutlineImage = ImageIO.read(new File("graphics/heartoutline.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        p = new Player(50, 100, f.entrance, SpriteLoader.getSprite("kowata"));
+        p = new Player(f, 0, 0, SpriteLoader.getSprite("kowata"));
         f.weapons.add(p.weapon);
         camera = new Camera();
         camera.centerObj = p;
-
-        // first room
-        Room abc = f.getConnectingRooms(f.entrance).get(0);
-        Spider sp = new Spider(abc.gateUp.x, abc.gateLeft.y);
-        abc.enemies.add(sp);
-        sp.debug = sp.x + ", " + sp.y;
 
         addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
                 p.useWeapon();
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
             }
 
             
@@ -145,6 +144,49 @@ class World extends JPanel {
     }
 
     private void handleCollisions() {
+        // entity collisions
+        for (Enemy e1: p.activeEnemies()) {
+            // check with player
+            double cx = collisionX(e1, p);
+            double cy = collisionY(e1, p);
+            if (cx != 0 && cy != 0) { // collision has occured
+                Point2D.Double knockbackVector = e1.getUnitVectorTo(p);
+                p.knockbackX = 20*knockbackVector.x;
+                p.knockbackY = 20*knockbackVector.y;
+
+                e1.knockbackX = -10*knockbackVector.x;
+                e1.knockbackY = -10*knockbackVector.y;
+
+                if (Math.abs(cx) < Math.abs(cy)) {
+                    e1.x += cx;
+                } else {
+                    e1.y += cy;
+                }
+            }    
+
+            // check with other enemies
+            for (Enemy e2: p.activeEnemies()) {
+                if (e1 == e2) {
+                    continue;
+                }
+
+                cx = collisionX(e1, e2);
+                cy = collisionY(e1, e2);
+                if (cx != 0 && cy != 0) { // collision has occured
+                    Point2D.Double knockbackVector = e1.getUnitVectorTo(e2);
+                    e1.knockbackX = -10*knockbackVector.x;
+                    e1.knockbackY = -10*knockbackVector.y;
+                    e2.knockbackX = 10*knockbackVector.x;
+                    e2.knockbackY = 10*knockbackVector.y;
+
+                    if (Math.abs(cx) < Math.abs(cy)) {
+                        e1.x += cx;
+                    } else {
+                        e1.y += cy;
+                    }
+                }    
+            }
+        }
         // object collisions
         for (Room r: p.getRooms()) {
             for (GameObject obj: r.objs) {
@@ -153,6 +195,12 @@ class World extends JPanel {
                 double cx = collisionX(p, obj);
                 double cy = collisionY(p, obj);
                 if (cx != 0 && cy != 0) { // collision has occured
+
+                    // check if they are interacting
+                    if (KeyHandler.isHeld(KeyEvent.VK_SPACE)) {
+                        obj.interact();
+                    }
+
                     if (obj.isSolid()) {
                         if (Math.abs(cx) < Math.abs(cy)) {
                             p.x += cx;
@@ -161,19 +209,17 @@ class World extends JPanel {
                             p.y += cy;
                             p.vy = 0;
                         }
-                    } else {
-                        p.r = r;
+                    } else if (obj instanceof Empty) {
+                        p.enter(r);
                     }
                 }
 
                 // enemy collides with object
-                for (Enemy e: p.getEnemies()) {
+                for (Enemy e: p.activeEnemies()) {
                     cx = collisionX(e, obj);
                     cy = collisionY(e, obj);
                     if (cx != 0 && cy != 0) { // collision has occured
-                        if (r == p.r) {
-                            e.active = true;
-                        }
+
                         if (obj.isSolid()) {
                             if (Math.abs(cx) < Math.abs(cy)) {
                                 e.x += cx;
@@ -181,7 +227,7 @@ class World extends JPanel {
                                 e.y += cy;
                             }
                         }
-                    }    
+                    }
                 }
 
                 // projectile collides with object
@@ -218,24 +264,6 @@ class World extends JPanel {
                     }
                 }
             }
-
-            // enemy collisions
-            for (Enemy e: r.enemies) {
-                double cx = collisionX(e, p);
-                double cy = collisionY(e, p);
-                if (cx != 0 && cy != 0) { // collision has occured
-                    Point2D.Double knockbackVector = e.getNormalVectorToPlayer();
-                    p.knockbackX = 25*knockbackVector.x;
-                    p.knockbackY = 25*knockbackVector.y;
-                    e.vx = 0;
-                    e.vy = 0;
-                    if (Math.abs(cx) < Math.abs(cy)) {
-                        e.x += cx;
-                    } else {
-                        e.y += cy;
-                    }
-                } 
-            }
         }
     }
 
@@ -261,7 +289,6 @@ class World extends JPanel {
         AffineTransform oldTransform = g2d.getTransform();
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
         try {
             g2d.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts/MysteryQuest-Regular.ttf")).deriveFont(18f));
         } catch (FontFormatException | IOException e) {
@@ -287,11 +314,14 @@ class World extends JPanel {
         for(int i = 0; i < p.hearts; i++){
             g2d.drawImage(heartImage, 10 + heartImage.getWidth() * i, 10, null);
         }
-
         for(int i = p.hearts; i < p.maxHearts; i++){
             g2d.drawImage(heartOutlineImage, 10 + heartImage.getWidth() * i, 10, null);
         }
 
+        g2d.setFont(g2d.getFont().deriveFont(36f));
+        g2d.setColor(new Color(0, 0, 128));
+        g2d.drawString(String.format("Floor: %d", f.level), 10, 30+heartImage.getHeight());
+        g2d.setColor(Color.BLACK);
     }
     
 }

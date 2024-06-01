@@ -1,8 +1,4 @@
-import java.awt.Graphics2D;
-import java.io.*;
 import java.awt.geom.Point2D;
-
-import javax.imageio.ImageIO;
 
 import java.awt.image.*;
 
@@ -61,4 +57,8 @@ public class Projectile extends GameObject {
         return false;
     }
 
+    @Override
+    public void interact() {
+
+    }
 }

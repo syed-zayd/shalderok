@@ -6,6 +6,7 @@ public class Floor {
     private Map<Room, ArrayList<Room>> connections;
     ArrayList<Weapon> weapons;
     public Room entrance;
+    int level;
 
     void addRoom(Room r) {
         connections.put(r, new ArrayList<>());
@@ -87,7 +88,8 @@ public class Floor {
         return visited[x][y];
     }
 
-    public Floor() throws IOException {
+    public Floor(int level) throws IOException {
+        this.level = level;
         visited = new boolean[0x1000][0x1000];
         connections = new HashMap<>();
         weapons = new ArrayList<Weapon>();
@@ -97,7 +99,7 @@ public class Floor {
 
         Room current = entrance;
         // add 3-11 normal rooms
-        for (int i = 0; i < Util.randInt(3, 3); i++) {
+        for (int i = 0; i < Util.randInt(1, 1); i++) {
             current = appendRoom(current, "normal");
             if (current == null) {
                 break;
@@ -105,7 +107,6 @@ public class Floor {
         }
         // add boss room
         current = appendRoom(current, "boss");
-        current = appendRoom(current, "exit");
     }
 
     private Room appendRoom(Room current, String type) throws IOException {

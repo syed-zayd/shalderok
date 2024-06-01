@@ -26,4 +26,9 @@ class Wall extends GameObject {
 	public boolean isSolid() {
 		return true;
 	}
+
+    @Override
+    public void interact() {
+
+    }
 }
