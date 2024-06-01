@@ -22,4 +22,9 @@ public class Path extends GameObject {
     public boolean isSolid() {
         return false;
     }
+
+    @Override
+    public void interact() {
+
+    }
 }

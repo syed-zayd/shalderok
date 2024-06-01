@@ -1,19 +1,15 @@
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.util.List;
-import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class Room {
     static final int TILE_SIZE = 64;
 
     public boolean conflicted;
+    public boolean defeated;
 
     public String type;
     Floor f;
@@ -26,6 +22,10 @@ public class Room {
     GameObject gateRight;
     private int cols; // width in tiles
     private int rows; // height in tiles
+
+    public GameObject getCenterObject() {
+        return grid[grid.length/2][grid[0].length/2];
+    }
 
     private void setEnemyPFIndex(Enemy e) {
         double left = grid[0][0].x;
@@ -40,8 +40,6 @@ public class Room {
             e.pathfindingCurrentIndex.x = i;
             e.pathfindingCurrentIndex.y = j;
         }
-        System.out.print("Enemy: ");
-        System.out.println(e.pathfindingCurrentIndex);
     }
     private void setPlayerPFIndex() {
         double left = World.p.r.grid[0][0].x;
@@ -69,7 +67,8 @@ public class Room {
     }
 
     void unlock() {
-        
+        defeated = true;
+
         if (gateUp instanceof Door) {
             ((Door)gateUp).locked = false;
         }
@@ -81,6 +80,13 @@ public class Room {
         }
         if (gateRight instanceof Door) {
             ((Door)gateRight).locked = false;
+        }
+
+        if (type == "boss") {
+            System.out.println("DEFEATED BOSS");
+            objs.remove(getCenterObject());
+            grid[grid.length/2][grid[0].length/2] = new Staircase(getCenterObject().x, getCenterObject().y, TILE_SIZE, TILE_SIZE);
+            addObj(grid[grid.length/2][grid[0].length/2]);
         }
     }
 
@@ -303,7 +309,7 @@ public class Room {
             }
         }
 
-        if (enemies.size() == 0) {
+        if (enemies.size() == 0 && !defeated) {
             unlock();
         }
     }

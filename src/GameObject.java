@@ -47,4 +47,5 @@ abstract class GameObject {
 
     public abstract void update();
     public abstract boolean isSolid();
+    public abstract void interact();
 }

@@ -66,4 +66,9 @@ public class Util {
         }
         return "none";
     }
+
+    public static void centerPosition(GameObject obj1, GameObject obj2) {
+        obj1.x = obj2.x + (obj2.w/2.) - obj1.w/2.;
+        obj1.y = obj2.y + (obj2.h/2.) - obj1.h/2.;
+    }
 }

@@ -1,7 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 class Spider extends Enemy {
     String debug = "0";
@@ -20,7 +19,6 @@ class Spider extends Enemy {
     }
 
     private void updateVelocity() {
-        System.out.println(pathfindingPath.size());
         Point2D.Double v;
         
         if (pathfindingPath.size() < 1) {
@@ -55,5 +53,10 @@ class Spider extends Enemy {
 
         x+=vx;
         y+=vy;
+    }
+
+    @Override
+    public void interact() {
+
     }
 }

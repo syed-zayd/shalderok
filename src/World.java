@@ -1,9 +1,11 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -14,7 +16,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -24,19 +25,28 @@ class World extends JPanel {
     static final int TILE_SIZE = 32;
     static Camera camera;
     static Player p;
-    Floor f;
+    static Floor f;
     static Point mouse = new Point(0, 0);
     static BufferedImage heartImage, heartOutlineImage;
     
+    public static void nextFloor() {
+        try {
+            f = new Floor(f.level+1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        p.enterNewFloor(f);
+    }
+
     public World() {
         try {
-            f = new Floor();
+            f = new Floor(1);
             heartImage = ImageIO.read(new File("graphics/heart.png"));
             heartOutlineImage = ImageIO.read(new File("graphics/heartoutline.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        p = new Player(50, 100, f.entrance, SpriteLoader.getSprite("kowata"));
+        p = new Player(f, 0, 0, SpriteLoader.getSprite("kowata"));
         f.weapons.add(p.weapon);
         camera = new Camera();
         camera.centerObj = p;
@@ -50,22 +60,18 @@ class World extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 p.useWeapon();
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
             }
 
             
@@ -189,6 +195,12 @@ class World extends JPanel {
                 double cx = collisionX(p, obj);
                 double cy = collisionY(p, obj);
                 if (cx != 0 && cy != 0) { // collision has occured
+
+                    // check if they are interacting
+                    if (KeyHandler.isHeld(KeyEvent.VK_SPACE)) {
+                        obj.interact();
+                    }
+
                     if (obj.isSolid()) {
                         if (Math.abs(cx) < Math.abs(cy)) {
                             p.x += cx;
@@ -277,7 +289,6 @@ class World extends JPanel {
         AffineTransform oldTransform = g2d.getTransform();
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
         try {
             g2d.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts/MysteryQuest-Regular.ttf")).deriveFont(18f));
         } catch (FontFormatException | IOException e) {
@@ -303,11 +314,14 @@ class World extends JPanel {
         for(int i = 0; i < p.hearts; i++){
             g2d.drawImage(heartImage, 10 + heartImage.getWidth() * i, 10, null);
         }
-
         for(int i = p.hearts; i < p.maxHearts; i++){
             g2d.drawImage(heartOutlineImage, 10 + heartImage.getWidth() * i, 10, null);
         }
 
+        g2d.setFont(g2d.getFont().deriveFont(36f));
+        g2d.setColor(new Color(0, 0, 128));
+        g2d.drawString(String.format("Floor: %d", f.level), 10, 30+heartImage.getHeight());
+        g2d.setColor(Color.BLACK);
     }
     
 }

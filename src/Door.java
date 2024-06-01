@@ -25,4 +25,9 @@ public class Door extends GameObject {
     public boolean isSolid() {
         return locked;
     }
+
+    @Override
+    public void interact() {
+
+    }
 }

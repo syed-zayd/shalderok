@@ -9,4 +9,8 @@ public class Bow extends Weapon {
         queuedProjectiles.add(new Arrow(x, y, 5, angle));
     }
     
+    @Override
+    public void interact() {
+
+    }
 }
