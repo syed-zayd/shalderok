@@ -243,7 +243,8 @@ public class Room {
                         break;
                     case 'B':
                     case 'X':
-                        enemies.add(new Spider(x+col*TILE_SIZE, y+row*TILE_SIZE));
+                        Enemy e = new Spider(x+col*TILE_SIZE, y+row*TILE_SIZE);
+                        enemies.add(e);
                     case 'E':
                     default:
                         grid[row][col] = new Empty(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
