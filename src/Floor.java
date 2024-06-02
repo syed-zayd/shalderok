@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.io.*;
 import java.util.*;
 
@@ -7,6 +8,50 @@ public class Floor {
     ArrayList<Weapon> weapons;
     public Room entrance;
     int level;
+    private String lastSuccessfulDirection;
+
+    private Room remove(Room r) {
+        // seal the room before it
+        Room prev = connections.get(r).get(0);
+        switch (lastSuccessfulDirection) {
+            case "up":
+                System.out.println("up");
+                prev.objs.remove(prev.gateUp);
+                prev.grid[0][prev.grid[0].length/2] = new Wall(prev.gateUp.x, prev.gateUp.y, Room.TILE_SIZE, Room.TILE_SIZE, Color.darkGray);
+                prev.gateUp = prev.grid[0][prev.grid[0].length/2];
+                prev.objs.add(prev.gateUp);
+                break;
+            case "down":
+                System.out.println("down");
+                prev.objs.remove(prev.gateDown);
+                prev.grid[prev.grid.length-1][prev.grid[0].length/2] = new Wall(prev.gateDown.x, prev.gateDown.y, Room.TILE_SIZE, Room.TILE_SIZE, Color.darkGray);
+                prev.gateDown = prev.grid[prev.grid.length-1][prev.grid[0].length/2];
+                prev.objs.add(prev.gateDown);
+                break;
+            case "left":
+                System.out.println("left");
+                prev.objs.remove(prev.gateLeft);
+                prev.grid[prev.grid.length/2][0] = new Wall(prev.gateLeft.x, prev.gateLeft.y, Room.TILE_SIZE, Room.TILE_SIZE, Color.darkGray);
+                prev.gateLeft = prev.grid[prev.grid.length/2][0];
+                prev.objs.add(prev.gateLeft);
+                break;
+            case "right":
+            default:
+                System.out.println("right");
+                prev.objs.remove(prev.gateRight);
+                prev.grid[prev.grid.length/2][prev.grid[0].length-1] = new Wall(prev.gateRight.x, prev.gateRight.y, Room.TILE_SIZE, Room.TILE_SIZE, Color.darkGray);
+                prev.gateRight = prev.grid[prev.grid.length/2][prev.grid[0].length-1];
+                prev.objs.add(prev.gateRight);
+                break;
+        }
+
+        // remove all references to the room
+        connections.values().stream().forEach(e -> e.remove(r));
+        // remove the room
+        connections.remove(r);
+
+        return prev;
+    }
 
     void addRoom(Room r) {
         connections.put(r, new ArrayList<>());
@@ -98,15 +143,51 @@ public class Floor {
         addRoom(entrance);
 
         Room current = entrance;
+        Room last = current;
         // add 3-11 normal rooms
-        for (int i = 0; i < Util.randInt(1, 1); i++) {
+        for (int i = 0; i < Util.randInt(11, 11); i++) {
             current = appendRoom(current, "normal");
             if (current == null) {
                 break;
             }
+            last = current;
         }
+
         // add boss room
         current = appendRoom(current, "boss");
+        while (current == null) {
+            current = remove(last);
+            last = current;
+            current = appendRoom(current, "boss");
+        }
+
+        // add random side paths
+        Set<Room> visited = new LinkedHashSet<Room>();
+        Stack<Room> stack = new Stack<Room>();
+        stack.push(entrance);
+        while (!stack.isEmpty()) {
+            current = stack.pop();
+            if (!visited.contains(current)) {
+                visited.add(current);
+                
+                // chance to add a side path
+                if (Math.random() < 0.1 || (current == entrance && Math.random() < 0.5)) {
+                    Room sidePathRoom = current;
+                    for (int i=0; i<Util.randInt(5,7); i++) {
+                        sidePathRoom = appendRoom(current, "normal");
+                        if (sidePathRoom == null) {
+                            break;
+                        }
+                    }
+                }
+
+                // keep going
+                for (Room r: getConnectingRooms(current)) {
+                    stack.push(r);
+                }
+
+            }
+        }
     }
 
     private Room appendRoom(Room current, String type) throws IOException {
@@ -144,6 +225,7 @@ public class Floor {
             } else {
                 addRoom(next);
                 connect(current, next, direction);
+                lastSuccessfulDirection = direction;
                 System.out.println("[Floor Generation] Successful: Room added");
                 return next;
             }
