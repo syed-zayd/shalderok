@@ -17,14 +17,10 @@ abstract class Enemy extends Entity {
         pathfindingCurrentIndex = new Point(-1,-1);
     }
 
-    public Point2D.Double getUnitVectorTo(GameObject obj) {
-        double dx = obj.drawCenterX()-drawCenterX();
-        double dy = obj.drawCenterY()-drawCenterY();
-        double magnitude = Math.sqrt(dx*dx+dy*dy);
-        if (magnitude == 0) {
-            return new Point2D.Double(0, 0);
+    public void update(){
+        if(hp <= 0){
+            activated = false;
         }
-        return new Point2D.Double(dx/magnitude, dy/magnitude);
     }
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Room {
     static final int TILE_SIZE = 64;
@@ -296,13 +297,18 @@ public class Room {
     }
 
     void update() {
+        
         for (GameObject obj: objs) {
             obj.update();
         }
 
         setPlayerPFIndex();
-        for (Enemy e: enemies) {
-            if (e.activated) {
+        for (Iterator<Enemy> enemiesIterator = enemies.iterator(); enemiesIterator.hasNext();) {
+            Enemy e = enemiesIterator.next();
+            if(e.hp <= 0){
+                enemiesIterator.remove();
+            }
+            else if (e.activated) {
                 setEnemyPFIndex(e);
                 pathFind(e);
                 e.update();

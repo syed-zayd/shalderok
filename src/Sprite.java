@@ -25,6 +25,10 @@ public class Sprite {
         sprites.put(state, spriteList);
     }
 
+    public int getNumFrames(String state){
+        return sprites.get(state).size();
+    }
+
     public BufferedImage getSprite(String state, int index){
         return sprites.get(state).get(index);
     }

@@ -7,7 +7,6 @@ class Spider extends Enemy {
 
     public Spider(double x, double y) {
         super(x, y, 10, SpriteLoader.getSprite("spider"));
-        this.currentFrame = sprite.getSprite("idle", 0);
     }
 
     private void updateVelocity() {

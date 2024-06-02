@@ -186,6 +186,21 @@ class World extends JPanel {
                     }
                 }    
             }
+            
+            // check for collisions with projectiles
+            for (Weapon w: f.weapons) {
+                Iterator<Projectile> it = w.activeProjectiles.iterator();
+                while (it.hasNext()) {
+                    Projectile projectile = it.next();
+                    cx = collisionX(projectile, e1);
+                    cy = collisionY(projectile, e1);
+                    if (cx != 0 && cy != 0) {
+                        e1.takeHit(projectile);
+                        it.remove();
+                    }
+                }
+            }
+
         }
         // object collisions
         for (Room r: p.getRooms()) {
@@ -235,14 +250,16 @@ class World extends JPanel {
                     Iterator<Projectile> it = w.activeProjectiles.iterator();
                     while (it.hasNext()) {
                         Projectile projectile = it.next();
+                        if(obj.getClass().getName().equals("Spider") || obj.getClass().getName().equals("Enemy")){
+                            System.out.println("Enemy detected.");
+                        }
                         if (obj.isSolid()) {
                             cx = collisionX(projectile, obj);
                             cy = collisionY(projectile, obj);
                             if (cx != 0 && cy != 0) {
                                 if (Math.abs(cx) < Math.abs(cy)) {
-                                    System.out.println("Collision!");
                                     projectile.x += cx;
-                                    if (projectile.bouncesRemaining>0) {
+                                    if (projectile.bouncesRemaining > 0) {
                                         projectile.vx *= -1;
                                         projectile.bouncesRemaining--;
                                     } else {
@@ -260,10 +277,6 @@ class World extends JPanel {
                                     }
                                 }
                             }
-                        }
-                        if(obj instanceof Enemy){
-                            Enemy e = (Enemy) obj;
-                            e.takeDamage(projectile.damage);
                         }
                     }
                 }

@@ -4,8 +4,9 @@ import java.awt.image.BufferedImage;
 abstract class GameObject {
     double x, y;
     int w, h;
+    String state;
+    int frameIndex;
     Sprite sprite;
-    BufferedImage currentFrame;
     
 
     public GameObject(double x, double y, int w, int h, Sprite sprite) {
@@ -14,6 +15,8 @@ abstract class GameObject {
         this.w = w;
         this.h = h;
         this.sprite = sprite;
+        this.state = "idle";
+        this.frameIndex = 0;
     }
 
     public int drawX() {
@@ -42,7 +45,7 @@ abstract class GameObject {
     }
 
     public void paint(Graphics2D g2d){
-        g2d.drawImage(currentFrame, drawX(), drawY(), null);
+        g2d.drawImage(sprite.getSprite(state, frameIndex), drawX(), drawY(), null);
     }
 
     public abstract void update();

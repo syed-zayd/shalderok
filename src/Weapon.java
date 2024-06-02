@@ -11,7 +11,6 @@ abstract class Weapon extends GameObject {
         super(x, y, 32, 32, s);
         activeProjectiles = new ArrayList <Projectile>();
         queuedProjectiles = new ArrayList <Projectile>();
-        currentFrame = s.getSprite("idle", 0);
     }
 
     abstract void shoot();
