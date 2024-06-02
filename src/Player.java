@@ -10,7 +10,6 @@ class Player extends Entity {
     boolean up, down, left, right; // direction player is facing
     double dx, dy; // angle from mouse to player's center
     Point pathfindingCurrentIndex;
-    Room r;
 
     public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 5, s);
