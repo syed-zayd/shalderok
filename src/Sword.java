@@ -4,9 +4,11 @@ public class Sword extends Weapon {
             super(x, y, SpriteLoader.getSprite("sword"));
         }
     
-        @Override
-        void shoot() {
-            queuedProjectiles.add(new MeleeProjectile(x, y, angle));
+        public void shoot() {
+            if(canShoot()){
+                queuedProjectiles.add(new MeleeProjectile(x, y, angle));
+                cooldownTimer = 25;
+            }
         }
         
         @Override

@@ -298,6 +298,7 @@ public class Room {
                     case 'X':
                         grid[row][col] = new Ground(x+col*TILE_SIZE, y+row*TILE_SIZE, f.getTheme());
                         Enemy e = new Spider(0, 0);
+                        e.enterNewFloor(f);
                         enemies.add(e);
                         Util.centerPosition(e, grid[row][col]);
                         break;
@@ -335,6 +336,7 @@ public class Room {
                 setEnemyPFIndex(e);
                 pathFind(e);
                 e.update();
+                e.attack();
             }
         }
 

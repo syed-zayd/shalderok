@@ -28,6 +28,7 @@ class World extends JPanel {
     static Floor f;
     static Point mouse = new Point(0, 0);
     static BufferedImage heartImage, heartOutlineImage;
+    static String difficulty = "easy";
     
     public static void nextFloor() {
         try {
@@ -173,11 +174,11 @@ class World extends JPanel {
                 cx = collisionX(e1, e2);
                 cy = collisionY(e1, e2);
                 if (cx != 0 && cy != 0) { // collision has occured
-                    Point2D.Double knockbackVector = e1.getUnitVectorTo(e2);
-                    e1.knockbackX = -10*knockbackVector.x;
-                    e1.knockbackY = -10*knockbackVector.y;
-                    e2.knockbackX = 10*knockbackVector.x;
-                    e2.knockbackY = 10*knockbackVector.y;
+                    // Point2D.Double knockbackVector = e1.getUnitVectorTo(e2);
+                    // e1.knockbackX = -10*knockbackVector.x;
+                    // e1.knockbackY = -10*knockbackVector.y;
+                    // e2.knockbackX = 10*knockbackVector.x;
+                    // e2.knockbackY = 10*knockbackVector.y;
 
                     if (Math.abs(cx) < Math.abs(cy)) {
                         e1.x += cx;
@@ -253,9 +254,6 @@ class World extends JPanel {
                     Iterator<Projectile> it = w.activeProjectiles.iterator();
                     while (it.hasNext()) {
                         Projectile projectile = it.next();
-                        if(obj.getClass().getName().equals("Spider") || obj.getClass().getName().equals("Enemy")){
-                            System.out.println("Enemy detected.");
-                        }
                         if (obj.isSolid()) {
                             cx = collisionX(projectile, obj);
                             cy = collisionY(projectile, obj);
@@ -267,6 +265,7 @@ class World extends JPanel {
                                         projectile.bouncesRemaining--;
                                     } else {
                                         it.remove();
+                                        continue;
                                     }
                                 }
                                 else {
@@ -277,7 +276,39 @@ class World extends JPanel {
                                     }
                                     else {
                                         it.remove();
+                                        continue;
                                     }
+                                }
+                            }
+                        }
+                        if(difficulty.equals("easy")){
+                            if(w == p.weapon){
+                                continue;
+                            }
+                        }
+                        cx = collisionX(projectile, p);
+                        cy = collisionY(projectile, p);
+                        if (cx != 0 && cy != 0) {
+                            p.takeHit(projectile);
+                            if (Math.abs(cx) < Math.abs(cy)) {
+                                projectile.x += cx;
+                                if (projectile.bouncesRemaining > 0) {
+                                    projectile.vx *= -1;
+                                    projectile.bouncesRemaining -= 5;
+                                } else {
+                                    it.remove();
+                                    continue;
+                                }
+                            }
+                            else {
+                                projectile.y += cy;
+                                if (projectile.bouncesRemaining>0) {
+                                    projectile.vy *= -1;
+                                    projectile.bouncesRemaining -= 5;
+                                }
+                                else {
+                                    it.remove();
+                                    continue;
                                 }
                             }
                         }

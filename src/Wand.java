@@ -6,8 +6,10 @@ public class Wand extends Weapon {
         super(x, y, SpriteLoader.getSprite("wand"));
     }
     public void shoot(){
-
-        queuedProjectiles.add(new MagicOrb(x, y, 5, angle));
+        if(canShoot()){
+            queuedProjectiles.add(new MagicOrb(x, y, 5, angle));
+            cooldownTimer = 50;
+        }
     }
 
     @Override

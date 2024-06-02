@@ -5,10 +5,10 @@ import java.util.ArrayList;
 
 class Player extends Entity {
 
-    private final int WEAPON_RADIUS = 64;
+    String name;
     double spd; // max speed
     boolean up, down, left, right; // direction player is facing
-    double dx, dy, mouseAngle; // angle from mouse to player's center
+    double dx, dy; // angle from mouse to player's center
     Point pathfindingCurrentIndex;
     Room r;
 
@@ -17,20 +17,22 @@ class Player extends Entity {
         spd = 5;
         weapon = new Wand(x, y);
         pathfindingCurrentIndex = new Point(-1, -1);
+        name = s.getName();
 
         this.r = f.entrance;
         Util.centerPosition(this, f.entrance.getCenterObject());
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     public void updateCharacter(Sprite s){
         this.sprite = s;
     }
 
-    void enterNewFloor(Floor f) {
-        if(weapon != null){
-            f.weapons.add(weapon);
-        }
-        this.r = f.entrance;
+    public void enterNewFloor(Floor f) {
+        super.enterNewFloor(f);
         Util.centerPosition(this, f.entrance.getCenterObject());
     }
 
@@ -57,7 +59,7 @@ class Player extends Entity {
         return rv;
     }
     
-    private void updateDirection() {
+    protected void updateDirection() {
         up = KeyHandler.isHeld(KeyEvent.VK_UP) || KeyHandler.isHeld(KeyEvent.VK_W);
         down = KeyHandler.isHeld(KeyEvent.VK_DOWN) || KeyHandler.isHeld(KeyEvent.VK_S);
         right = KeyHandler.isHeld(KeyEvent.VK_RIGHT) || KeyHandler.isHeld(KeyEvent.VK_D);
@@ -72,7 +74,7 @@ class Player extends Entity {
         }
     }
 
-    private void updateVelocity() {
+    protected void updateVelocity() {
         knockbackX *= 0.92;
         knockbackY *= 0.92;
 
@@ -107,48 +109,19 @@ class Player extends Entity {
         vx = Math.max(vx, -spd);
         vy = Math.max(vy, -spd);
     }
-
-    private void move() {
-        x += vx;
-        y += vy;
-    }
     
-    private void updateAngle() {
+    protected void updateAngle() {
         dx = World.mouse.getX() - (drawCenterX()-World.camera.x);
         dy = World.mouse.getY() - (drawCenterY()-World.camera.y);
-        mouseAngle = -1 * Math.atan2(dy, dx);
+        angle = -1 * Math.atan2(dy, dx);
         
-        mouseAngle%=360;
-    }
-
-    private void updateWeapon() {
-        if(weapon != null){
-            weapon.angle = mouseAngle;
-            double centerX = drawCenterX() + WEAPON_RADIUS * Math.cos(mouseAngle);
-            double centerY = drawCenterY() - WEAPON_RADIUS * Math.sin(mouseAngle);
-            weapon.x = weapon.drawXFromCenter(centerX);
-            weapon.y = weapon.drawYFromCenter(centerY);
-            weapon.update();
-        }
-    }
-
-    public void update() {
-        updateDirection();
-        updateVelocity();
-        move();
-        updateAngle();
-        updateWeapon();
+        angle%=360;
     }
 
 	@Override
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
-
-
-        // draw weapon
-        if(weapon != null){
-            weapon.paint(g2d);
-        }
+        Util.drawCenteredString(g2d, name, drawCenterX(), drawY());
 
 	}
 

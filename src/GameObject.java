@@ -44,7 +44,9 @@ abstract class GameObject {
     }
 
     public void paint(Graphics2D g2d){
-        g2d.drawImage(sprite.getSprite(state, frameIndex), drawX(), drawY(), null);
+        if(sprite != null){
+            g2d.drawImage(sprite.getSprite(state, frameIndex), drawX(), drawY(), null);
+        }
     }
 
     public abstract void update();
