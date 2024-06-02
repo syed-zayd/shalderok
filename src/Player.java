@@ -144,7 +144,6 @@ class Player extends Entity {
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
 
-        // Util.drawCenteredString(g2d, String.format("%.25f, %.25f", x, y), drawCenterX(), drawY()-10);
 
         // draw weapon
         if(weapon != null){
