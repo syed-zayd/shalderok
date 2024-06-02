@@ -13,10 +13,10 @@ class Camera {
     }
 
     public void zoomOut() {
-        zoom = Math.max(0.5-1000, zoom-0.05);
+        zoom = Math.max(0.5, zoom-0.05);
     }
     public void zoomIn() {
-        zoom = Math.min(1.5+1000, zoom+0.05);
+        zoom = Math.min(2, zoom+0.05);
     }
     public void resetZoom() {
         zoom = 1;
