@@ -27,6 +27,7 @@ public abstract class Entity extends GameObject {
             f.weapons.add(weapon);
         }
         this.r = f.entrance;
+        this.r.activate();
     }
 
     public Point2D.Double getUnitVectorTo(GameObject obj) {

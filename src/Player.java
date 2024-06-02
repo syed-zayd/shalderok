@@ -71,6 +71,16 @@ class Player extends Entity {
             right = false;
             left = false;
         }
+
+        if (left) {
+            this.state = "left";
+        } else if (right) {
+            this.state = "right";
+        } else if (up) {
+            this.state = "up";
+        } else {
+            this.state = "idle";
+        }
     }
 
     protected void updateVelocity() {

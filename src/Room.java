@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Room {
-    static final int TILE_SIZE = 64;
+    static final int TILE_SIZE = 128;
 
     public boolean conflicted;
     public boolean defeated;
@@ -100,6 +100,8 @@ public class Room {
         activated = true;
         if (enemies.size() != 0) {
             lock();
+        } else {
+            unlock();
         }
 
         for (Enemy enemy : enemies) {
