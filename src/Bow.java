@@ -1,7 +1,7 @@
 public class Bow extends Weapon {
 
-    public Bow(double x, double y) {
-        super(x, y, SpriteLoader.getSprite("bow"));
+    public Bow(Entity owner, double x, double y) {
+        super(owner, x, y, SpriteLoader.getSprite("bow"));
     }
 
     @Override

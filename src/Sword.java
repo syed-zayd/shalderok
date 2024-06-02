@@ -1,7 +1,7 @@
 public class Sword extends Weapon {
 
-        public Sword(double x, double y) {
-            super(x, y, SpriteLoader.getSprite("sword"));
+        public Sword(Entity owner, double x, double y) {
+            super(owner, x, y, SpriteLoader.getSprite("sword"));
         }
     
         public void shoot() {

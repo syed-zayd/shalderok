@@ -15,7 +15,7 @@ class Player extends Entity {
     public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 5, s);
         spd = 5;
-        weapon = new Wand(x, y);
+        weapon = new Wand(this, x, y);
         pathfindingCurrentIndex = new Point(-1, -1);
         name = s.getName();
 

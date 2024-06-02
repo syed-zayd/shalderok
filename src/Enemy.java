@@ -1,17 +1,21 @@
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 abstract class Enemy extends Entity {
     
     boolean activated;
 
+    double accuracy;
+
     ArrayList<GameObject> pathfindingPath; // pathfinding
     Point pathfindingCurrentIndex;
 
-    public Enemy(double x, double y, int hp, Sprite s) {
+    public Enemy(double x, double y, int hp, double accuracy, Sprite s) {
         super(x, y, hp, s);
         this.hp = hp;
+        this.accuracy = accuracy;
         activated = false;
         pathfindingPath = new ArrayList<GameObject>();
         pathfindingCurrentIndex = new Point(-1,-1);
@@ -33,6 +37,8 @@ abstract class Enemy extends Entity {
     protected void updateAngle() {
         Point2D.Double v = getUnitVectorTo(World.p);
         angle = Math.atan(- v.y / v.x);
+        double offset = (Math.PI / 4) * (1 - accuracy);
+        angle += (Math.random() * offset) - (offset / 2.);
     }
 
     @Override

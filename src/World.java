@@ -190,6 +190,9 @@ class World extends JPanel {
             
             // check for collisions with projectiles
             for (Weapon w: f.weapons) {
+                if(w.owner != p){
+                    continue;
+                }
                 Iterator<Projectile> it = w.activeProjectiles.iterator();
                 while (it.hasNext()) {
                     Projectile projectile = it.next();
@@ -282,7 +285,7 @@ class World extends JPanel {
                             }
                         }
                         if(difficulty.equals("easy")){
-                            if(w == p.weapon){
+                            if(w.owner == p){
                                 continue;
                             }
                         }
