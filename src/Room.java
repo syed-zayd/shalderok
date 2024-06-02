@@ -333,6 +333,7 @@ public class Room {
         for (Iterator<Enemy> enemiesIterator = enemies.iterator(); enemiesIterator.hasNext();) {
             Enemy e = enemiesIterator.next();
             if (e.hp <= 0) {
+                f.weapons.remove(e.weapon);
                 enemiesIterator.remove();
             } else if (e.activated) {
                 setEnemyPFIndex(e);

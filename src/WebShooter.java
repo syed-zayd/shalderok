@@ -1,9 +1,8 @@
-import java.awt.Graphics2D;
 
 public class WebShooter extends Weapon {
     
-    public WebShooter(double x, double y){
-        super(x, y, null);
+    public WebShooter(Entity owner, double x, double y){
+        super(owner, x, y, null);
     }
 
     public void shoot(){

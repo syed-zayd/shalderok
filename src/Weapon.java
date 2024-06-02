@@ -8,9 +8,11 @@ abstract class Weapon extends GameObject {
     ArrayList <Projectile> queuedProjectiles;
     int cooldownTimer;
     int projectilesShot;
+    Entity owner;
 
-    public Weapon(double x, double y, Sprite s) {
+    public Weapon(Entity owner, double x, double y, Sprite s) {
         super(x, y, 32, 32, s);
+        this.owner = owner;
         activeProjectiles = new ArrayList <Projectile>();
         queuedProjectiles = new ArrayList <Projectile>();
         cooldownTimer = 0;
@@ -49,4 +51,5 @@ abstract class Weapon extends GameObject {
     public boolean isSolid() {
         return false;
     }
+    
 }
