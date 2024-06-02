@@ -10,40 +10,34 @@ public class Floor {
     int level;
     private String lastSuccessfulDirection;
 
+    public Color getBackgroundColor() {
+        switch (level) {
+            case 1: // stone
+                return new Color(22, 22, 26);
+            default:
+                return Color.BLACK;
+        }
+    }
+
+    public String getTheme() {
+        switch (level) {
+            case 1:
+                return "stone";
+            default:
+                return "stone";
+        }
+    }
+
     private Room remove(Room r) {
+        System.out.println("[Floor Generation] Cannot Add Boss Room, Deleting: " + lastSuccessfulDirection);
+
         // seal the room before it
         Room prev = connections.get(r).get(0);
-        switch (lastSuccessfulDirection) {
-            case "up":
-                System.out.println("up");
-                prev.objs.remove(prev.gateUp);
-                prev.grid[0][prev.grid[0].length/2] = new Wall(prev.gateUp.x, prev.gateUp.y, Room.TILE_SIZE, Room.TILE_SIZE, Color.darkGray);
-                prev.gateUp = prev.grid[0][prev.grid[0].length/2];
-                prev.objs.add(prev.gateUp);
-                break;
-            case "down":
-                System.out.println("down");
-                prev.objs.remove(prev.gateDown);
-                prev.grid[prev.grid.length-1][prev.grid[0].length/2] = new Wall(prev.gateDown.x, prev.gateDown.y, Room.TILE_SIZE, Room.TILE_SIZE, Color.darkGray);
-                prev.gateDown = prev.grid[prev.grid.length-1][prev.grid[0].length/2];
-                prev.objs.add(prev.gateDown);
-                break;
-            case "left":
-                System.out.println("left");
-                prev.objs.remove(prev.gateLeft);
-                prev.grid[prev.grid.length/2][0] = new Wall(prev.gateLeft.x, prev.gateLeft.y, Room.TILE_SIZE, Room.TILE_SIZE, Color.darkGray);
-                prev.gateLeft = prev.grid[prev.grid.length/2][0];
-                prev.objs.add(prev.gateLeft);
-                break;
-            case "right":
-            default:
-                System.out.println("right");
-                prev.objs.remove(prev.gateRight);
-                prev.grid[prev.grid.length/2][prev.grid[0].length-1] = new Wall(prev.gateRight.x, prev.gateRight.y, Room.TILE_SIZE, Room.TILE_SIZE, Color.darkGray);
-                prev.gateRight = prev.grid[prev.grid.length/2][prev.grid[0].length-1];
-                prev.objs.add(prev.gateRight);
-                break;
-        }
+        int row = prev.getGateRow(lastSuccessfulDirection);
+        int col = prev.getGateCol(lastSuccessfulDirection);
+        prev.objs.remove(prev.grid[row][col]);
+        prev.grid[row][col] = new Wall(prev.grid[row][col].x, prev.grid[row][col].y, getTheme());
+        prev.objs.add(prev.grid[row][col]);
 
         // remove all references to the room
         connections.values().stream().forEach(e -> e.remove(r));
@@ -62,43 +56,34 @@ public class Floor {
         connections.get(r1).add(r2);
         connections.get(r2).add(r1);
 
+        String oppositeDirection;
         switch (direction) {
             case "up":
-                r1.objs.remove(r1.gateUp);
-                r1.gateUp = new Door(r1.gateUp.x, r1.gateUp.y, Room.TILE_SIZE, Room.TILE_SIZE);
-                r1.objs.add(r1.gateUp);
-
-                r2.objs.remove(r2.gateDown);
-                r2.gateDown = new Path(r2.gateDown.x, r2.gateDown.y, Room.TILE_SIZE, Room.TILE_SIZE);
-                r2.objs.add(r2.gateDown);
+                oppositeDirection = "down";
                 break;
             case "down":
-                r1.objs.remove(r1.gateDown);
-                r1.gateDown = new Door(r1.gateDown.x, r1.gateDown.y, Room.TILE_SIZE, Room.TILE_SIZE);
-                r1.objs.add(r1.gateDown);
-
-                r2.objs.remove(r2.gateUp);
-                r2.gateUp = new Path(r2.gateUp.x, r2.gateUp.y, Room.TILE_SIZE, Room.TILE_SIZE);
-                r2.objs.add(r2.gateUp);
+                oppositeDirection = "up";
                 break;
             case "left":
-                r1.objs.remove(r1.gateLeft);
-                r1.gateLeft = new Door(r1.gateLeft.x, r1.gateLeft.y, Room.TILE_SIZE, Room.TILE_SIZE);
-                r1.objs.add(r1.gateLeft);
-
-                r2.objs.remove(r2.gateRight);
-                r2.gateRight = new Path(r2.gateRight.x, r2.gateRight.y, Room.TILE_SIZE, Room.TILE_SIZE);
-                r2.objs.add(r2.gateRight);
+                oppositeDirection = "right";
                 break;
             case "right":
-                r1.objs.remove(r1.gateRight);
-                r1.gateRight = new Door(r1.gateRight.x, r1.gateRight.y, Room.TILE_SIZE, Room.TILE_SIZE);
-                r1.objs.add(r1.gateRight);
-
-                r2.objs.remove(r2.gateLeft);
-                r2.gateLeft = new Path(r2.gateLeft.x, r2.gateLeft.y, Room.TILE_SIZE, Room.TILE_SIZE);
-                r2.objs.add(r2.gateLeft);
+                oppositeDirection = "left";
+                break;
+            default:
+                oppositeDirection = "none";
         }
+
+        GameObject gateR1 = r1.getGate(direction);
+        r1.objs.remove(gateR1);
+        r1.grid[r1.getGateRow(direction)][r1.getGateCol(direction)] = new Door(gateR1.x, gateR1.y, getTheme(), true);
+        r1.objs.add(r1.grid[r1.getGateRow(direction)][r1.getGateCol(direction)]);
+
+        GameObject gateR2 = r2.getGate(oppositeDirection);
+        r2.objs.remove(gateR2);
+        r2.grid[r2.getGateRow(oppositeDirection)][r2.getGateCol(oppositeDirection)] = new Door(gateR2.x, gateR2.y, getTheme(), false);
+        r2.objs.add(r2.grid[r2.getGateRow(oppositeDirection)][r2.getGateCol(oppositeDirection)]);
+
     }
 
     ArrayList<Room> getConnectingRooms(Room r) {
@@ -144,8 +129,10 @@ public class Floor {
 
         Room current = entrance;
         Room last = current;
-        // add 3-11 normal rooms
-        for (int i = 0; i < Util.randInt(11, 11); i++) {
+        int minRooms = 1;
+        int maxRooms = 1;
+        // add a random number of normal rooms
+        for (int i = 0; i < Util.randInt(minRooms, maxRooms); i++) {
             current = appendRoom(current, "normal");
             if (current == null) {
                 break;
@@ -199,23 +186,19 @@ public class Floor {
         while (up || down || left || right) {
             direction = Util.randDirection(up, down, left, right);
             System.out.println("[Floor Generation] Attempt: " + direction);
-            GameObject gate = null;
+            GameObject gate = current.getGate(direction);
             switch (direction) {
                 case "up":
                     up = false;
-                    gate = current.gateUp;
                     break;
                 case "down":
                     down = false;
-                    gate = current.gateDown;
                     break;
                 case "left":
                     left = false;
-                    gate = current.gateLeft;
                     break;
                 case "right":
                     right = false;
-                    gate = current.gateRight;
                     break;
             }
             next = new Room(type, gate.x, gate.y, direction, this);

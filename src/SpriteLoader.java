@@ -66,7 +66,8 @@ public class SpriteLoader {
     }
 
     public static Sprite getSprite(String spriteName){
-        return sprites.get(spriteName);
+        Sprite s = sprites.get(spriteName);
+        return s == null ? sprites.get("not_found") : s;
     }
 
 }

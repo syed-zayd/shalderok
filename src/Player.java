@@ -14,8 +14,8 @@ class Player extends Entity {
 
     public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 5, s);
-        spd = 8;
-        weapon = new Bow(x, y);
+        spd = 5;
+        weapon = new Wand(x, y);
         pathfindingCurrentIndex = new Point(-1, -1);
 
         this.r = f.entrance;
@@ -35,13 +35,13 @@ class Player extends Entity {
     }
 
     void enter(Room r) {
-        if (this.r == r) {
+        this.r = r;
+        if (r.activated == true) {
             return;
         }
-        this.r = r;
-        for (Enemy e: r.enemies) {
-            e.activated = true;
-        }
+        r.activate();
+        if (r != World.f.entrance)
+            AudioManager.playSFX("sfx/room_enter.wav");
     }
 
     ArrayList<Room> getRooms() {
@@ -144,7 +144,7 @@ class Player extends Entity {
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
 
-        Util.drawCenteredString(g2d, String.format("%d, %d", pathfindingCurrentIndex.x, pathfindingCurrentIndex.y), drawCenterX(), drawY()-10);
+        Util.drawCenteredString(g2d, String.format("%.25f, %.25f", x, y), drawCenterX(), drawY()-10);
 
         // draw weapon
         if(weapon != null){

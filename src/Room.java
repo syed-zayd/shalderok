@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,30 +10,59 @@ public class Room {
 
     public boolean conflicted;
     public boolean defeated;
+    public boolean activated;
 
     public String type;
     Floor f;
     GameObject[][] grid;
     ArrayList<GameObject> objs;
     ArrayList<Enemy> enemies;
-    GameObject gateUp;
-    GameObject gateDown;
-    GameObject gateLeft;
-    GameObject gateRight;
     private int cols; // width in tiles
     private int rows; // height in tiles
 
+    public int getGateRow(String direction) {
+        switch (direction) {
+            case "up":
+                return 0;
+            case "down":
+                return grid.length-1;
+            case "left":
+                return grid.length/2;
+            case "right":
+                return grid.length/2;
+            default:
+                return -1;
+        }
+    }
+    public int getGateCol(String direction) {
+        switch (direction) {
+            case "up":
+                return grid[0].length/2;
+            case "down":
+                return grid[0].length/2;
+            case "left":
+                return 0;
+            case "right":
+                return grid[0].length-1;
+            default:
+                return -1;
+        }
+    }
+    public GameObject getGate(String direction) {
+        return grid[getGateRow(direction)][getGateCol(direction)];
+    }
+
     public GameObject getCenterObject() {
-        return grid[grid.length/2][grid[0].length/2];
+        return grid[grid.length / 2][grid[0].length / 2];
     }
 
     private void setEnemyPFIndex(Enemy e) {
         double left = grid[0][0].x;
         double top = grid[0][0].y;
 
-        int i = (int) ((e.drawCenterY()-top)/TILE_SIZE);
-        int j = (int) ((e.drawCenterX()-left)/TILE_SIZE);
-        if (i > grid.length -1 || i < 0 || j > grid[0].length - 1 || j < 0) {
+        int i = (int) ((e.drawCenterY() - top) / TILE_SIZE);
+        int j = (int) ((e.drawCenterX() - left) / TILE_SIZE);
+        if (i > grid.length - 1 || i < 0 || j > grid[0].length - 1 || j < 0) {
             e.pathfindingCurrentIndex.x = -1;
             e.pathfindingCurrentIndex.y = -1;
         } else {
@@ -42,12 +70,13 @@ public class Room {
             e.pathfindingCurrentIndex.y = j;
         }
     }
+
     private void setPlayerPFIndex() {
         double left = World.p.r.grid[0][0].x;
         double top = World.p.r.grid[0][0].y;
 
-        int i = (int) ((World.p.drawCenterY()-top)/TILE_SIZE);
-        int j = (int) ((World.p.drawCenterX()-left)/TILE_SIZE);
+        int i = (int) ((World.p.drawCenterY() - top) / TILE_SIZE);
+        int j = (int) ((World.p.drawCenterX() - left) / TILE_SIZE);
         if (i > World.p.r.grid.length || i < 0 || j > World.p.r.grid[0].length - 1 || j < 0) {
             World.p.pathfindingCurrentIndex.x = -1;
             World.p.pathfindingCurrentIndex.y = -1;
@@ -67,27 +96,55 @@ public class Room {
         e.pathfindingPath = aStar.findPath(e.pathfindingCurrentIndex, World.p.pathfindingCurrentIndex);
     }
 
+    void activate() {
+        activated = true;
+        if (enemies.size() != 0) {
+            lock();
+        }
+
+        for (Enemy enemy : enemies) {
+            enemy.activated = true;
+        }
+    }
+
+    void lock() {
+        defeated = false;
+
+        if (getGate("up") instanceof Door) {
+            ((Door) getGate("up")).lock();
+        }
+        if (getGate("down") instanceof Door) {
+            ((Door) getGate("down")).lock();
+        }
+        if (getGate("left") instanceof Door) {
+            ((Door) getGate("left")).lock();
+        }
+        if (getGate("right") instanceof Door) {
+            ((Door) getGate("right")).lock();
+        }
+    }
+
     void unlock() {
         defeated = true;
 
-        if (gateUp instanceof Door) {
-            ((Door)gateUp).locked = false;
+        if (getGate("up") instanceof Door) {
+            ((Door) getGate("up")).unlock();
         }
-        if (gateDown instanceof Door) {
-            ((Door)gateDown).locked = false;
+        if (getGate("down") instanceof Door) {
+            ((Door) getGate("down")).unlock();
         }
-        if (gateLeft instanceof Door) {
-            ((Door)gateLeft).locked = false;
+        if (getGate("left") instanceof Door) {
+            ((Door) getGate("left")).unlock();
         }
-        if (gateRight instanceof Door) {
-            ((Door)gateRight).locked = false;
+        if (getGate("right") instanceof Door) {
+            ((Door) getGate("right")).unlock();
         }
 
         if (type == "boss") {
             System.out.println("DEFEATED BOSS");
-            objs.remove(getCenterObject());
-            grid[grid.length/2][grid[0].length/2] = new Staircase(getCenterObject().x, getCenterObject().y, TILE_SIZE, TILE_SIZE);
-            addObj(grid[grid.length/2][grid[0].length/2]);
+            int i = grid.length/2-1;
+            int j = grid[0].length/2-1;
+            objs.add(new Portal(grid[i][j].x, grid[i][j].y));
         }
     }
 
@@ -109,14 +166,13 @@ public class Room {
             filePath = "rooms/entrance.txt";
         } else if (type == "normal") {
             File[] normalRooms = new File("rooms/normal").listFiles();
-            filePath = "rooms/normal/" + normalRooms[Util.randInt(0,normalRooms.length-1)].getName();
+            filePath = "rooms/normal/" + normalRooms[Util.randInt(0, normalRooms.length - 1)].getName();
         } else if (type == "boss") {
             File[] bossRooms = new File("rooms/boss").listFiles();
-            filePath = "rooms/boss/" + bossRooms[Util.randInt(0,bossRooms.length-1)].getName();
+            filePath = "rooms/boss/" + bossRooms[Util.randInt(0, bossRooms.length - 1)].getName();
         } else if (type == "exit") {
             filePath = "rooms/exit.txt";
         }
-
 
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         cols = Integer.parseInt(br.readLine());
@@ -129,17 +185,17 @@ public class Room {
             case "up":
                 // build a path of walls
                 for (int i = 0; i < pathLength; i++) {
-                    if (addObj(new Wall(x-TILE_SIZE, y-TILE_SIZE, TILE_SIZE, TILE_SIZE, Color.darkGray))) {
+                    if (addObj(new Wall(x - TILE_SIZE, y - TILE_SIZE, f.getTheme()))) {
                         conflicted = true;
                         br.close();
                         return;
                     }
-                    if (addObj(new Path(x, y - TILE_SIZE, TILE_SIZE, TILE_SIZE))) {
+                    if (addObj(new Path(x, y - TILE_SIZE, f.getTheme(), direction))) {
                         conflicted = true;
                         br.close();
                         return;
                     }
-                    if (addObj(new Wall(x + TILE_SIZE, y - TILE_SIZE, TILE_SIZE, TILE_SIZE, Color.darkGray))) {
+                    if (addObj(new Wall(x + TILE_SIZE, y - TILE_SIZE, f.getTheme()))) {
                         conflicted = true;
                         br.close();
                         return;
@@ -153,19 +209,17 @@ public class Room {
             case "down":
                 // build a path of walls
                 for (int i = 0; i < pathLength; i++) {
-                    if (addObj(new Wall(x - TILE_SIZE, y + TILE_SIZE, TILE_SIZE, TILE_SIZE, Color.darkGray))) { // left
-                                                                                                                // wall
+                    if (addObj(new Wall(x - TILE_SIZE, y + TILE_SIZE, f.getTheme()))) { // leftwall
                         conflicted = true;
                         br.close();
                         return;
                     }
-                    if (addObj(new Path(x, y + TILE_SIZE, TILE_SIZE, TILE_SIZE))) { // middle empty
+                    if (addObj(new Path(x, y + TILE_SIZE, f.getTheme(), direction))) { // middle empty
                         conflicted = true;
                         br.close();
                         return;
                     }
-                    if (addObj(new Wall(x + TILE_SIZE, y + TILE_SIZE, TILE_SIZE, TILE_SIZE, Color.darkGray))) { // right
-                                                                                                                // wall
+                    if (addObj(new Wall(x + TILE_SIZE, y + TILE_SIZE, f.getTheme()))) { // right wall
                         conflicted = true;
                         br.close();
                         return;
@@ -179,19 +233,17 @@ public class Room {
             case "left":
                 // build a path of walls
                 for (int i = 0; i < pathLength; i++) {
-                    if (addObj(new Wall(x - TILE_SIZE, y - TILE_SIZE, TILE_SIZE, TILE_SIZE, Color.darkGray))) { // top
-                                                                                                                // wall
+                    if (addObj(new Wall(x - TILE_SIZE, y - TILE_SIZE, f.getTheme()))) { // top wall
                         conflicted = true;
                         br.close();
                         return;
                     }
-                    if (addObj(new Path(x - TILE_SIZE, y, TILE_SIZE, TILE_SIZE))) { // middle empty
+                    if (addObj(new Path(x - TILE_SIZE, y, f.getTheme(), direction))) { // middle empty
                         conflicted = true;
                         br.close();
                         return;
                     }
-                    if (addObj(new Wall(x - TILE_SIZE, y + TILE_SIZE, TILE_SIZE, TILE_SIZE, Color.darkGray))) { // bottom
-                                                                                                                // wall
+                    if (addObj(new Wall(x - TILE_SIZE, y + TILE_SIZE, f.getTheme()))) { // bottom wall
                         conflicted = true;
                         br.close();
                         return;
@@ -205,19 +257,17 @@ public class Room {
             case "right":
                 // build a path of walls
                 for (int i = 0; i < pathLength; i++) {
-                    if (addObj(new Wall(x + TILE_SIZE, y - TILE_SIZE, TILE_SIZE, TILE_SIZE, Color.darkGray))) { // top
-                                                                                                                // wall
+                    if (addObj(new Wall(x + TILE_SIZE, y - TILE_SIZE, f.getTheme()))) { // top wall
                         conflicted = true;
                         br.close();
                         return;
                     }
-                    if (addObj(new Path(x + TILE_SIZE, y, TILE_SIZE, TILE_SIZE))) { // middle empty
+                    if (addObj(new Path(x + TILE_SIZE, y, f.getTheme(), direction))) { // middle empty
                         conflicted = true;
                         br.close();
                         return;
                     }
-                    if (addObj(new Wall(x + TILE_SIZE, y + TILE_SIZE, TILE_SIZE, TILE_SIZE, Color.darkGray))) { // bottom
-                                                                                                                // wall
+                    if (addObj(new Wall(x + TILE_SIZE, y + TILE_SIZE, f.getTheme()))) { // bottom wall
                         conflicted = true;
                         br.close();
                         return;
@@ -236,56 +286,27 @@ public class Room {
                 // determine the object to add
                 switch (line.charAt(col)) {
                     case 'W':
-                        grid[row][col] = new Wall(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE,
-                                Color.darkGray);
+                        grid[row][col] = new Wall(x + col * TILE_SIZE, y + row * TILE_SIZE, f.getTheme());
                         break;
                     case 'P':
-                        grid[row][col] = new Path(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        grid[row][col] = new Ground(x + col * TILE_SIZE, y + row * TILE_SIZE, f.getTheme());
+                        break;
+                    case 'V':
+                        grid[row][col] = new Void(x + col * TILE_SIZE, y + row * TILE_SIZE, f.getTheme());
                         break;
                     case 'B':
                     case 'X':
-                        Enemy e = new Spider(x+col*TILE_SIZE, y+row*TILE_SIZE);
+                        Enemy e = new Spider(x + col * TILE_SIZE, y + row * TILE_SIZE);
                         enemies.add(e);
                     case 'E':
                     default:
-                        grid[row][col] = new Empty(x + col * TILE_SIZE, y + row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        grid[row][col] = new Ground(x + col * TILE_SIZE, y + row * TILE_SIZE, f.getTheme());
                 }
 
-                // add the gates if necessary
-                if (row == 0 && col == cols / 2) { // top
-                    if (addObj(grid[row][col])) {
-                        conflicted = true;
-                        br.close();
-                        return;
-                    }
-                    gateUp = grid[row][col];
-                } else if (row == rows - 1 && col == cols / 2) { // bottom
-                    if (addObj(grid[row][col])) {
-                        conflicted = true;
-                        br.close();
-                        return;
-                    }
-                    gateDown = grid[row][col];
-                } else if (row == rows / 2 && col == 0) { // left
-                    if (addObj(grid[row][col])) {
-                        conflicted = true;
-                        br.close();
-                        return;
-                    }
-                    gateLeft = grid[row][col];
-                } else if (row == rows / 2 && col == cols - 1) { // right
-                    if (addObj(grid[row][col])) {
-                        conflicted = true;
-                        br.close();
-                        return;
-                    }
-                    gateRight = grid[row][col];
-                } else {
-                    if (addObj(grid[row][col])) {
-                        conflicted = true;
-                        br.close();
-                        return;
-                    }
+                if (addObj(grid[row][col])) {
+                    conflicted = true;
+                    br.close();
+                    return;
                 }
             }
         }
@@ -297,18 +318,17 @@ public class Room {
     }
 
     void update() {
-        
-        for (GameObject obj: objs) {
+
+        for (GameObject obj : objs) {
             obj.update();
         }
 
         setPlayerPFIndex();
         for (Iterator<Enemy> enemiesIterator = enemies.iterator(); enemiesIterator.hasNext();) {
             Enemy e = enemiesIterator.next();
-            if(e.hp <= 0){
+            if (e.hp <= 0) {
                 enemiesIterator.remove();
-            }
-            else if (e.activated) {
+            } else if (e.activated) {
                 setEnemyPFIndex(e);
                 pathFind(e);
                 e.update();
@@ -319,9 +339,4 @@ public class Room {
             unlock();
         }
     }
-
-    // @Override
-    // public String toString() {
-    //     return "[Room: " + type + "]";
-    // }
 }
