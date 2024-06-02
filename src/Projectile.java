@@ -1,7 +1,5 @@
 import java.awt.geom.Point2D;
 
-import java.awt.image.*;
-
 public class Projectile extends GameObject {
 
     interface AttackPattern {
@@ -16,7 +14,7 @@ public class Projectile extends GameObject {
     int duration;
     double angle;
     private AttackPattern attackPattern;
-    int bouncesRemaining = 1;
+    int bouncesRemaining;
     int damage;
     int knockback;
 
@@ -30,13 +28,14 @@ public class Projectile extends GameObject {
 
     };
 
-    public Projectile(double x, double y, double v, double angle, int damage, int knockback, int duration, AttackPattern ap, Sprite s) {
+    public Projectile(double x, double y, double v, double angle, int damage, int knockback, int duration, int bounces, AttackPattern ap, Sprite s) {
         super(x, y, 16, 16, s);
         this.angle = angle;
         this.timeOfFlight = 0;
         this.damage = damage;
         this.knockback = knockback;
         this.duration = duration;
+        this.bouncesRemaining = bounces;
         this.attackPattern = ap;
         this.vx = v * Math.cos(angle);
         this.vy = - v * Math.sin(angle);

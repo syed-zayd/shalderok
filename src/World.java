@@ -220,12 +220,15 @@ class World extends JPanel {
                     if (obj.isSolid()) {
                         if (Math.abs(cx) < Math.abs(cy)) {
                             p.x += cx;
-                            p.vx = 0;
+
+                            if (!(obj instanceof Door))
+                                p.vx = 0;
                         } else {
                             p.y += cy;
-                            p.vy = 0;
+                            if (!(obj instanceof Door))
+                                p.vy = 0;
                         }
-                    } else if (obj instanceof Empty) {
+                    } else if (obj instanceof Ground) {
                         p.enter(r);
                     }
                 }
@@ -335,6 +338,7 @@ class World extends JPanel {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
         AffineTransform oldTransform = g2d.getTransform();
+        setBackground(f.getBackgroundColor());
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         try {

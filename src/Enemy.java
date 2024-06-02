@@ -1,6 +1,5 @@
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 abstract class Enemy extends Entity {

@@ -14,8 +14,8 @@ class Player extends Entity {
 
     public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 5, s);
-        spd = 8;
-        weapon = new Bow(x, y);
+        spd = 5;
+        weapon = new Wand(x, y);
         pathfindingCurrentIndex = new Point(-1, -1);
         name = s.getName();
 
@@ -37,13 +37,13 @@ class Player extends Entity {
     }
 
     void enter(Room r) {
-        if (this.r == r) {
+        this.r = r;
+        if (r.activated == true) {
             return;
         }
-        this.r = r;
-        for (Enemy e: r.enemies) {
-            e.activated = true;
-        }
+        r.activate();
+        if (r != World.f.entrance)
+            AudioManager.playSFX("sfx/room_enter.wav");
     }
 
     ArrayList<Room> getRooms() {

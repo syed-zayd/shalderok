@@ -1,5 +1,4 @@
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 abstract class GameObject {
     double x, y;
@@ -7,7 +6,7 @@ abstract class GameObject {
     String state;
     int frameIndex;
     Sprite sprite;
-    
+
 
     public GameObject(double x, double y, int w, int h, Sprite sprite) {
         this.x = x;

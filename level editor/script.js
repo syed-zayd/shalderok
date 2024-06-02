@@ -67,8 +67,60 @@ function toggleCell(event) {
     updateLiveTextarea();
 }
 
+function markVoidTiles(level) {
+    const rows = level.length;
+    const cols = level[0].length;
+    const voidTiles = Array.from({ length: rows }, () => Array(cols).fill(false));
+    
+    // Function to perform flood fill from the edges
+    function floodFill(x, y) {
+        const queue = [];
+        queue.push([x, y]);
+        
+        while (queue.length > 0) {
+            const [cx, cy] = queue.shift();
+            
+            if (cx < 0 || cx >= cols || cy < 0 || cy >= rows) {
+                continue;
+            }
+            
+            if (level[cy][cx] !== 'E' || voidTiles[cy][cx]) {
+                continue;
+            }
+            
+            voidTiles[cy][cx] = true;
+            
+            queue.push([cx + 1, cy]);
+            queue.push([cx - 1, cy]);
+            queue.push([cx, cy + 1]);
+            queue.push([cx, cy - 1]);
+        }
+    }
+
+    // Perform flood fill from the edges
+    for (let i = 0; i < rows; i++) {
+        if (level[i][0] === 'E') floodFill(0, i);
+        if (level[i][cols - 1] === 'E') floodFill(cols - 1, i);
+    }
+    for (let i = 0; i < cols; i++) {
+        if (level[0][i] === 'E') floodFill(i, 0);
+        if (level[rows - 1][i] === 'E') floodFill(i, rows - 1);
+    }
+    
+    // Update the level with void tiles
+    for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+            if (level[y][x] === 'E' && !voidTiles[y][x]) {
+                level[y][x] = 'V';
+            }
+        }
+    }
+    
+    return level;
+}
+
 function saveLevel() {
-    const content = `${cols}\n${rows}\n` + level.map(row => row.join('')).join('\n');
+    const content = `${cols}\n${rows}\n` + markVoidTiles(level).map(row => row.join('')).join('\n');
     const blob = new Blob([content], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -79,7 +131,7 @@ function saveLevel() {
 }
 
 function copyLevel() {
-    navigator.clipboard.writeText(`${cols}\n${rows}\n` + level.map(row => row.join('')).join('\n'));
+    navigator.clipboard.writeText(`${cols}\n${rows}\n` + markVoidTiles(level).map(row => row.join('')).join('\n'));
 }
 
 function makeWalls() {

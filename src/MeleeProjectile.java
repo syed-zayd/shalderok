@@ -1,5 +1,3 @@
-import java.awt.Graphics2D;
-
 public class MeleeProjectile extends Projectile {
 
     public MeleeProjectile(double x, double y, double angle) {
