@@ -2,24 +2,22 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-abstract class Enemy extends GameObject {
+abstract class Enemy extends Entity {
+    
     boolean activated;
-    double vx, vy;
-    double knockbackX, knockbackY;
-    int hp;
 
     ArrayList<GameObject> pathfindingPath; // pathfinding
     Point pathfindingCurrentIndex;
 
-    public Enemy(double x, double y, int w, int h, int hp, Sprite s) {
-        super(x, y, w, h, s);
+    public Enemy(double x, double y, int hp, Sprite s) {
+        super(x, y, hp, s);
         this.hp = hp;
         activated = false;
         pathfindingPath = new ArrayList<GameObject>();
         pathfindingCurrentIndex = new Point(-1,-1);
     }
 
-    Point2D.Double getUnitVectorTo(GameObject obj) {
+    public Point2D.Double getUnitVectorTo(GameObject obj) {
         double dx = obj.drawCenterX()-drawCenterX();
         double dy = obj.drawCenterY()-drawCenterY();
         double magnitude = Math.sqrt(dx*dx+dy*dy);
@@ -29,8 +27,4 @@ abstract class Enemy extends GameObject {
         return new Point2D.Double(dx/magnitude, dy/magnitude);
     }
 
-    @Override
-    public boolean isSolid() {
-        return true;
-    }
 }

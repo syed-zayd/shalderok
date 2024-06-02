@@ -11,6 +11,16 @@ public class Sprite {
         sprites = new HashMap<String, ArrayList<BufferedImage>>();
     }
 
+    public void rotate(double angle){
+        
+        for(String key: sprites.keySet()){
+            for(int i = 0; i < sprites.get(key).size(); i++){
+                sprites.get(key).set(i, Util.rotateImage(sprites.get(key).get(i), angle));
+            }
+        }
+
+    }
+
     public void addState(String state, ArrayList<BufferedImage> spriteList){
         sprites.put(state, spriteList);
     }
@@ -25,6 +35,14 @@ public class Sprite {
                 System.out.println(sprite.getWidth());
             }
         }
+    }
+
+    public int getWidth(){
+        return sprites.get("idle").get(0).getWidth();
+    }
+
+    public int getHeight(){
+        return sprites.get("idle").get(0).getHeight();
     }
 
 }

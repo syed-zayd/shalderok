@@ -3,28 +3,19 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-class Player extends GameObject {
+class Player extends Entity {
 
     private final int WEAPON_RADIUS = 64;
-
-    int hearts;
-    int maxHearts;
-    double vx, vy; // current speed
-    double knockbackX, knockbackY;
     double spd; // max speed
     boolean up, down, left, right; // direction player is facing
     double dx, dy, mouseAngle; // angle from mouse to player's center
     Point pathfindingCurrentIndex;
-
-    Weapon weapon;
     Room r;
 
     public Player(Floor f, double x, double y, Sprite s) {
-        super(x, y, 32, 32, s);
-        hearts = 3;
-        maxHearts = 3;
+        super(x, y, 5, s);
         spd = 3;
-        weapon = new Wand(x, y);
+        weapon = new Sword(x, y);
         currentFrame = s.getSprite("idle", 0);
         pathfindingCurrentIndex = new Point(-1, -1);
 
@@ -32,27 +23,8 @@ class Player extends GameObject {
         Util.centerPosition(this, f.entrance.getCenterObject());
     }
 
-    @Override
-    public boolean isSolid() {
-        return true;
-    }
-
     public void updateCharacter(Sprite s){
         this.sprite = s;
-    }
-
-    public void equip(Weapon weapon){
-        this.weapon = weapon;
-    }
-
-    public void useWeapon(){
-        if(weapon != null){
-            weapon.shoot();
-        }
-    }
-
-    public void takeDamage(int damage){
-        hearts -= damage;
     }
 
     void enterNewFloor(Floor f) {

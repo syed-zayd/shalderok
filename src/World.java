@@ -219,7 +219,7 @@ class World extends JPanel {
                     cx = collisionX(e, obj);
                     cy = collisionY(e, obj);
                     if (cx != 0 && cy != 0) { // collision has occured
-
+                        
                         if (obj.isSolid()) {
                             if (Math.abs(cx) < Math.abs(cy)) {
                                 e.x += cx;
@@ -260,6 +260,10 @@ class World extends JPanel {
                                     }
                                 }
                             }
+                        }
+                        if(obj instanceof Enemy){
+                            Enemy e = (Enemy) obj;
+                            e.takeDamage(projectile.damage);
                         }
                     }
                 }
@@ -311,10 +315,10 @@ class World extends JPanel {
 
         g2d.setTransform(oldTransform);
 
-        for(int i = 0; i < p.hearts; i++){
+        for(int i = 0; i < p.hp; i++){
             g2d.drawImage(heartImage, 10 + heartImage.getWidth() * i, 10, null);
         }
-        for(int i = p.hearts; i < p.maxHearts; i++){
+        for(int i = p.hp; i < p.maxHp; i++){
             g2d.drawImage(heartOutlineImage, 10 + heartImage.getWidth() * i, 10, null);
         }
 

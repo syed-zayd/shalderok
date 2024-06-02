@@ -1,36 +1,30 @@
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Util {
 
-    public static BufferedImage rotateImage(BufferedImage buffImage, double angle) {
-        double sin = Math.abs(Math.sin(angle));
-        double cos = Math.abs(Math.cos(angle));
+    public static BufferedImage rotateImage(BufferedImage img, double angle) {
+        double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
+        int w = img.getWidth();
+        int h = img.getHeight();
+        int newWidth = (int) Math.floor(w * cos + h * sin);
+        int newHeight = (int) Math.floor(h * cos + w * sin);
     
-        int width = buffImage.getWidth();
-        int height = buffImage.getHeight();
+        BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = rotated.createGraphics();
+        AffineTransform at = new AffineTransform();
+        at.translate((newWidth - w) / 2, (newHeight - h) / 2);
     
-        int nWidth = (int) Math.floor((double) width * cos + (double) height * sin);
-        int nHeight = (int) Math.floor((double) height * cos + (double) width * sin);
+        int x = w / 2;
+        int y = h / 2;
     
-        BufferedImage rotatedImage = new BufferedImage(
-                nWidth, nHeight, BufferedImage.TYPE_INT_ARGB);
+        at.rotate(angle, x, y);
+        g2d.setTransform(at);
+        g2d.dispose();
     
-        Graphics2D graphics = rotatedImage.createGraphics();
-    
-        graphics.setRenderingHint(
-                RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-    
-        graphics.translate((nWidth - width) / 2, (nHeight - height) / 2);
-        // rotation around the center point
-        graphics.rotate(angle, (double) (width / 2), (double) (height / 2));
-        graphics.drawImage(buffImage, 0, 0, null);
-        graphics.dispose();
-    
-        return rotatedImage;
+        return rotated;
     }
 
     public static void drawCenteredString(Graphics2D g2d, String text, int centerX, int y) {
