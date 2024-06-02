@@ -296,8 +296,11 @@ public class Room {
                         break;
                     case 'B':
                     case 'X':
-                        Enemy e = new Spider(x + col * TILE_SIZE, y + row * TILE_SIZE);
+                        grid[row][col] = new Ground(x+col*TILE_SIZE, y+row*TILE_SIZE, f.getTheme());
+                        Enemy e = new Spider(0, 0);
                         enemies.add(e);
+                        Util.centerPosition(e, grid[row][col]);
+                        break;
                     case 'E':
                     default:
                         grid[row][col] = new Ground(x + col * TILE_SIZE, y + row * TILE_SIZE, f.getTheme());
