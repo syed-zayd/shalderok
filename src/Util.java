@@ -65,4 +65,9 @@ public class Util {
         obj1.x = obj2.x + (obj2.w/2.) - obj1.w/2.;
         obj1.y = obj2.y + (obj2.h/2.) - obj1.h/2.;
     }
+
+    public static String capitalize(String s){
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+    }
+
 }

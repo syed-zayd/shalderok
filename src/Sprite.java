@@ -5,9 +5,11 @@ import java.awt.image.BufferedImage;
 
 public class Sprite {
     
+    private String name;
     private HashMap<String, ArrayList<BufferedImage>> sprites;
 
-    public Sprite(){
+    public Sprite(String name){
+        this.name = name;
         sprites = new HashMap<String, ArrayList<BufferedImage>>();
     }
 
@@ -39,6 +41,10 @@ public class Sprite {
                 System.out.println(sprite.getWidth());
             }
         }
+    }
+
+    public String getName(){
+        return name;
     }
 
     public int getWidth(){

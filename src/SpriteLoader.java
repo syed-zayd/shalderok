@@ -33,7 +33,7 @@ public class SpriteLoader {
                 for(File obj: objects){
                     System.out.println("\tLoading " + obj.getName() + "...");
 
-                    Sprite s = new Sprite();
+                    Sprite s = new Sprite(Util.capitalize(obj.getName()));
                     File[] states = obj.listFiles();
                     
                     for(File state: states){

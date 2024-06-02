@@ -6,7 +6,10 @@ public class Bow extends Weapon {
 
     @Override
     void shoot() {
-        queuedProjectiles.add(new Arrow(x, y, 5, angle));
+        if(canShoot()){
+            queuedProjectiles.add(new Arrow(x, y, 5, angle));
+            cooldownTimer = 50;
+        }
     }
     
     @Override

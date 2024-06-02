@@ -245,6 +245,7 @@ public class Room {
                     case 'B':
                     case 'X':
                         Enemy e = new Spider(x+col*TILE_SIZE, y+row*TILE_SIZE);
+                        e.enterNewFloor(f);
                         enemies.add(e);
                     case 'E':
                     default:
@@ -312,6 +313,7 @@ public class Room {
                 setEnemyPFIndex(e);
                 pathFind(e);
                 e.update();
+                e.attack();
             }
         }
 
