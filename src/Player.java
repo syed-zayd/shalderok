@@ -10,6 +10,8 @@ class Player extends Entity {
     boolean up, down, left, right; // direction player is facing
     double dx, dy; // angle from mouse to player's center
     Point pathfindingCurrentIndex;
+    public boolean collidingWithDoor;
+    public Room roomToEnter;
 
     public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 5, s);
@@ -31,15 +33,13 @@ class Player extends Entity {
     }
 
     public void enterNewFloor(Floor f) {
-        super.enterNewFloor(f);
+        super.enterNewFloor(f, f.entrance);
+        // this.r.activate();
         Util.centerPosition(this, f.entrance.getCenterObject());
     }
 
     void enter(Room r) {
         this.r = r;
-        if (r.activated == true) {
-            return;
-        }
         r.activate();
         if (r != World.f.entrance)
             AudioManager.playSFX("sfx/room_enter.wav");
@@ -127,6 +127,15 @@ class Player extends Entity {
         angle%=360;
     }
 
+    void attemptToEnter() {
+        if (!collidingWithDoor && roomToEnter != null && !roomToEnter.activated) {
+            enter(roomToEnter);
+        }
+
+        collidingWithDoor = false;
+        roomToEnter = null;
+    }
+
 	@Override
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
@@ -137,5 +146,11 @@ class Player extends Entity {
     @Override
     public void interact() {
 
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        attemptToEnter();
     }
 }

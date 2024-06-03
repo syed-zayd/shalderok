@@ -206,6 +206,9 @@ class World extends JPanel {
             }
 
         }
+
+        p.collidingWithDoor = false;
+        p.roomToEnter = null;
         // object collisions
         for (Room r: p.getRooms()) {
             for (GameObject obj: r.objs) {
@@ -220,19 +223,18 @@ class World extends JPanel {
                         obj.interact();
                     }
 
+                    if (obj instanceof Door) {
+                        p.collidingWithDoor = true;
+                    }
+
                     if (obj.isSolid()) {
                         if (Math.abs(cx) < Math.abs(cy)) {
                             p.x += cx;
-
-                            if (!(obj instanceof Door))
-                                p.vx = 0;
                         } else {
                             p.y += cy;
-                            if (!(obj instanceof Door))
-                                p.vy = 0;
-                        }
+                        } 
                     } else if (obj instanceof Ground) {
-                        p.enter(r);
+                        p.roomToEnter = r;
                     }
                 }
 

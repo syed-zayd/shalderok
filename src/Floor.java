@@ -180,7 +180,7 @@ public class Floor {
             }
         }
 
-        entrance.activate();
+        // entrance.activate();
     }
 
     private Room appendRoom(Room current, String type) throws IOException {
