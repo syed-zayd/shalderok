@@ -8,6 +8,7 @@ public abstract class Entity extends GameObject {
     public Room r;
 
     public double vx, vy;
+    public double spd;
     public double knockbackX, knockbackY;
     public int hp;
     public int maxHp;
@@ -15,8 +16,9 @@ public abstract class Entity extends GameObject {
     public Weapon weapon;
     public double angle;
 
-    public Entity(double x, double y, int hp, Sprite s){
+    public Entity(double x, double y, double spd, int hp, Sprite s){
         super(x, y, s.getWidth(), s.getHeight(), s);
+        this.spd = spd;
         this.vx = 0;
         this.vy = 0;
         this.hp = hp;
@@ -29,6 +31,12 @@ public abstract class Entity extends GameObject {
             f.weapons.add(weapon);
         }
         this.r = r;
+    }
+
+    public Point2D.Double getVectorTo(GameObject obj) {
+        double dx = obj.drawCenterX()-drawCenterX();
+        double dy = obj.drawCenterY()-drawCenterY();
+        return new Point2D.Double(dx, dy);
     }
 
     public Point2D.Double getUnitVectorTo(GameObject obj) {

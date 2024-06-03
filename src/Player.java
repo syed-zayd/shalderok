@@ -18,7 +18,7 @@ class Player extends Entity {
     Backpack backpack;
 
     public Player(Floor f, double x, double y, Sprite s) {
-        super(x, y, 5, s);
+        super(x, y, 4, 5, s);
         spd = 5;
         pathfindingCurrentIndex = new Point(-1, -1);
         name = s.getName();
@@ -49,6 +49,7 @@ class Player extends Entity {
 
     public void enterNewFloor(Floor f) {
         super.enterNewFloor(f, f.entrance);
+        f.entrance.activate();
         Util.centerPosition(this, f.entrance.getCenterObject());
     }
 

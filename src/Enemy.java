@@ -8,12 +8,11 @@ abstract class Enemy extends Entity {
     boolean activated;
 
     double accuracy;
-
     ArrayList<GameObject> pathfindingPath; // pathfinding
     Point pathfindingCurrentIndex;
 
-    public Enemy(double x, double y, int hp, double accuracy, Sprite s) {
-        super(x, y, hp, s);
+    public Enemy(double x, double y, double spd, int hp, double accuracy, Sprite s) {
+        super(x, y, spd, hp, s);
         this.hp = hp;
         this.accuracy = accuracy;
         activated = false;
@@ -25,12 +24,23 @@ abstract class Enemy extends Entity {
         Point2D.Double v;
         
         if (pathfindingPath.size() < 1) {
-            v = getUnitVectorTo(World.p);
+            v = getVectorTo(World.p);
         } else {
-            v = getUnitVectorTo(pathfindingPath.get(0));
+            v = getVectorTo(pathfindingPath.get(0));
+            vx = v.x;
+            vy = v.y;
+
+            if (vx < -spd) {
+                vx = -spd;
+            } else if (vx > spd) {
+                vx = spd;
+            }
+            if (vy < -spd) {
+                vy = -spd;
+            } else if (vy > spd) {
+                vy = spd;
+            }
         }
-        vx = 2*v.x;
-        vy = 2*v.y;
     }
 
     @Override
@@ -76,6 +86,7 @@ abstract class Enemy extends Entity {
     @Override
     public void paint(Graphics2D g2d){
         super.paint(g2d);
+        Util.drawCenteredString(g2d, String.format("(%.2f, %.2f)", vx, vy), drawCenterX(), drawY()-10);
         if(weapon != null){
             weapon.paint(g2d);
         }
