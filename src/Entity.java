@@ -23,11 +23,12 @@ public abstract class Entity extends GameObject {
         this.maxHp = hp;
     }
 
-    public void enterNewFloor(Floor f) {
+    public void enterNewFloor(Floor f, Room r) {
+        
         if(weapon != null){
             f.weapons.add(weapon);
         }
-        this.r = f.entrance;
+        this.r = r;
     }
 
     public Point2D.Double getUnitVectorTo(GameObject obj) {
@@ -82,7 +83,6 @@ public abstract class Entity extends GameObject {
             frameIndex = 0;
         }
     }
-
 
     public void update(){
         updateSprite();

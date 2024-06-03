@@ -4,11 +4,11 @@ public class Door extends Tile {
     public Door(double x, double y, String theme, boolean locked) {
         super(x, y, SpriteLoader.getSprite(theme + "_door"));
         this.locked = locked;
-        this.state = locked ? "idle" : "unlocked";
+        this.state = locked ? "locked" : "unlocked";
     }
 
     public void lock() {
-        this.state = "idle";
+        this.state = "locked";
         locked = true;
         System.out.println("locked!");
     }

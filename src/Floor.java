@@ -14,6 +14,8 @@ public class Floor {
         switch (level) {
             case 1: // stone
                 return new Color(22, 22, 26);
+            case 2: // lava
+                return new Color(5, 5, 11);
             default:
                 return Color.BLACK;
         }
@@ -23,6 +25,8 @@ public class Floor {
         switch (level) {
             case 1:
                 return "stone";
+            case 2:
+                return "lava";
             default:
                 return "stone";
         }
@@ -175,6 +179,8 @@ public class Floor {
 
             }
         }
+
+        // entrance.activate();
     }
 
     private Room appendRoom(Room current, String type) throws IOException {

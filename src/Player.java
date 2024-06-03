@@ -11,9 +11,6 @@ class Player extends Entity {
     double dx, dy; // angle from mouse to player's center
     Point pathfindingCurrentIndex;
 
-    int activeSlot;
-    Backpack backpack;
-
     public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 5, s);
         spd = 5;
@@ -45,15 +42,12 @@ class Player extends Entity {
     }
 
     public void enterNewFloor(Floor f) {
-        super.enterNewFloor(f);
+        super.enterNewFloor(f, f.entrance);
         Util.centerPosition(this, f.entrance.getCenterObject());
     }
 
     void enter(Room r) {
         this.r = r;
-        if (r.activated == true) {
-            return;
-        }
         r.activate();
         if (r != World.f.entrance)
             AudioManager.playSFX("sfx/room_enter.wav");
@@ -84,6 +78,20 @@ class Player extends Entity {
         if (right && left) {
             right = false;
             left = false;
+        }
+
+        if (up && right) {
+            this.state = "up_right";
+        } else if (up && left) {
+            this.state = "up_left";
+        } else if (up) {
+            this.state = "up";
+        } else if (left) {
+            this.state = "left";
+        } else if (right) {
+            this.state = "right";
+        } else {
+            this.state = "idle";
         }
     }
 
@@ -131,20 +139,6 @@ class Player extends Entity {
         angle%=360;
     }
 
-    @Override
-    public void update(){
-        activeItem = backpack.getActiveItem();
-        if(activeItem instanceof Weapon){
-            weapon = (Weapon) activeItem;
-            if(r != null){
-                if(!r.f.weapons.contains(weapon)){
-                    r.f.weapons.add(weapon);
-                }
-            }
-        }
-        super.update();
-    }
-
 	@Override
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
@@ -155,5 +149,11 @@ class Player extends Entity {
     @Override
     public void interact() {
 
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        attemptToEnter();
     }
 }

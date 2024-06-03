@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Room {
-    static final int TILE_SIZE = 64;
+    static final int TILE_SIZE = 128;
 
     public boolean conflicted;
     public boolean defeated;
-    public boolean activated;
+    boolean activated;
 
     public String type;
     Floor f;
@@ -96,10 +96,12 @@ public class Room {
         e.pathfindingPath = aStar.findPath(e.pathfindingCurrentIndex, World.p.pathfindingCurrentIndex);
     }
 
-    void activate() {
+    public void activate() {
         activated = true;
         if (enemies.size() != 0) {
             lock();
+        } else {
+            unlock();
         }
 
         for (Enemy enemy : enemies) {
@@ -159,6 +161,7 @@ public class Room {
         this.objs = new ArrayList<GameObject>();
         this.enemies = new ArrayList<Enemy>();
         this.f = f;
+        this.activated = false;
 
         // load the room's file
         String filePath = "";
@@ -298,7 +301,7 @@ public class Room {
                     case 'X':
                         grid[row][col] = new Ground(x+col*TILE_SIZE, y+row*TILE_SIZE, f.getTheme());
                         Enemy e = new Spider(0, 0);
-                        e.enterNewFloor(f);
+                        e.enterNewFloor(f, this);
                         enemies.add(e);
                         Util.centerPosition(e, grid[row][col]);
                         break;
