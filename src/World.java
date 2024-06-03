@@ -325,6 +325,10 @@ class World extends JPanel {
     }
 
     public void update() {
+        if (p.hp <= 0) {
+            return;
+        }
+        
         // update every object
         p.update();
 
@@ -343,6 +347,14 @@ class World extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
+
+        if (p.hp <= 0) {
+            g2d.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts/MysteryQuest-Regular.tff")).deriveFont(100f));
+            g2d.setColor(new Color(139, 0, 0));
+            g2d.drawString("GAME OVER");
+            return;
+        }
+        
         AffineTransform oldTransform = g2d.getTransform();
         setBackground(f.getBackgroundColor());
 
