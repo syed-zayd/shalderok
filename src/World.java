@@ -36,6 +36,8 @@ class World extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        f.entrance.activate();
+        f.entrance.activated = true;
         p.enterNewFloor(f);
     }
 

@@ -62,6 +62,11 @@ class Player extends Entity {
 
     ArrayList<Room> getRooms() {
         ArrayList<Room> rv = new ArrayList<Room>(r.f.getConnectingRooms(r));
+        r.f.connections.keySet().forEach((r) -> {
+            if (r.activated) {
+                rv.add(r);
+            }
+        });
         rv.add(r);
         return rv;
     }
@@ -158,7 +163,7 @@ class Player extends Entity {
 	@Override
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
-        Util.drawCenteredString(g2d, name, drawCenterX(), drawY());
+        Util.drawCenteredString(g2d, r.toString(), drawCenterX(), drawY());
 	}
 
     @Override

@@ -309,7 +309,7 @@ public class Room {
                         break;
                     case 'X':
                         grid[row][col] = new Ground(x+col*TILE_SIZE, y+row*TILE_SIZE, f.getTheme());
-                        Enemy e = new Spider(0, 0);
+                        Enemy e = f.newEnemy();
                         e.enterNewFloor(f, this);
                         enemies.add(e);
                         Util.centerPosition(e, grid[row][col]);

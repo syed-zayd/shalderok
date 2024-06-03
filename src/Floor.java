@@ -4,11 +4,31 @@ import java.util.*;
 
 public class Floor {
     private boolean[][] visited;
-    private Map<Room, ArrayList<Room>> connections;
+    Map<Room, ArrayList<Room>> connections;
     ArrayList<Weapon> weapons;
     public Room entrance;
     int level;
     private String lastSuccessfulDirection;
+
+    public Enemy newEnemy() {
+        switch (level) {
+            case 1:
+                return Math.random() < 0.5 ? new Slime(0, 0) : new Spider(0, 0);
+            case 2:
+                return Math.random() < 0.5 ? new BlueSlime(0, 0) : new Goblin(0, 0);
+            case 3:
+                return Math.random() < 0.5 ? new LavaSlime(0, 0) : new Golem(0, 0);
+        }
+        switch (Util.randInt(1, 3)) {
+            case 1:
+                return Math.random() < 0.5 ? new Slime(0, 0) : new Spider(0, 0);
+            case 2:
+                return Math.random() < 0.5 ? new BlueSlime(0, 0) : new Goblin(0, 0);
+            case 3:
+                return Math.random() < 0.5 ? new LavaSlime(0, 0) : new Golem(0, 0);
+        }
+        return null;
+    }
 
     public Enemy newBoss() {
         switch (level) {
@@ -37,6 +57,7 @@ public class Floor {
             case 1: // stone
                 return new Color(22, 22, 26);
             case 2: // forest
+                return new Color(42, 26, 13);
             case 3: // lava
                 return new Color(5, 5, 11);
             default:
