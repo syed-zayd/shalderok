@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.awt.Graphics2D;
 
-abstract class Weapon extends GameObject {
+abstract class Weapon extends Item {
     double angle;
     ArrayList <Projectile> activeProjectiles;
     ArrayList <Projectile> queuedProjectiles;
@@ -19,6 +19,10 @@ abstract class Weapon extends GameObject {
     }
 
     abstract void shoot();
+
+    public void use(){
+        shoot();
+    }
 
     public boolean canShoot(){
         return cooldownTimer <= 0 && activeProjectiles.size() < 5;

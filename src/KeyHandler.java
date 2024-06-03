@@ -21,6 +21,8 @@ public class KeyHandler implements KeyListener {
             } catch (ConcurrentModificationException exception) {
 
             }
+        } else if(e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9){
+            World.p.setActiveSlot(e.getKeyCode() - KeyEvent.VK_0);
         }
     }
 

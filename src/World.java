@@ -48,7 +48,6 @@ class World extends JPanel {
             e.printStackTrace();
         }
         p = new Player(f, 0, 0, SpriteLoader.getSprite("kowata"));
-        f.weapons.add(p.weapon);
         camera = new Camera();
         camera.centerObj = p;
 
@@ -60,7 +59,7 @@ class World extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                p.useWeapon();
+                p.useActiveItem();
             }
 
             @Override
@@ -107,7 +106,7 @@ class World extends JPanel {
     }
 
     public static void updateCharacter(String character){
-        p.updateCharacter(SpriteLoader.getSprite(character));
+        p.setCharacter(SpriteLoader.getSprite(character));
     }
 
     private static double collisionX(GameObject a, GameObject b) {

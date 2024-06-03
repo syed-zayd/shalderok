@@ -6,7 +6,7 @@ public class Sword extends Weapon {
     
         public void shoot() {
             if(canShoot()){
-                queuedProjectiles.add(new MeleeProjectile(x, y, angle));
+                queuedProjectiles.add(new MeleeProjectile(x, y, angle, 10, 8));
                 cooldownTimer = 25;
             }
         }
