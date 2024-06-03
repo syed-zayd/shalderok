@@ -367,6 +367,8 @@ class World extends JPanel {
 
         g2d.setTransform(oldTransform);
 
+        p.backpack.paint(g2d);
+
         for(int i = 0; i < p.hp; i++){
             g2d.drawImage(heartImage, 10 + heartImage.getWidth() * i, 10, null);
         }

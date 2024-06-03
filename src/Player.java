@@ -157,7 +157,6 @@ class Player extends Entity {
 	@Override
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
-        backpack.paint(g2d);
         Util.drawCenteredString(g2d, name, drawCenterX(), drawY());
 	}
 

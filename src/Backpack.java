@@ -9,6 +9,7 @@ public class Backpack {
     ArrayList<Item> items;
 
     public Backpack(int numSlots){
+        this.numSlots = numSlots;
         items = new ArrayList<Item>();
         activeSlot = 0;
     }
@@ -30,20 +31,28 @@ public class Backpack {
     }
 
     public void paint(Graphics2D g2d){
+        g2d.setColor(Color.BLACK);
         for(int i = 0; i < numSlots; i++){
-            g2d.setColor(i == activeSlot ? Color.RED : Color.BLACK);
-            g2d.drawRect(hotbarX() + (40 * i), 1000, 40, 40);
+            if(i != activeSlot){
+                g2d.drawRect(hotbarX() + (40 * i), hotbarY(), 40, 40);
+            }
         }
+        g2d.setColor(Color.RED);
+        g2d.drawRect(hotbarX() + (40 * activeSlot), hotbarY(), 40, 40);
         for(int i = 0; i < items.size(); i++){
             Item item = items.get(i);
             if(item.sprite != null){
-                g2d.drawImage(item.sprite.getSprite(item.state, item.frameIndex), hotbarX() + (40 * i) + 4, 1004, null);
+                g2d.drawImage(item.sprite.getSprite(item.state, item.frameIndex), hotbarX() + (40 * i) + 4, hotbarY() + 4, null);
             }
         }
     }
 
     private int hotbarX(){
         return (int) ((Main.getScreenSize().getWidth() - (40 * numSlots)) / 2.);
+    }
+
+    private int hotbarY(){
+        return (int) ((Main.getScreenSize().getHeight()) - 100);
     }
 
 }
