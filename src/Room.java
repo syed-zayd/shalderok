@@ -63,7 +63,7 @@ public class Room {
         int i = (int) ((e.drawCenterY() - top) / TILE_SIZE);
         int j = (int) ((e.drawCenterX() - left) / TILE_SIZE);
 
-        
+
 
         if (i > grid.length - 1 || i < 0 || j > grid[0].length - 1 || j < 0) {
             e.pathfindingCurrentIndex.x = -1;
@@ -302,7 +302,7 @@ public class Room {
                         break;
                     case 'B':
                         grid[row][col] = new Ground(x+col*TILE_SIZE, y+row*TILE_SIZE, f.getTheme());
-                        Enemy boss = new Phoenix(0, 0);
+                        Enemy boss = f.newBoss();
                         boss.enterNewFloor(f, this);
                         enemies.add(boss);
                         Util.centerPosition(boss, grid[row][col]);

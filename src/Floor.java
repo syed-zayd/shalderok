@@ -10,11 +10,34 @@ public class Floor {
     int level;
     private String lastSuccessfulDirection;
 
+    public Enemy newBoss() {
+        switch (level) {
+            case 1:
+                return new SkeletonKing(0, 0);
+            case 2:
+                return new Ent(0, 0);
+            case 3:
+                return new Phoenix(0, 0);
+            default:
+                switch (Util.randInt(1, 3)) {
+                    case 1:
+                        return new SkeletonKing(0, 0);
+                    case 2:
+                        return new Ent(0, 0);
+                    case 3:
+                        return new Phoenix(0, 0);
+                    default:
+                        return null;
+                }
+        }
+    }
+
     public Color getBackgroundColor() {
         switch (level) {
             case 1: // stone
                 return new Color(22, 22, 26);
-            case 2: // lava
+            case 2: // forest
+            case 3: // lava
                 return new Color(5, 5, 11);
             default:
                 return Color.BLACK;
@@ -26,6 +49,8 @@ public class Floor {
             case 1:
                 return "stone";
             case 2:
+                return "forest";
+            case 3:
                 return "lava";
             default:
                 return "stone";

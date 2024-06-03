@@ -46,6 +46,13 @@ abstract class Enemy extends Entity {
     @Override
     protected void updateAngle() {
         Point2D.Double v = getUnitVectorTo(World.p);
+
+        if (v.x > 0) {
+            this.state = "right";
+        } else if (v.x < 0) {
+            this.state = "idle";
+        }
+
         angle = Math.atan(- v.y / v.x);
         double offset = (Math.PI / 4) * (1 - accuracy);
         angle += (Math.random() * offset) - (offset / 2.);
@@ -73,7 +80,6 @@ abstract class Enemy extends Entity {
 
     @Override
     protected void updateDirection() {
-        // do nothing
     }
 
     public void attack(){
