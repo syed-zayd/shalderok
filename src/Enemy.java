@@ -53,8 +53,8 @@ abstract class Enemy extends Entity {
             this.state = "idle";
         }
 
-        angle = Math.atan(- v.y / v.x);
-        double offset = (Math.PI / 4) * (1 - accuracy);
+        angle = - 1 * Math.atan(v.y / v.x);
+        double offset = 0;
         angle += (Math.random() * offset) - (offset / 2.);
     }
 

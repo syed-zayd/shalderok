@@ -366,9 +366,13 @@ class World extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         if (p.hp <= 0) {
-            g2d.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts/MysteryQuest-Regular.tff")).deriveFont(100f));
-            g2d.setColor(new Color(139, 0, 0));
-            g2d.drawString("GAME OVER");
+            try{
+                g2d.setFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts/MysteryQuest-Regular.ttf")).deriveFont(100f));
+                g2d.setColor(new Color(139, 0, 0));
+                g2d.drawString("GAME OVER", (int) (Main.getScreenSize().getWidth() / 3.), (int) (Main.getScreenSize().getHeight() / 2.));
+            } catch(Exception e){
+                e.printStackTrace();
+            }
             return;
         }
         
@@ -417,5 +421,5 @@ class World extends JPanel {
         g2d.drawString(String.format("Floor: %d", f.level), 10, 30+heartImage.getHeight());
         g2d.setColor(Color.BLACK);
     }
-    
+
 }
