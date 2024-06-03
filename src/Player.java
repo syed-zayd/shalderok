@@ -5,11 +5,17 @@ import java.util.ArrayList;
 
 class Player extends Entity {
 
+    Room roomToEnter;
+
     String name;
     double spd; // max speed
     boolean up, down, left, right; // direction player is facing
     double dx, dy; // angle from mouse to player's center
     Point pathfindingCurrentIndex;
+
+    boolean collidingWithDoor;
+
+    Backpack backpack;
 
     public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 5, s);
@@ -137,6 +143,15 @@ class Player extends Entity {
         angle = -1 * Math.atan2(dy, dx);
         
         angle%=360;
+    }
+
+    void attemptToEnter() {
+        if (!collidingWithDoor && roomToEnter != null && !roomToEnter.activated) {
+            enter(roomToEnter);
+        }
+
+        collidingWithDoor = false;
+        roomToEnter = null;
     }
 
 	@Override
