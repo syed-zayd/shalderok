@@ -49,6 +49,7 @@ class Player extends Entity {
 
     public void enterNewFloor(Floor f) {
         super.enterNewFloor(f, f.entrance);
+        f.entrance.activate();
         Util.centerPosition(this, f.entrance.getCenterObject());
     }
 
