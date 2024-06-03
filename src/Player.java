@@ -34,7 +34,6 @@ class Player extends Entity {
 
     public void enterNewFloor(Floor f) {
         super.enterNewFloor(f, f.entrance);
-        // this.r.activate();
         Util.centerPosition(this, f.entrance.getCenterObject());
     }
 
@@ -72,12 +71,16 @@ class Player extends Entity {
             left = false;
         }
 
-        if (left) {
+        if (up && right) {
+            this.state = "up_right";
+        } else if (up && left) {
+            this.state = "up_left";
+        } else if (up) {
+            this.state = "up";
+        } else if (left) {
             this.state = "left";
         } else if (right) {
             this.state = "right";
-        } else if (up) {
-            this.state = "up";
         } else {
             this.state = "idle";
         }
