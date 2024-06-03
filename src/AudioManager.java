@@ -4,6 +4,7 @@ import javax.sound.sampled.Clip;
 import java.io.File;
 
 public class AudioManager {
+
     public static void playSFX(String filename) {
         try {
             File soundFile = new File(filename);
