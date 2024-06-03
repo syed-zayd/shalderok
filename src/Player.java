@@ -14,7 +14,7 @@ class Player extends Entity {
     public Room roomToEnter;
 
     public Player(Floor f, double x, double y, Sprite s) {
-        super(x, y, 5, s);
+        super(x, y, 4, 5, s);
         spd = 5;
         weapon = new Wand(this, x, y);
         pathfindingCurrentIndex = new Point(-1, -1);
