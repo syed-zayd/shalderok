@@ -167,6 +167,15 @@ class Player extends Entity {
 
     @Override
     public void update() {
+        activeItem = backpack.getActiveItem();
+        if(activeItem instanceof Weapon){
+            weapon = (Weapon) activeItem;
+            if(r != null){
+                if(!r.f.weapons.contains(weapon)){
+                    r.f.weapons.add(weapon);
+                }
+            }
+        }
         super.update();
         attemptToEnter();
     }
