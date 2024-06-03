@@ -5,21 +5,32 @@ import java.util.ArrayList;
 
 class Player extends Entity {
 
+    Room roomToEnter;
+
     String name;
     double spd; // max speed
     boolean up, down, left, right; // direction player is facing
     double dx, dy; // angle from mouse to player's center
     Point pathfindingCurrentIndex;
-    public boolean collidingWithDoor;
-    public Room roomToEnter;
+
+    boolean collidingWithDoor;
+
+    Backpack backpack;
 
     public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 4, 5, s);
         spd = 5;
-        weapon = new Wand(this, x, y);
         pathfindingCurrentIndex = new Point(-1, -1);
         name = s.getName();
-
+        backpack = new Backpack(10);
+        backpack.addItem(new Wand(this, x, y));
+        backpack.addItem(new Bow(this, x, y));
+        backpack.addItem(new Sword(this, x, y));
+        Fists fists = new Fists(this, x, y);
+        for(int i = 0; i < 7; i++){
+            backpack.addItem(fists);
+        }
+        activeItem = backpack.getActiveItem();
         this.r = f.entrance;
         Util.centerPosition(this, f.entrance.getCenterObject());
     }
@@ -28,8 +39,12 @@ class Player extends Entity {
         this.name = name;
     }
 
-    public void updateCharacter(Sprite s){
+    public void setCharacter(Sprite s){
         this.sprite = s;
+    }
+
+    public void setActiveSlot(int slot){
+        backpack.setActiveSlot(slot);
     }
 
     public void enterNewFloor(Floor f) {
@@ -143,7 +158,6 @@ class Player extends Entity {
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
         Util.drawCenteredString(g2d, name, drawCenterX(), drawY());
-
 	}
 
     @Override

@@ -12,6 +12,7 @@ public abstract class Entity extends GameObject {
     public double knockbackX, knockbackY;
     public int hp;
     public int maxHp;
+    public Item activeItem;
     public Weapon weapon;
     public double angle;
 
@@ -55,13 +56,13 @@ public abstract class Entity extends GameObject {
         this.knockbackY = -10*knockbackVector.y;
     }
 
-    public void equip(Weapon weapon){
-        this.weapon = weapon;
+    public void equip(Item item){
+        this.activeItem = item;
     }
 
-    public void useWeapon(){
-        if(weapon != null){
-            weapon.shoot();
+    public void useActiveItem(){
+        if(activeItem != null){
+            activeItem.use();
         }
     }
 
