@@ -11,8 +11,8 @@ abstract class Enemy extends Entity {
     ArrayList<GameObject> pathfindingPath; // pathfinding
     Point pathfindingCurrentIndex;
 
-    public Enemy(double x, double y, double spd, int hp, double accuracy, Sprite s) {
-        super(x, y, spd, hp, s);
+    public Enemy(double x, double y, double spd, int hp, int damage, double accuracy, Sprite s) {
+        super(x, y, spd, hp, damage, s);
         this.hp = hp;
         this.accuracy = accuracy;
         activated = false;

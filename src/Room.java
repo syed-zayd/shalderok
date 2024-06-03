@@ -300,6 +300,9 @@ public class Room {
                     case 'V':
                         grid[row][col] = new Void(x + col * TILE_SIZE, y + row * TILE_SIZE, f.getTheme());
                         break;
+                    case 'C':
+                        grid[row][col] = new Chest(x + col * TILE_SIZE, y + row * TILE_SIZE);
+                        break;
                     case 'B':
                         grid[row][col] = new Ground(x+col*TILE_SIZE, y+row*TILE_SIZE, f.getTheme());
                         Enemy boss = f.newBoss();

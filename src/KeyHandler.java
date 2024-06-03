@@ -9,18 +9,14 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         KEYS_HELD[e.getKeyCode()] = true;
 
-        if (e.getKeyCode() == KeyEvent.VK_R) {
+        if(World.inMenu()){
+            if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+                World.closeMenus();
+            }
+        } else if (e.getKeyCode() == KeyEvent.VK_R) {
             World.camera.resetZoom();
         } else if (e.getKeyCode() == KeyEvent.VK_F11) {
             toggleFullscreen();
-        } else if (e.getKeyCode() == KeyEvent.VK_K) {
-            try {
-                if (!World.p.r.enemies.isEmpty()) {
-                    World.p.r.enemies = new ArrayList<Enemy>();
-                }
-            } catch (ConcurrentModificationException exception) {
-
-            }
         } else if(e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9){
             World.p.setActiveSlot(e.getKeyCode() - KeyEvent.VK_0);
         }

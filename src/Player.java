@@ -18,7 +18,7 @@ class Player extends Entity {
     Backpack backpack;
 
     public Player(Floor f, double x, double y, Sprite s) {
-        super(x, y, 4, 5, s);
+        super(x, y, 5, 5, 5, s);
         spd = 5;
         pathfindingCurrentIndex = new Point(-1, -1);
         name = s.getName();
@@ -26,6 +26,10 @@ class Player extends Entity {
         backpack.addItem(new Wand(this, x, y));
         backpack.addItem(new Bow(this, x, y));
         backpack.addItem(new Sword(this, x, y));
+        backpack.addItem(new HealingPotion(x, y, 5));
+        backpack.addItem(new SpeedPotion(x, y, 5));
+        backpack.addItem(new DamagePotion(x, y, 5));
+
         Fists fists = new Fists(this, x, y);
         for(int i = 0; i < 7; i++){
             backpack.addItem(fists);
@@ -166,6 +170,11 @@ class Player extends Entity {
         Util.drawCenteredString(g2d, r.toString(), drawCenterX(), drawY());
 	}
 
+    public void paintStats(Graphics2D g2d){
+        g2d.drawString("Speed: " + (int) this.spd, (int) (Main.getScreenSize().getWidth() - 100), 30);
+        g2d.drawString("Damage: " + this.damage, (int) (Main.getScreenSize().getWidth() - 100), 60);
+    }
+
     @Override
     public void interact() {
 
@@ -173,6 +182,7 @@ class Player extends Entity {
 
     @Override
     public void update() {
+        backpack.update();
         activeItem = backpack.getActiveItem();
         if(activeItem instanceof Weapon){
             weapon = (Weapon) activeItem;

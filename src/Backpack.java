@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Backpack {
     
@@ -28,6 +29,15 @@ public class Backpack {
 
     public void setActiveSlot(int slot){
         activeSlot = slot;
+    }
+
+    public void update(){
+        for(int i = 0; i < items.size(); i++){
+            Item item = items.get(i);
+            if(item.numUses <= 0){
+                items.set(i, new Fists(World.p, World.p.x, World.p.y));
+            }
+        }
     }
 
     public void paint(Graphics2D g2d){

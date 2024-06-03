@@ -12,17 +12,19 @@ public abstract class Entity extends GameObject {
     public double knockbackX, knockbackY;
     public int hp;
     public int maxHp;
+    public int damage;
     public Item activeItem;
     public Weapon weapon;
     public double angle;
 
-    public Entity(double x, double y, double spd, int hp, Sprite s){
+    public Entity(double x, double y, double spd, int hp, int damage, Sprite s){
         super(x, y, s.getWidth(), s.getHeight(), s);
         this.spd = spd;
         this.vx = 0;
         this.vy = 0;
         this.hp = hp;
         this.maxHp = hp;
+        this.damage = damage;
     }
 
     public void enterNewFloor(Floor f, Room r) {
@@ -70,13 +72,15 @@ public abstract class Entity extends GameObject {
     protected abstract void updateVelocity();
     protected abstract void updateDirection();
 
-    protected void updateWeapon(){
-        if(weapon != null){
-            weapon.angle = angle;
+    protected void updateActiveItem(){
+        if(activeItem != null){
             double centerX = drawCenterX() + WEAPON_RADIUS * Math.cos(angle);
             double centerY = drawCenterY() - WEAPON_RADIUS * Math.sin(angle);
-            weapon.x = weapon.drawXFromCenter(centerX);
-            weapon.y = weapon.drawYFromCenter(centerY);
+            activeItem.x = activeItem.drawXFromCenter(centerX);
+            activeItem.y = activeItem.drawYFromCenter(centerY);
+        }
+        if(weapon != null){
+            weapon.angle = angle;
             weapon.update();
         }
     }
@@ -98,15 +102,15 @@ public abstract class Entity extends GameObject {
         updateVelocity();
         move();
         updateAngle();
-        updateWeapon();
+        updateActiveItem();
     }
 
     public void paint(Graphics2D g2d){
         super.paint(g2d);
 
         // draw weapon
-        if(weapon != null){
-            weapon.paint(g2d);
+        if(activeItem != null){
+            activeItem.paint(g2d);
         }
     }
 

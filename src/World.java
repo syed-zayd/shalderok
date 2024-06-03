@@ -29,7 +29,24 @@ class World extends JPanel {
     static Point mouse = new Point(0, 0);
     static BufferedImage heartImage, heartOutlineImage;
     static String difficulty = "easy";
+    static ChestMenu chestMenu = null;
+
+    public static boolean inMenu(){
+        return chestMenu != null;
+    }
     
+    public static void openChest(Chest c){
+        chestMenu = new ChestMenu(c);
+    }
+
+    public static void closeChest(){
+        chestMenu = null;
+    }
+
+    public static void closeMenus(){
+        closeChest();
+    }
+
     public static void nextFloor() {
         try {
             f = new Floor(f.level+1);
@@ -370,12 +387,17 @@ class World extends JPanel {
         g2d.setTransform(oldTransform);
 
         p.backpack.paint(g2d);
+        p.paintStats(g2d);
 
         for(int i = 0; i < p.hp; i++){
             g2d.drawImage(heartImage, 10 + heartImage.getWidth() * i, 10, null);
         }
         for(int i = p.hp; i < p.maxHp; i++){
             g2d.drawImage(heartOutlineImage, 10 + heartImage.getWidth() * i, 10, null);
+        }
+
+        if(chestMenu != null){
+            chestMenu.paint(g2d);
         }
 
         g2d.setFont(g2d.getFont().deriveFont(36f));
