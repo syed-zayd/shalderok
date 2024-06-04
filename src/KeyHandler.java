@@ -19,6 +19,8 @@ public class KeyHandler implements KeyListener {
             toggleFullscreen();
         } else if(e.getKeyCode() >= KeyEvent.VK_0 && e.getKeyCode() <= KeyEvent.VK_9){
             World.p.setActiveSlot(e.getKeyCode() - KeyEvent.VK_0);
+        } else if (e.getKeyCode() == KeyEvent.VK_K) {
+            World.p.r.enemies.clear();
         }
     }
 

@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 public class Main {
   public static JFrame frame = new JFrame("camera test");
   public static World world;
+  static double fps;
 
   public static void main(String[] args) throws InterruptedException {
     
@@ -30,10 +31,21 @@ public class Main {
     Cursor c = toolkit.createCustomCursor(image, new Point(16,16), "gameplay");
     world.setCursor(c);
 
+
+    final double UPDATE_INTERVAL = 1.0 / 100.0; // Update 100 times per second
+    double deltaTime = 0;
+    long lastTime = System.nanoTime();
+
     while (true) {
-      world.update();
+      long now = System.nanoTime();
+      deltaTime += (now - lastTime) / 1e9;
+      lastTime = now;
+
+      while (deltaTime >= UPDATE_INTERVAL) {
+        world.update();
+        deltaTime -= UPDATE_INTERVAL;
+      }
       world.repaint();
-      Thread.sleep(10);
     }
   }
 
