@@ -24,22 +24,11 @@ abstract class Enemy extends Entity {
         Point2D.Double v;
         
         if (pathfindingPath.size() < 1) {
-            v = getVectorTo(World.p);
+            v = getUnitVectorTo(World.p);
         } else {
-            v = getVectorTo(pathfindingPath.get(0));
-            vx = v.x;
-            vy = v.y;
-
-            if (vx < -spd) {
-                vx = -spd;
-            } else if (vx > spd) {
-                vx = spd;
-            }
-            if (vy < -spd) {
-                vy = -spd;
-            } else if (vy > spd) {
-                vy = spd;
-            }
+            v = getUnitVectorTo(pathfindingPath.get(0));
+            vx = v.x*spd;
+            vy = v.y*spd;
         }
     }
 
@@ -83,9 +72,8 @@ abstract class Enemy extends Entity {
     }
 
     public void attack(){
-        if(Math.random() < 0.5){
-            weapon.angle = angle;
-            weapon.shoot();
+        if (activeItem instanceof Weapon) {
+            ((Weapon)(activeItem)).shoot();
         }
     }
 
@@ -93,13 +81,14 @@ abstract class Enemy extends Entity {
     public void paint(Graphics2D g2d){
         super.paint(g2d);
         Util.drawCenteredString(g2d, String.format("(%.2f, %.2f)", vx, vy), drawCenterX(), drawY()-10);
-        if(weapon != null){
-            weapon.paint(g2d);
+        if(activeItem != null){
+            activeItem.paint(g2d);
         }
     }
 
     public void update(){
         super.update();
+        attack();
         if(hp <= 0){
             activated = false;
         }

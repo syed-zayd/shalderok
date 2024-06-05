@@ -7,14 +7,12 @@ public class Ground extends Tile {
     }
 
     @Override
-    public void update() {
-        // emptiness
-    }
-
-    @Override
     public boolean isSolid() {
         return false;
     }
+    
+    @Override
+    public void update() {}
 
     @Override
     public void interact() {

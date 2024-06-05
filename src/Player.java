@@ -8,7 +8,6 @@ class Player extends Entity {
     Room roomToEnter;
 
     String name;
-    double spd; // max speed
     boolean up, down, left, right; // direction player is facing
     double dx, dy; // angle from mouse to player's center
     Point pathfindingCurrentIndex;
@@ -19,7 +18,6 @@ class Player extends Entity {
 
     public Player(Floor f, double x, double y, Sprite s) {
         super(x, y, 5, 5, 5, s);
-        spd = 5;
         pathfindingCurrentIndex = new Point(-1, -1);
         name = s.getName();
         backpack = new Backpack(10);
@@ -59,9 +57,12 @@ class Player extends Entity {
 
     void enter(Room r) {
         this.r = r;
-        r.activate();
-        if (r != World.f.entrance)
-            AudioManager.playSFX("sfx/room_enter.wav");
+        if (!r.activated) {
+            r.activate();
+            if (r != World.f.entrance) {
+                AudioManager.playSFX("sfx/room_enter.wav");
+            }
+        }
     }
 
     ArrayList<Room> getRooms() {
@@ -156,7 +157,7 @@ class Player extends Entity {
     }
 
     void attemptToEnter() {
-        if (!collidingWithDoor && roomToEnter != null && !roomToEnter.activated) {
+        if (!collidingWithDoor && roomToEnter != null) {
             enter(roomToEnter);
         }
 
@@ -167,7 +168,7 @@ class Player extends Entity {
 	@Override
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
-        Util.drawCenteredString(g2d, r.toString(), drawCenterX(), drawY());
+        Util.drawCenteredString(g2d, r.toString(), drawCenterX(), drawY()-10);
 	}
 
     public void paintStats(Graphics2D g2d){
@@ -184,14 +185,6 @@ class Player extends Entity {
     public void update() {
         backpack.update();
         activeItem = backpack.getActiveItem();
-        if(activeItem instanceof Weapon){
-            weapon = (Weapon) activeItem;
-            if(r != null){
-                if(!r.f.weapons.contains(weapon)){
-                    r.f.weapons.add(weapon);
-                }
-            }
-        }
         super.update();
         attemptToEnter();
     }

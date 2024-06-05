@@ -18,7 +18,7 @@ public class Main {
 
     world = new World();
     
-    frame.setSize(800, 600);;
+    frame.setSize(800, 600);
     frame.add(world);
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     frame.setUndecorated(false);
@@ -31,21 +31,10 @@ public class Main {
     Cursor c = toolkit.createCustomCursor(image, new Point(16,16), "gameplay");
     world.setCursor(c);
 
-
-    final double UPDATE_INTERVAL = 1.0 / 100.0; // Update 100 times per second
-    double deltaTime = 0;
-    long lastTime = System.nanoTime();
-
     while (true) {
-      long now = System.nanoTime();
-      deltaTime += (now - lastTime) / 1e9;
-      lastTime = now;
-
-      while (deltaTime >= UPDATE_INTERVAL) {
-        world.update();
-        deltaTime -= UPDATE_INTERVAL;
-      }
+      world.update();
       world.repaint();
+      Thread.sleep(10);
     }
   }
 

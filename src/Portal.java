@@ -10,7 +10,7 @@ public class Portal extends Tile {
     public void interact() {
         World.nextFloor();
     }
-
+    
     @Override
     public void update() {}
 
