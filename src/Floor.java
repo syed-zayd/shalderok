@@ -176,6 +176,7 @@ public class Floor {
 
         entrance = new Room("entrance", 0, 0, "none", this);
         addRoom(entrance);
+        entrance.activated = true;
 
         Room current = entrance;
         Room last = current;

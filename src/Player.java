@@ -156,7 +156,7 @@ class Player extends Entity {
     }
 
     void attemptToEnter() {
-        if (!collidingWithDoor && roomToEnter != null) {
+        if (!collidingWithDoor && roomToEnter != null && !roomToEnter.activated) {
             enter(roomToEnter);
         }
 
