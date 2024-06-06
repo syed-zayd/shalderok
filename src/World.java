@@ -28,7 +28,7 @@ class World extends JPanel {
     static Floor f;
     static Point mouse = new Point(0, 0);
     static BufferedImage heartImage, heartOutlineImage;
-    static String difficulty = "easy";
+    static String difficulty = "easy!!!";
     static ChestMenu chestMenu = null;
 
     public static boolean inMenu(){
@@ -66,6 +66,7 @@ class World extends JPanel {
             e.printStackTrace();
         }
         p = new Player(f, 0, 0, SpriteLoader.getSprite("kowata"));
+        p.enterNewFloor(f, f.entrance);
         camera = new Camera();
         camera.centerObj = p;
 
