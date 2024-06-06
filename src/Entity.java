@@ -14,7 +14,6 @@ public abstract class Entity extends GameObject {
     public int maxHp;
     public int damage;
     public Item activeItem;
-    public Weapon weapon;
     public double angle;
 
     public Entity(double x, double y, double spd, int hp, int damage, Sprite s){
@@ -29,8 +28,8 @@ public abstract class Entity extends GameObject {
 
     public void enterNewFloor(Floor f, Room r) {
         
-        if(weapon != null){
-            f.weapons.add(weapon);
+        if(activeItem instanceof Weapon){
+            f.weapons.add((Weapon)activeItem);
         }
         this.r = r;
     }
@@ -79,9 +78,9 @@ public abstract class Entity extends GameObject {
             activeItem.x = activeItem.drawXFromCenter(centerX);
             activeItem.y = activeItem.drawYFromCenter(centerY);
         }
-        if(weapon != null){
-            weapon.angle = angle;
-            weapon.update();
+        if(activeItem instanceof Weapon){
+            ((Weapon)(activeItem)).angle = angle;
+            ((Weapon)activeItem).update();
         }
     }
     protected void move(){

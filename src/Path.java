@@ -16,13 +16,12 @@ public class Path extends Tile {
     }
 
     @Override
-    public void update() {
-    }
-
-    @Override
     public boolean isSolid() {
         return false;
     }
+    
+    @Override
+    public void update() {}
 
     @Override
     public void interact() {

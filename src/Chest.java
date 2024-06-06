@@ -55,14 +55,12 @@ public class Chest extends GameObject {
     }
 
     @Override
-    public void update() {
-        
-    }
-
-    @Override
     public boolean isSolid() {
         return true;
     }
+
+    @Override
+    public void update() {}
 
     @Override
     public void interact() {

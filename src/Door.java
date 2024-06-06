@@ -20,14 +20,12 @@ public class Door extends Tile {
     }
 
     @Override
-    public void update() {
-
-    }
-
-    @Override
     public boolean isSolid() {
         return locked;
     }
+
+    @Override
+    public void update() {}
 
     @Override
     public void interact() {

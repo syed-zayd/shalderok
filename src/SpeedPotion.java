@@ -14,14 +14,12 @@ public class SpeedPotion extends Item {
     }
 
     @Override
-    public void update() {
-        
-    }
-
-    @Override
     public boolean isSolid() {
         return false;
     }
+    
+    @Override
+    public void update() {}
 
     @Override
     public void interact() {

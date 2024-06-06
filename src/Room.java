@@ -338,21 +338,16 @@ public class Room {
 
     void update() {
 
-        for (GameObject obj : objs) {
-            obj.update();
-        }
-
         setPlayerPFIndex();
         for (Iterator<Enemy> enemiesIterator = enemies.iterator(); enemiesIterator.hasNext();) {
             Enemy e = enemiesIterator.next();
             if (e.hp <= 0) {
-                f.weapons.remove(e.weapon);
+                f.weapons.remove(e.ac);
                 enemiesIterator.remove();
             } else if (e.activated) {
                 setEnemyPFIndex(e);
                 pathFind(e);
                 e.update();
-                e.attack();
             }
         }
 

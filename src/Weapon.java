@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.awt.Graphics2D;
 
 abstract class Weapon extends Item {
@@ -30,17 +29,21 @@ abstract class Weapon extends Item {
 
     @Override
     public void update(){
-        activeProjectiles.addAll(queuedProjectiles);
-        queuedProjectiles.clear();
-        Iterator<Projectile> it = activeProjectiles.iterator();
-        while (it.hasNext()) {
-            Projectile projectile = it.next();
-            projectile.update();
-            if (projectile.timeOfFlight >= projectile.duration) {
-                it.remove();
+        ArrayList<Projectile> newProjectiles = new ArrayList<Projectile>();
+        activeProjectiles.forEach((proj) -> {
+            if (proj.timeOfFlight < proj.duration) {
+                newProjectiles.add(proj);
+                proj.update();
             }
-        }
-        cooldownTimer -= 1;
+        });
+        queuedProjectiles.forEach((proj) -> {
+            newProjectiles.add(proj);
+        });
+
+
+        activeProjectiles = newProjectiles;
+        queuedProjectiles = new ArrayList<Projectile>();
+        cooldownTimer--;
     }
 
     @Override

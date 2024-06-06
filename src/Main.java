@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 public class Main {
   public static JFrame frame = new JFrame("camera test");
   public static World world;
+  static double fps;
 
   public static void main(String[] args) throws InterruptedException {
     
@@ -17,7 +18,7 @@ public class Main {
 
     world = new World();
     
-    frame.setSize(800, 600);;
+    frame.setSize(800, 600);
     frame.add(world);
     frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     frame.setUndecorated(false);
