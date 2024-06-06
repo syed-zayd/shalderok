@@ -2,7 +2,7 @@
 public class WebShooter extends Weapon {
     
     public WebShooter(Entity owner, double x, double y){
-        super(owner, x, y, SpriteLoader.getSprite("wand"));
+        super(owner, x, y, null);
     }
 
     public void shoot(){
