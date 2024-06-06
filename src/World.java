@@ -420,5 +420,5 @@ class World extends JPanel {
         g2d.drawString(String.format("Floor: %d", f.level), 10, 30+heartImage.getHeight());
         g2d.setColor(Color.BLACK);
     }
-    
+
 }
