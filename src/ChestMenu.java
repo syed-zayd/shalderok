@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class ChestMenu {
@@ -7,6 +8,7 @@ public class ChestMenu {
     Chest chest;
     int numRows;
     int numCols;
+    Item selectedItem = null;
 
     public ChestMenu(Chest chest){
         this.chest = chest;
@@ -15,13 +17,59 @@ public class ChestMenu {
     }
 
     public void paint(Graphics2D g2d){
+        g2d.setColor(Color.GRAY);
+        g2d.fillRoundRect(menuX(), menuY(), 400, 200, 20, 20);
+        g2d.setColor(Color.BLACK);
+        int centerX = menuX() + 199;
+        int centerY = menuY() + 99;
+
+        int startX = centerX - ((numCols * CELL_SIZE) / 2);
+        int startY = centerY - ((numRows * CELL_SIZE) / 2);
+        
         for(int r = 0; r < numRows; r++){
             for(int c = 0; c < numCols; c++){
                 Item item = chest.getItem(r * numRows + c);
-                g2d.drawRect(menuX() + c * (CELL_SIZE + OFFSET), menuY() + r * (CELL_SIZE + OFFSET), CELL_SIZE + OFFSET, CELL_SIZE + OFFSET);
-                g2d.drawImage(item.sprite.getSprite(item.state, item.frameIndex), menuX() + c * (CELL_SIZE + OFFSET) + OFFSET, menuY() + r * (CELL_SIZE + OFFSET) + OFFSET, null);
+                g2d.drawRect(startX + c * (CELL_SIZE + OFFSET), startY + r * (CELL_SIZE + OFFSET), CELL_SIZE + OFFSET, CELL_SIZE + OFFSET);
+                if(item == selectedItem){
+                    selectedItem.paint(g2d);
+                }
+                else{
+                    g2d.drawImage(item.sprite.getSprite(item.state, item.frameIndex), startX + c * (CELL_SIZE + OFFSET) + OFFSET, startY + r * (CELL_SIZE + OFFSET) + OFFSET, null);
+                }
             }
         }
+    }
+
+    public void selectItem(int x, int y){
+        int centerX = menuX() + 199;
+        int centerY = menuY() + 99;
+
+        int startX = centerX - ((numCols * CELL_SIZE) / 2);
+        int startY = centerY - ((numRows * CELL_SIZE) / 2);
+        
+        for(int r = 0; r < numRows; r++){
+            for(int c = 0; c < numCols; c++){
+                if(x >= startX + c * (CELL_SIZE + OFFSET) && x <= startX + c * (CELL_SIZE + OFFSET) + CELL_SIZE && y >= startY + r * (CELL_SIZE + OFFSET) && y <= startY + r * (CELL_SIZE + OFFSET) + CELL_SIZE){
+                    selectedItem = chest.getItem(r * numRows + c);
+                    selectedItem.x = x;
+                    selectedItem.y = y;
+                    return;
+                }
+            }
+        }
+    }
+
+    public void moveItem(int x, int y){
+        selectedItem.x = x;
+        selectedItem.y = y;
+    }
+
+    public boolean itemSelected(){
+        return selectedItem != null;
+    }
+
+    public void deselectItem(){
+        selectedItem = null;
     }
 
     public int menuX(){

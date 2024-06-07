@@ -78,11 +78,21 @@ class World extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                p.useActiveItem();
+                if(!inMenu()){
+                    p.useActiveItem();
+                }
+                else if(chestMenu != null){
+                    chestMenu.selectItem(e.getX(), e.getY());
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                if(chestMenu != null){
+                    if(chestMenu.itemSelected()){
+                        chestMenu.deselectItem();
+                    }
+                }
             }
 
             @Override
@@ -102,7 +112,13 @@ class World extends JPanel {
         addMouseMotionListener(new MouseMotionListener() {
 
             @Override
-            public void mouseDragged(MouseEvent e) {}
+            public void mouseDragged(MouseEvent e) {
+                if(chestMenu != null){
+                    if(chestMenu.itemSelected()){
+                        chestMenu.moveItem(e.getX(), e.getY());
+                    }
+                }
+            }
 
             @Override
             public void mouseMoved(MouseEvent e) {
