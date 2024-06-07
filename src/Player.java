@@ -17,7 +17,7 @@ class Player extends Entity {
     Backpack backpack;
 
     public Player(Floor f, double x, double y, Sprite s) {
-        super(x, y, 5, 5, 5, s);
+        super(x, y, 5, 500, 5, s);
         pathfindingCurrentIndex = new Point(-1, -1);
         name = s.getName();
         backpack = new Backpack(10);
@@ -117,12 +117,12 @@ class Player extends Entity {
         knockbackY *= 0.92;
 
         // if knockback is significant, prevent moving
-        if (Math.abs(knockbackX) > 1 || Math.abs(knockbackY) > 1) {
-            // apply knockback
-            vx = knockbackX;
-            vy = knockbackY;
-            return;
-        }
+        // if (Math.abs(knockbackX) > 1 || Math.abs(knockbackY) > 1) {
+        //     // apply knockback
+        //     vx = knockbackX;
+        //     vy = knockbackY;
+        //     return;
+        // }
 
         if (up) {
             vy -= spd/10;

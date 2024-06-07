@@ -28,7 +28,7 @@ class World extends JPanel {
     static Floor f;
     static Point mouse = new Point(0, 0);
     static BufferedImage heartImage, heartOutlineImage;
-    static String difficulty = "easy!!!";
+    static String difficulty = "easy";
     static ChestMenu chestMenu = null;
 
     public static boolean inMenu(){
@@ -286,7 +286,8 @@ class World extends JPanel {
                                     if (projectile.bouncesRemaining > 0) {
                                         projectile.vx *= -1;
                                         projectile.bouncesRemaining--;
-                                    } else {
+                                    }
+                                    if (projectile.bouncesRemaining <= 0) {
                                         it.remove();
                                         continue;
                                     }
@@ -297,7 +298,7 @@ class World extends JPanel {
                                         projectile.vy *= -1;
                                         projectile.bouncesRemaining--;
                                     }
-                                    else {
+                                    if (projectile.bouncesRemaining<=0) {
                                         it.remove();
                                         continue;
                                     }
@@ -318,7 +319,8 @@ class World extends JPanel {
                                 if (projectile.bouncesRemaining > 0) {
                                     projectile.vx *= -1;
                                     projectile.bouncesRemaining -= 5;
-                                } else {
+                                }
+                                if (projectile.bouncesRemaining <= 0) {
                                     it.remove();
                                     continue;
                                 }
@@ -329,7 +331,7 @@ class World extends JPanel {
                                     projectile.vy *= -1;
                                     projectile.bouncesRemaining -= 5;
                                 }
-                                else {
+                                if (projectile.bouncesRemaining<=0) {
                                     it.remove();
                                     continue;
                                 }

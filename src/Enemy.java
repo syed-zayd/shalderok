@@ -35,6 +35,7 @@ abstract class Enemy extends Entity {
     @Override
     protected void updateAngle() {
         Point2D.Double v = getUnitVectorTo(World.p);
+        System.out.println(v);
 
         if (v.x > 0) {
             this.state = "right";
@@ -42,9 +43,12 @@ abstract class Enemy extends Entity {
             this.state = "idle";
         }
 
-        angle = - 1 * Math.atan(v.y / v.x);
+        angle = Math.atan2(-v.y, v.x);
+        if (angle < 0) {
+            angle += Math.PI*2;
+        }
         double offset = 0;
-        angle += (Math.random() * offset) - (offset / 2.);
+        // angle += (Math.random() * offset) - (offset / 2.);
     }
 
     @Override
@@ -80,7 +84,7 @@ abstract class Enemy extends Entity {
     @Override
     public void paint(Graphics2D g2d){
         super.paint(g2d);
-        Util.drawCenteredString(g2d, String.format("(%.2f, %.2f)", vx, vy), drawCenterX(), drawY()-10);
+        Util.drawCenteredString(g2d, String.format("%.2f", Math.toDegrees(angle)), drawCenterX(), drawY()-10);
         if(activeItem != null){
             activeItem.paint(g2d);
         }
