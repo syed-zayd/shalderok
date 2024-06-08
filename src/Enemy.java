@@ -46,8 +46,8 @@ abstract class Enemy extends Entity {
         if (angle < 0) {
             angle += Math.PI*2;
         }
-        double offset = 0;
-        // angle += (Math.random() * offset) - (offset / 2.);
+        double offset = Math.PI / 4 * (1 - accuracy);
+        angle += (Math.random() * offset) - (offset / 2.);
     }
 
     @Override

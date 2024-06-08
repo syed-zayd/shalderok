@@ -1,4 +1,4 @@
-public abstract class Item extends GameObject {
+public abstract class Item extends GameObject implements Cloneable {
 
     int numUses;
     static Weapon[] weapons = {new Bow(null, 0, 0), new Wand(null, 0, 0), new Sword(null, 0, 0)};
@@ -12,11 +12,23 @@ public abstract class Item extends GameObject {
     public abstract void use();
 
     public static Weapon getRandomWeapon(){
-        return weapons[(int) (Math.random() * weapons.length)];
+        try {
+            Weapon randomWeapon = weapons[(int) (Math.random() * weapons.length)];
+            return (Weapon) randomWeapon.clone();
+        } catch(CloneNotSupportedException e){
+            
+        }
+        return null;
     }
 
     public static Item getRandomPotion(){
-        return potions[(int) (Math.random() * weapons.length)];
+        try {
+            Item randomPotion = potions[(int) (Math.random() * potions.length)];
+            return (Item) randomPotion.clone();
+        } catch(CloneNotSupportedException e){
+            
+        }
+        return null;
     }
 
 }

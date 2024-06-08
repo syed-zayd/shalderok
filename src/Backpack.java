@@ -40,6 +40,17 @@ public class Backpack {
         }
     }
 
+    public Item swapItem(int x, int y, Item selectedItem){
+        for(int i = 0; i < numSlots; i++){
+            if(x >= hotbarX() + (40 * i) && x <= hotbarX() + (40 * i) + 40 && y >= hotbarY() && y <= hotbarY() + 40){
+                Item swapItem = items.get(i);
+                items.set(i, selectedItem);
+                return swapItem;
+            }
+        }
+        return null;
+    }
+
     public void paint(Graphics2D g2d){
         g2d.setColor(Color.BLACK);
         for(int i = 0; i < numSlots; i++){

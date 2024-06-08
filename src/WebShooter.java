@@ -7,7 +7,7 @@ public class WebShooter extends Weapon {
     public void shoot(){
         if(canShoot()){
             queuedProjectiles.add(new Web(x, y, angle, owner.damage));
-            cooldownTimer = 300;
+            cooldownTimer = 500;
         }
     }
 

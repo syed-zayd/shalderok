@@ -28,7 +28,7 @@ public class ChestMenu {
         
         for(int r = 0; r < numRows; r++){
             for(int c = 0; c < numCols; c++){
-                Item item = chest.getItem(r * numRows + c);
+                Item item = chest.getItem(r * numCols + c);
                 g2d.drawRect(startX + c * (CELL_SIZE + OFFSET), startY + r * (CELL_SIZE + OFFSET), CELL_SIZE + OFFSET, CELL_SIZE + OFFSET);
                 if(item == selectedItem){
                     selectedItem.paint(g2d);
@@ -50,7 +50,7 @@ public class ChestMenu {
         for(int r = 0; r < numRows; r++){
             for(int c = 0; c < numCols; c++){
                 if(x >= startX + c * (CELL_SIZE + OFFSET) && x <= startX + c * (CELL_SIZE + OFFSET) + CELL_SIZE && y >= startY + r * (CELL_SIZE + OFFSET) && y <= startY + r * (CELL_SIZE + OFFSET) + CELL_SIZE){
-                    selectedItem = chest.getItem(r * numRows + c);
+                    selectedItem = chest.getItem(r * numCols + c);
                     selectedItem.x = x;
                     selectedItem.y = y;
                     return;
@@ -68,7 +68,15 @@ public class ChestMenu {
         return selectedItem != null;
     }
 
-    public void deselectItem(){
+    public void swapItem(Item item){
+        if(item != null){
+            for(int i = 0; i < numCols * numRows; i++){
+                if(chest.getItem(i) == selectedItem){
+                    chest.setItem(i, item);
+                    return;
+                }
+            }
+        }
         selectedItem = null;
     }
 

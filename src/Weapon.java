@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.awt.Graphics2D;
 
-abstract class Weapon extends Item {
+abstract class Weapon extends Item implements Cloneable {
     double angle;
     ArrayList <Projectile> activeProjectiles;
     ArrayList <Projectile> queuedProjectiles;

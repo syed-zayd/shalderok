@@ -90,7 +90,7 @@ class World extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 if(chestMenu != null){
                     if(chestMenu.itemSelected()){
-                        chestMenu.deselectItem();
+                        chestMenu.swapItem(p.backpack.swapItem(e.getX(), e.getY(), chestMenu.selectedItem));
                     }
                 }
             }
