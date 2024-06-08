@@ -53,7 +53,6 @@ class World extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        f.entrance.activate();
         p.enterNewFloor(f);
     }
 
@@ -66,7 +65,7 @@ class World extends JPanel {
             e.printStackTrace();
         }
         p = new Player(f, 0, 0, SpriteLoader.getSprite("kowata"));
-        p.enterNewFloor(f, f.entrance);
+        p.enterNewFloor(f);
         camera = new Camera();
         camera.centerObj = p;
 
@@ -74,6 +73,8 @@ class World extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                System.out.println(f);
+                System.out.println(p.r);
             }
 
             @Override
@@ -255,6 +256,9 @@ class World extends JPanel {
                     // check if they are interacting
                     if (KeyHandler.isHeld(KeyEvent.VK_SPACE)) {
                         obj.interact();
+                        if (obj instanceof Portal && !((Portal)obj).canInteract) {
+                            return;
+                        }
                     }
 
                     if (obj instanceof Door) {

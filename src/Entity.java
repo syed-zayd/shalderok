@@ -32,7 +32,7 @@ public abstract class Entity extends GameObject {
             f.weapons.add((Weapon)activeItem);
         }
         this.r = r;
-    }
+    } 
 
     public void takeHit(Projectile projectile){
         this.hp -= projectile.damage;

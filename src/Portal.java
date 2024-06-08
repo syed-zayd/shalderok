@@ -1,14 +1,17 @@
 public class Portal extends Tile {
-
+    boolean canInteract;
 
     public Portal(double x, double y) {
         super(x, y, 3, SpriteLoader.getSprite("portal"));
+        canInteract = true;
     }
 
 
     @Override
     public void interact() {
-        World.nextFloor();
+        if (canInteract)
+            World.nextFloor();
+        canInteract = false;
     }
     
     @Override

@@ -18,16 +18,9 @@ public class Floor {
                 return Math.random() < 0.5 ? new BlueSlime(0, 0) : new Goblin(0, 0);
             case 3:
                 return Math.random() < 0.5 ? new LavaSlime(0, 0) : new Golem(0, 0);
+            default:
+                return new SkeletonKing(0, 0);
         }
-        switch (Util.randInt(1, 3)) {
-            case 1:
-                return Math.random() < 0.5 ? new Slime(0, 0) : new Spider(0, 0);
-            case 2:
-                return Math.random() < 0.5 ? new BlueSlime(0, 0) : new Goblin(0, 0);
-            case 3:
-                return Math.random() < 0.5 ? new LavaSlime(0, 0) : new Golem(0, 0);
-        }
-        return null;
     }
 
     public Enemy newBoss() {
@@ -208,21 +201,21 @@ public class Floor {
             if (!visited.contains(current)) {
                 visited.add(current);
                 
-                // chance to add a side path
-                if (Math.random() < 0.1 || (current == entrance && Math.random() < 0.5)) {
-                    Room sidePathRoom = current;
-                    for (int i=0; i<Util.randInt(5,7); i++) {
-                        sidePathRoom = appendRoom(current, "normal");
-                        if (sidePathRoom == null) {
-                            break;
-                        }
-                    }
-                }
-
                 // keep going
                 for (Room r: getConnectingRooms(current)) {
                     stack.push(r);
                 }
+
+                // // chance to add a side path
+                // if (Math.random() < 0.1 || (current == entrance && Math.random() < 0.5)) {
+                //     Room sidePathRoom = current;
+                //     for (int i=0; i<Util.randInt(5,7); i++) {
+                //         sidePathRoom = appendRoom(current, "normal");
+                //         if (sidePathRoom == null) {
+                //             break;
+                //         }
+                //     }
+                // }
 
             }
         }

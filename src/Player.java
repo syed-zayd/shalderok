@@ -50,16 +50,20 @@ class Player extends Entity {
     }
 
     public void enterNewFloor(Floor f) {
-        super.enterNewFloor(f, f.entrance);
-        f.entrance.activate();
+        if(activeItem instanceof Weapon){
+            f.weapons.add((Weapon)activeItem);
+        }
+        enter(f.entrance);
         Util.centerPosition(this, f.entrance.getCenterObject());
+
+        roomToEnter = f.entrance;
     }
 
     void enter(Room r) {
         this.r = r;
         if (!r.activated) {
             r.activate();
-            if (r != World.f.entrance) {
+            if (r.type != "entrance") {
                 AudioManager.playSFX("sfx/room_enter.wav");
             }
         }
@@ -170,7 +174,7 @@ class Player extends Entity {
 	@Override
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
-        Util.drawCenteredString(g2d, r.toString(), drawCenterX(), drawY()-10);
+        Util.drawCenteredString(g2d, r.toString() + " " + r.f.toString(), drawCenterX(), drawY()-10);
 	}
 
     public void paintStats(Graphics2D g2d){
