@@ -181,7 +181,7 @@ public class Floor {
         Room current = entrance;
         Room last = current;
         int minRooms = 1;
-        int maxRooms = 5;
+        int maxRooms = 1;
         // add a random number of normal rooms
         for (int i = 0; i < Util.randInt(minRooms, maxRooms); i++) {
             current = appendRoom(current, "normal");

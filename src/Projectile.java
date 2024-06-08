@@ -27,25 +27,25 @@ public class Projectile extends GameObject {
     public static final AttackPattern HEAT_SEEK_LIGHT = new AttackPattern() {
         public Point2D.Double updateVelocity(Projectile p){
             Point2D.Double target = p.getUnitVectorTo(World.p);
-            double vx = p.vx + (target.x - p.vx) * 0.2;
-            double vy = p.vy + (target.y - p.vy) * 0.2;
-            return new Point2D.Double(vx, vy);
+            double vx = p.vx/p.v + (target.x - p.vx/p.v) * 0.5;
+            double vy = p.vy/p.v + (target.y - p.vy/p.v) * 0.5;
+            return new Point2D.Double(p.v*vx, p.v*vy);
         }
     };
     public static final AttackPattern HEAT_SEEK_HEAVY = new AttackPattern() {
         public Point2D.Double updateVelocity(Projectile p){
             Point2D.Double target = p.getUnitVectorTo(World.p);
-            double vx = p.vx + (target.x - p.vx) * 0.5;
-            double vy = p.vy + (target.y - p.vy) * 0.5;
-            return new Point2D.Double(vx, vy);
+            double vx = p.vx/p.v + (target.x - p.vx/p.v) * 0.5;
+            double vy = p.vy/p.v + (target.y - p.vy/p.v) * 0.5;
+            return new Point2D.Double(p.v*vx, p.v*vy);
         }
     };
     public static final AttackPattern HEAT_SEEK_FULL = new AttackPattern() {
         public Point2D.Double updateVelocity(Projectile p){
             Point2D.Double target = p.getUnitVectorTo(World.p);
-            double vx = p.vx + (target.x - p.vx) * 1;
-            double vy = p.vy + (target.y - p.vy) * 1;
-            return new Point2D.Double(vx, vy);
+            double vx = p.vx/p.v + (target.x - p.vx/p.v) * 1;
+            double vy = p.vy/p.v + (target.y - p.vy/p.v) * 1;
+            return new Point2D.Double(p.v*vx, p.v*vy);
         }
     };
 

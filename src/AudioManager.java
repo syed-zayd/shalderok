@@ -12,9 +12,9 @@ public class AudioManager {
 
             Clip clip = AudioSystem.getClip();
 
-            clip.open(audioInputStream);
+            // clip.open(audioInputStream);
 
-            clip.start();
+            // clip.start();
 
         } catch (Exception e) {
             e.printStackTrace();
