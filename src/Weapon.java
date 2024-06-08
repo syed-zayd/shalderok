@@ -1,18 +1,15 @@
 import java.util.ArrayList;
 import java.awt.Graphics2D;
 
-class Weapon extends Item {
+abstract class Weapon extends Item {
     double angle;
     ArrayList <Projectile> activeProjectiles;
     ArrayList <Projectile> queuedProjectiles;
     int cooldownTimer;
     int projectilesShot;
-    String type;
     Entity owner;
 
-    public Weapon(Entity owner, double x, double y, String type) {
-        Sprite s = SpriteLoader.getSprite(type);
-
+    public Weapon(Entity owner, double x, double y, Sprite s) {
         super(x, y, 32, 32, s);
         this.owner = owner;
         activeProjectiles = new ArrayList <Projectile>();
@@ -20,12 +17,7 @@ class Weapon extends Item {
         cooldownTimer = 0;
     }
 
-    public void shoot() {
-        if(canShoot()){
-            queuedProjectiles.add(new Projectile(type, x, y, 3, angle, owner.damage));
-            cooldownTimer = 200;
-        }
-    }
+    abstract void shoot();
 
     public void use(){
         shoot();
@@ -65,10 +57,6 @@ class Weapon extends Item {
     @Override
     public boolean isSolid() {
         return false;
-    }
-
-    @Override
-    public void interact() {
     }
     
 }

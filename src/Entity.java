@@ -34,22 +34,6 @@ public abstract class Entity extends GameObject {
         this.r = r;
     }
 
-    public Point2D.Double getVectorTo(GameObject obj) {
-        double dx = obj.drawCenterX()-drawCenterX();
-        double dy = obj.drawCenterY()-drawCenterY();
-        return new Point2D.Double(dx, dy);
-    }
-
-    public Point2D.Double getUnitVectorTo(GameObject obj) {
-        double dx = obj.drawCenterX()-drawCenterX();
-        double dy = obj.drawCenterY()-drawCenterY();
-        double magnitude = Math.sqrt(dx*dx+dy*dy);
-        if (magnitude == 0) {
-            return new Point2D.Double(0, 0);
-        }
-        return new Point2D.Double(dx/magnitude, dy/magnitude);
-    }
-
     public void takeHit(Projectile projectile){
         this.hp -= projectile.damage;
         Point2D.Double knockbackVector = this.getUnitVectorTo(projectile);

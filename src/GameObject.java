@@ -1,4 +1,5 @@
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 
 abstract class GameObject {
     double x, y;
@@ -47,6 +48,16 @@ abstract class GameObject {
         if(sprite != null){
             g2d.drawImage(sprite.getSprite(state, frameIndex), drawX(), drawY(), null);
         }
+    }
+
+    public Point2D.Double getUnitVectorTo(GameObject obj) {
+        double dx = obj.drawCenterX()-drawCenterX();
+        double dy = obj.drawCenterY()-drawCenterY();
+        double magnitude = Math.sqrt(dx*dx+dy*dy);
+        if (magnitude == 0) {
+            return new Point2D.Double(0, 0);
+        }
+        return new Point2D.Double(dx/magnitude, dy/magnitude);
     }
 
     public abstract void update();

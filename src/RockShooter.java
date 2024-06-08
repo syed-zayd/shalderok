@@ -6,8 +6,8 @@ public class RockShooter extends Weapon {
 
     public void shoot(){
         if(canShoot()){
-            queuedProjectiles.add(new Rock(x, y, 3, angle, owner.damage));
-            cooldownTimer = 200;
+            queuedProjectiles.add(new Rock(x, y, angle, owner.damage));
+            cooldownTimer = 400;
         }
     }
 

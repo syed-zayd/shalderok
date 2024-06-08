@@ -1,5 +1,3 @@
-
-
 public class Wand extends Weapon {
     
     public Wand(Entity owner, double x, double y){
@@ -7,7 +5,7 @@ public class Wand extends Weapon {
     }
     public void shoot(){
         if(canShoot()){
-            queuedProjectiles.add(new MagicOrb(x, y, 5, angle, owner.damage));
+            queuedProjectiles.add(new MagicOrb(x, y, angle, owner.damage));
             cooldownTimer = 50;
         }
     }
