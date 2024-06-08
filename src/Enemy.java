@@ -35,7 +35,6 @@ abstract class Enemy extends Entity {
     @Override
     protected void updateAngle() {
         Point2D.Double v = getUnitVectorTo(World.p);
-        System.out.println(v);
 
         if (v.x > 0) {
             this.state = "right";

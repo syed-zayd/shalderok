@@ -7,7 +7,7 @@ public class LavaRockShooter extends Weapon {
     public void shoot(){
         if(canShoot()){
             queuedProjectiles.add(new LavaRock(x, y, angle, owner.damage));
-            cooldownTimer = 300;
+            cooldownTimer = 100;
         }
     }
 

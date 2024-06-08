@@ -82,7 +82,6 @@ public class Projectile extends GameObject {
         vy = newVel.getY();
         x += vx;
         y += vy;
-        // System.out.printf("vx: %.1f, vy: %.1f\n", x, y);
         timeOfFlight++;
     }
     

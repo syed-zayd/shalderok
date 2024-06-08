@@ -10,11 +10,9 @@ public class Door extends Tile {
     public void lock() {
         this.state = "locked";
         locked = true;
-        System.out.println("locked!");
     }
 
     public void unlock() {
-        System.out.println("unlocked!");
         locked = false;
         this.state = "unlocked";
     }

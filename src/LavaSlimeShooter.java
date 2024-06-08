@@ -7,7 +7,7 @@ public class LavaSlimeShooter extends Weapon {
     public void shoot() {
         if (canShoot()) {
             queuedProjectiles.add(new GreenSlimeBall(x, y, angle, owner.damage));
-            cooldownTimer = 100;
+            cooldownTimer = 50;
         }
     }
 

@@ -7,7 +7,7 @@ public class BlueSlimeShooter extends Weapon {
     public void shoot(){
         if(canShoot()){
             queuedProjectiles.add(new GreenSlimeBall(x, y, angle, owner.damage));
-            cooldownTimer = 200;
+            cooldownTimer = 100;
         }
     }
 

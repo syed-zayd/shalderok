@@ -412,10 +412,21 @@ class World extends JPanel {
             for (GameObject obj: r.objs) {
                 obj.paint(g2d);
             }
+        }
+
+        g2d.setTransform(oldTransform);
+        g2d.setColor(new Color(f.getBackgroundColor().getRed(), f.getBackgroundColor().getGreen(), f.getBackgroundColor().getBlue(), 100));
+        g2d.fillRect(0, 0, Main.getScreenSize().width, Main.getScreenSize().height);
+        g2d.setColor(Color.BLACK);
+        g2d.translate(-camera.x, -camera.y);
+        g2d.transform(new AffineTransform(camera.zoom, 0, 0, camera.zoom, camera.getCenterX()*(1-camera.zoom), camera.getCenterY()*(1-camera.zoom)));
+
+        for (Room r: f.getRooms()) {
             for (Enemy e: r.enemies) {
                 e.paint(g2d);
             }
         }
+
         p.paint(g2d);
 
         g2d.setTransform(oldTransform);

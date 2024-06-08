@@ -146,7 +146,6 @@ public class Room {
         }
 
         if (type == "boss") {
-            System.out.println("DEFEATED BOSS");
             int i = grid.length/2-1;
             int j = grid[0].length/2-1;
             objs.add(new Portal(grid[i][j].x, grid[i][j].y));

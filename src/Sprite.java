@@ -37,7 +37,7 @@ public class Sprite {
 
     public void printSprite(){
         for(String key: sprites.keySet()){
-            for(BufferedImage sprite: sprites.get(key)){
+            for(BufferedImage sprite: sprites.get(key)) {
                 System.out.println(sprite.getWidth());
             }
         }
