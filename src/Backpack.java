@@ -31,6 +31,10 @@ public class Backpack {
         activeSlot = slot;
     }
 
+    public int size(){
+        return items.size();
+    }
+
     public void update(){
         for(int i = 0; i < items.size(); i++){
             Item item = items.get(i);

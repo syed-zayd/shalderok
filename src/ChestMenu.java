@@ -12,6 +12,7 @@ public class ChestMenu {
 
     public ChestMenu(Chest chest){
         this.chest = chest;
+        chest.setWeaponOwner(World.p);
         numRows = 2;
         numCols = 5;
     }
@@ -40,7 +41,8 @@ public class ChestMenu {
         }
     }
 
-    public void selectItem(int x, int y){
+    public Item hoverItem(int x, int y){
+
         int centerX = menuX() + 199;
         int centerY = menuY() + 99;
 
@@ -50,12 +52,17 @@ public class ChestMenu {
         for(int r = 0; r < numRows; r++){
             for(int c = 0; c < numCols; c++){
                 if(x >= startX + c * (CELL_SIZE + OFFSET) && x <= startX + c * (CELL_SIZE + OFFSET) + CELL_SIZE && y >= startY + r * (CELL_SIZE + OFFSET) && y <= startY + r * (CELL_SIZE + OFFSET) + CELL_SIZE){
-                    selectedItem = chest.getItem(r * numCols + c);
-                    selectedItem.x = x;
-                    selectedItem.y = y;
-                    return;
+                    return chest.getItem(r * numCols + c);
                 }
             }
+        }
+        return null;
+    }
+
+    public void selectItem(int x, int y){
+        selectedItem = hoverItem(x, y);
+        if(selectedItem != null){
+            moveItem(x, y);
         }
     }
 

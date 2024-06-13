@@ -1,3 +1,5 @@
+import java.awt.Graphics2D;
+
 public abstract class Item extends GameObject implements Cloneable {
 
     int numUses;
@@ -10,6 +12,7 @@ public abstract class Item extends GameObject implements Cloneable {
     }
     
     public abstract void use();
+    public abstract void paintStats(Graphics2D g2d);
 
     public static Weapon getRandomWeapon(){
         try {
@@ -26,7 +29,7 @@ public abstract class Item extends GameObject implements Cloneable {
             Item randomPotion = potions[(int) (Math.random() * potions.length)];
             return (Item) randomPotion.clone();
         } catch(CloneNotSupportedException e){
-            
+
         }
         return null;
     }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 abstract class Weapon extends Item implements Cloneable {
@@ -8,10 +9,12 @@ abstract class Weapon extends Item implements Cloneable {
     int cooldownTimer;
     int projectilesShot;
     Entity owner;
+    double damageMultiplier;
 
-    public Weapon(Entity owner, double x, double y, Sprite s) {
+    public Weapon(Entity owner, double x, double y, double damageMultiplier, Sprite s) {
         super(x, y, 32, 32, s);
         this.owner = owner;
+        this.damageMultiplier = damageMultiplier;
         activeProjectiles = new ArrayList <Projectile>();
         queuedProjectiles = new ArrayList <Projectile>();
         cooldownTimer = 0;
@@ -21,6 +24,10 @@ abstract class Weapon extends Item implements Cloneable {
 
     public void use(){
         shoot();
+    }
+
+    public int calculateDamage(){
+        return (int) (owner.damage * damageMultiplier);
     }
 
     public boolean canShoot(){
@@ -44,6 +51,13 @@ abstract class Weapon extends Item implements Cloneable {
         activeProjectiles = newProjectiles;
         queuedProjectiles = new ArrayList<Projectile>();
         cooldownTimer--;
+    }
+
+    public void paintStats(Graphics2D g2d){
+        g2d.drawString("Weapon Stats", (int) (Main.getScreenSize().getWidth() - 120), 120);
+        g2d.drawString("Damage: " + this.calculateDamage(), (int) (Main.getScreenSize().getWidth() - 120), 150);
+        g2d.setColor(this.cooldownTimer >= 0 ? Color.ORANGE : Color.GREEN);
+        g2d.drawString("Cooldown: " + (int) (this.cooldownTimer >= 0 ? this.cooldownTimer / 10. : 0), (int) (Main.getScreenSize().getWidth() - 120), 180);
     }
 
     @Override

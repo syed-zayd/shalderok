@@ -25,6 +25,7 @@ class World extends JPanel {
     static final int TILE_SIZE = 32;
     static Camera camera;
     static Player p;
+    static Item currentItem;
     static Floor f;
     static Point mouse = new Point(0, 0);
     static BufferedImage heartImage, heartOutlineImage;
@@ -124,6 +125,11 @@ class World extends JPanel {
             @Override
             public void mouseMoved(MouseEvent e) {
                 mouse = e.getPoint();
+                if(inMenu()){
+                    if(chestMenu != null){
+                        currentItem = chestMenu.hoverItem(e.getX(), e.getY());
+                    }
+                }
             }
             
         });
@@ -435,9 +441,6 @@ class World extends JPanel {
 
         g2d.setTransform(oldTransform);
 
-        p.backpack.paint(g2d);
-        p.paintStats(g2d);
-
         for(int i = 0; i < p.hp; i++){
             g2d.drawImage(heartImage, 10 + heartImage.getWidth() * i, 10, null);
         }
@@ -445,8 +448,16 @@ class World extends JPanel {
             g2d.drawImage(heartOutlineImage, 10 + heartImage.getWidth() * i, 10, null);
         }
 
-        if(chestMenu != null){
+        p.backpack.paint(g2d);
+        p.paintStats(g2d);
+
+        if(chestMenu == null){
+            p.activeItem.paintStats(g2d);
+        } else{
             chestMenu.paint(g2d);
+            if(currentItem != null){
+                currentItem.paintStats(g2d);
+            }
         }
 
         g2d.setFont(g2d.getFont().deriveFont(36f));

@@ -1,12 +1,12 @@
 public class FireballShooter extends Weapon {
     
     public FireballShooter(Entity owner, double x, double y){
-        super(owner, x, y, null);
+        super(owner, x, y, 1.0, null);
     }
 
     public void shoot(){
         if(canShoot()){
-            queuedProjectiles.add(new Fireball(x, y, angle, owner.damage));
+            queuedProjectiles.add(new Fireball(x, y, angle, calculateDamage()));
             cooldownTimer = 50;
         }
     }

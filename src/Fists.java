@@ -1,7 +1,7 @@
 public class Fists extends Weapon {
 
     public Fists(Entity owner, double x, double y) {
-        super(owner, x, y, SpriteLoader.getSprite("fists"));
+        super(owner, x, y, 1.0, SpriteLoader.getSprite("fists"));
     }
 
     public void shoot() {

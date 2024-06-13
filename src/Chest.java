@@ -49,6 +49,16 @@ public class Chest extends GameObject {
         }
     }
 
+    public void setWeaponOwner(Entity owner){
+        for(Item item: items){
+            if(item instanceof Weapon){
+                Weapon weapon = (Weapon) item;
+                weapon.owner = owner;
+                World.f.weapons.add(weapon);
+            }
+        }
+    }
+
     public Item getItem(int index){
         return items.get(index);
     }

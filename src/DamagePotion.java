@@ -1,3 +1,5 @@
+import java.awt.Graphics2D;
+
 public class DamagePotion extends Item {
 
     private int damageBoost;
@@ -20,6 +22,12 @@ public class DamagePotion extends Item {
     
     @Override
     public void update() {}
+
+    @Override
+    public void paintStats(Graphics2D g2d){
+        g2d.drawString("Damage Potion", (int) (Main.getScreenSize().getWidth() - 120), 120);
+        g2d.drawString("+" + this.damageBoost + " damage", (int) (Main.getScreenSize().getWidth() - 120), 150);
+    }
 
     @Override
     public void interact() {

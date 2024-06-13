@@ -1,12 +1,12 @@
 public class LeafShooter extends Weapon {
     
     public LeafShooter(Entity owner, double x, double y){
-        super(owner, x, y, null);
+        super(owner, x, y, 1.0, null);
     }
 
     public void shoot(){
         if(canShoot()){
-            queuedProjectiles.add(new Leaf(x, y, angle, owner.damage));
+            queuedProjectiles.add(new Leaf(x, y, angle, calculateDamage()));
             cooldownTimer = 75;
         }
     }
