@@ -13,10 +13,11 @@ public abstract class Entity extends GameObject {
     public int hp;
     public int maxHp;
     public int damage;
+    public double evasiveness;
     public Item activeItem;
     public double angle;
 
-    public Entity(double x, double y, double spd, int hp, int damage, Sprite s){
+    public Entity(double x, double y, double spd, int hp, int damage, double evasiveness, Sprite s){
         super(x, y, s.getWidth(), s.getHeight(), s);
         this.spd = spd;
         this.vx = 0;
@@ -24,6 +25,7 @@ public abstract class Entity extends GameObject {
         this.hp = hp;
         this.maxHp = hp;
         this.damage = damage;
+        this.evasiveness = evasiveness;
     }
 
     public void enterNewFloor(Floor f, Room r) {
@@ -35,10 +37,12 @@ public abstract class Entity extends GameObject {
     } 
 
     public void takeHit(Projectile projectile){
-        this.hp -= projectile.damage;
-        Point2D.Double knockbackVector = this.getUnitVectorTo(projectile);
-        this.knockbackX = -10*knockbackVector.x;
-        this.knockbackY = -10*knockbackVector.y;
+        if(!(Math.random() < evasiveness)){
+            this.hp -= projectile.damage;
+            Point2D.Double knockbackVector = this.getUnitVectorTo(projectile);
+            this.knockbackX = -10*knockbackVector.x;
+            this.knockbackY = -10*knockbackVector.y;
+        }
     }
 
     public void equip(Item item){

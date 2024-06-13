@@ -12,7 +12,7 @@ abstract class Enemy extends Entity {
     Point pathfindingCurrentIndex;
 
     public Enemy(double x, double y, double spd, int hp, int damage, double accuracy, Sprite s) {
-        super(x, y, spd, hp, damage, s);
+        super(x, y, spd, hp, damage, 0, s);
         this.hp = hp;
         this.accuracy = accuracy;
         activated = false;

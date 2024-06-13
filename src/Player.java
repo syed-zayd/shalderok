@@ -18,7 +18,7 @@ class Player extends Entity {
     Backpack backpack;
 
     public Player(Floor f, double x, double y, Sprite s) {
-        super(x, y, 5, 5, 5, s);
+        super(x, y, 5, 5, 5, 0.2, s);
         pathfindingCurrentIndex = new Point(-1, -1);
         name = s.getName();
         backpack = new Backpack(10);
