@@ -23,7 +23,7 @@ class Player extends Entity {
         name = s.getName();
         backpack = new Backpack(10);
         Fists fists = new Fists(this, x, y);
-        for(int i = 0; i < backpack.size(); i++){
+        for(int i = 0; i < 10; i++){
             backpack.addItem(fists);
         }
         activeItem = backpack.getActiveItem();

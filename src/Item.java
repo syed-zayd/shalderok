@@ -4,7 +4,7 @@ public abstract class Item extends GameObject implements Cloneable {
 
     int numUses;
     static Weapon[] weapons = {new Bow(null, 0, 0), new Wand(null, 0, 0), new Sword(null, 0, 0)};
-    static Item[] potions = {new DamagePotion(0, 0, 0), new HealingPotion(0, 0, 0), new SpeedPotion(0, 0, 0)};
+    static Item[] potions = {new DamagePotion(0, 0, 5), new HealingPotion(0, 0, 3), new SpeedPotion(0, 0, 5)};
 
     public Item(double x, double y, int w, int h, Sprite s) {
         super(x, y, w, h, s);
