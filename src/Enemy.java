@@ -83,7 +83,6 @@ abstract class Enemy extends Entity {
     @Override
     public void paint(Graphics2D g2d){
         super.paint(g2d);
-        Util.drawCenteredString(g2d, String.format("%.2f", Math.toDegrees(angle)), drawCenterX(), drawY()-10);
         if(activeItem != null){
             activeItem.paint(g2d);
         }

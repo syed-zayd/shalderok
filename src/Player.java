@@ -23,7 +23,10 @@ class Player extends Entity {
         name = s.getName();
         backpack = new Backpack(10);
         Fists fists = new Fists(this, x, y);
-        for(int i = 0; i < 10; i++){
+        backpack.addItem(new Wand(this, x, y));
+        backpack.addItem(new Bow(this, x, y));
+        backpack.addItem(new Sword(this, x, y));
+        for(int i = 3; i < 10; i++){
             backpack.addItem(fists);
         }
         activeItem = backpack.getActiveItem();
@@ -170,7 +173,6 @@ class Player extends Entity {
 	@Override
 	public void paint(Graphics2D g2d) {
         super.paint(g2d);
-        Util.drawCenteredString(g2d, r.toString() + " " + r.f.toString(), drawCenterX(), drawY()-10);
 	}
 
     public void paintStats(Graphics2D g2d){

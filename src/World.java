@@ -74,8 +74,6 @@ class World extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println(f);
-                System.out.println(p.r);
             }
 
             @Override

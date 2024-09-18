@@ -1,7 +1,5 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 
 public class KeyHandler implements KeyListener {
     private static final boolean[] KEYS_HELD = new boolean[0x10000];
